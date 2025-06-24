@@ -1,0 +1,225 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+    /* === PRIMARY (Ana tema rengi - koyu mavi) === */
+    --primary-900: #0D1B2A; // En koyu - dark background
+    --primary-800: #1B263B; // Sidebar, footer, header background
+    --primary-700: #274156; // Hover butonlar
+    --primary-600: #3A506B; // Ana buton rengi
+    --primary-500: #5BC0BE; // Vurgu – link, aktif öğe
+    --primary-400: #9DB4C0; // İkon, sınır, ikincil metin
+    --primary-300: #CED4DA; // Pasif metin
+    --primary-100: #F1F1F1; // Açık arkaplanlar (light mode)
+
+    /* === SECONDARY (Tamamlayıcı mavi tonları) === */
+    --secondary-700: #1E6091;
+    --secondary-500: #168AAD;
+    --secondary-300: #56CFE1;
+    --secondary-100: #CAF0F8;
+
+    /* === STATE COLORS === */
+    --success-600: #38B000;
+    --success-400: #70E000;
+
+    --error-600: #D90429;
+    --error-400: #EF233C;
+
+    --warning-600: #FFBA08;
+    --warning-400: #FAA307;
+
+    /* === NEUTRALS === */
+    --text-light: #ffffff;
+    --text-dark: #1a1a1a;
+    --border-color: #dee2e6;
+    --background-dark: --primary-900;
+    --background-light: #ffffff;
+
+    /* === DEFAULT USAGE EXAMPLES === */
+    --btn-bg: --primary-600;
+    --btn-bg-hover: --primary-700;
+    --btn-text: --text-light;
+
+    --link-color: --primary-500;
+    --link-hover: --secondary-500;
+
+
+
+    /* === TOAST STYLES === */
+    --dc-success: --success-600 !important;
+    --dc-success-hover: --success-400 !important;
+    --dc-error: --error-600 !important;
+    --dc-error-hover: --error-400 !important;
+    --dc-warn: --warning-600 !important;
+    --dc-warn-hover: --warning-400 !important;
+    --dc-info: --secondary-500 !important;
+    --dc-info-hover: --secondary-300 !important;
+    --dc-dark: --primary-900 !important;
+    --dc-light: --primary-100 !important;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+
+/* === CUSTOM SCROLLBAR STYLES === */
+/* Webkit tabanlı tarayıcılar için (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--primary-100);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-400);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-500);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: var(--primary-600);
+}
+
+/* Koyu tema için scrollbar */
+@media (prefers-color-scheme: dark) {
+    ::-webkit-scrollbar-track {
+        background: var(--primary-800);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary-600);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-500);
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+        background: var(--primary-400);
+    }
+}
+
+/* Firefox için scrollbar stilleri */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-400) var(--primary-100);
+}
+
+/* Koyu tema için Firefox scrollbar */
+@media (prefers-color-scheme: dark) {
+    * {
+        scrollbar-color: var(--primary-600) var(--primary-800);
+    }
+}
+
+/* Belirli elementler için özel scrollbar stilleri */
+.scrollable-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-400) var(--primary-100);
+}
+
+.scrollable-content::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+    background: var(--primary-100);
+    border-radius: 3px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background: var(--primary-400);
+    border-radius: 3px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-500);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.field-chip {
+    &.cdk-drag-preview {
+        background-color: var(--primary-500);
+        color: var(--text-light);
+        opacity: 0.9;
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+        border-radius: 20px;
+        cursor: grabbing;
+    }
+
+    // Drag edilen elementin yerini tutan boşluk (placeholder)
+    &.cdk-drag-placeholder {
+        opacity: 0.3;
+        border: 2px dashed var(--primary-400);
+        background: transparent;
+        min-width: 80px;
+        height: 32px;
+        border-radius: 20px;
+    }
+}
+
+.student-card {
+    .cdk-drag-dragging {
+        position: absolute;
+        z-index: 9999;
+    }
+}
+
+dc-toast-ng {
+    .toast-container {
+        .toast {
+            min-height: 3rem;
+            &.success {
+                background-color: var(--success-600);
+            }
+
+            &.error {
+                background-color: var(--error-600);
+            }
+
+            &.warn {
+                background-color: var(--warning-600);
+            }
+
+            &.info {
+                background-color: var(--secondary-500);
+            }
+        }
+    }
+}
+
+
+@keyframes up-scale {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

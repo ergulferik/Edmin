@@ -1,0 +1,35 @@
+<div class="class-management-container">
+    <!-- Sol Bölüm: Sınıf Listesi -->
+    <div class="class-list-section">
+        <div class="section-header">
+            <h2>Sınıflar</h2>
+            <app-field 
+                [fields]="fields" 
+                [selectedField]="selectedField"
+                (fieldSelected)="onFieldSelected($event)"
+                (fieldsUpdated)="onFieldsUpdated($event)">
+            </app-field>
+        </div>
+
+        <app-class-list
+            [classes]="classes"
+            [fields]="fields"
+            [selectedClass]="selectedClass"
+            [selectedField]="selectedField"
+            [filteredClasses]="filteredClasses"
+            (classSelected)="selectClass($event)"
+            (dragOver)="onDragOver($event.event, $event.classItem)"
+            (drop)="onDrop($event.event, $event.classItem)"
+            (addNewClass)="addNewClass()">
+        </app-class-list>
+    </div>
+
+    <!-- Sağ Bölüm: Öğrenci Listesi -->
+    <app-student-list
+        [selectedClass]="selectedClass"
+        [students]="students"
+        [dragOverClass]="dragOverClass"
+        (dragStart)="onDragStart($event)"
+        (dragEnd)="onDragEnd()">
+    </app-student-list>
+</div>
