@@ -1,0 +1,76 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="header-title">
+      <h1>Sınav Oluştur</h1>
+      <span class="subtitle">Yeni bir sınav oluşturmak için aşağıdaki formu doldurun</span>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <mat-card class="form-card">
+      <form [formGroup]="examForm" class="exam-form">
+        <div class="form-row">
+          <div class="form-col">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Seçili Şablon</mat-label>
+              <input matInput [value]="selectedTemplate?.name || 'Şablon seçilmedi'" readonly>
+              <button mat-icon-button matSuffix (click)="openTemplateSelection()" matTooltip="Şablon Seç">
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Sınav Tarihi</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="examDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="examForm.get('examDate')?.hasError('required')">
+                Sınav tarihi zorunludur
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-col">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Sınav Kodu</mat-label>
+              <input matInput formControlName="examCode" placeholder="Sınav kodunu giriniz">
+              <mat-error *ngIf="examForm.get('examCode')?.hasError('required')">
+                Sınav kodu zorunludur
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Sınav Adı</mat-label>
+              <input matInput formControlName="examName" placeholder="Sınav adını giriniz">
+              <mat-error *ngIf="examForm.get('examName')?.hasError('required')">
+                Sınav adı zorunludur
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-row file-section">
+          <div class="file-upload-container">
+            <div class="upload-box" (click)="fileInput.click()" [class.has-file]="opticalForm">
+              <input #fileInput type="file" (change)="onFileChange($event)" accept=".pdf,.jpg,.jpeg,.png" style="display: none">
+              <mat-icon>cloud_upload</mat-icon>
+              <span class="upload-text">{{ opticalForm ? opticalForm.name : 'Optik Form Yükle' }}</span>
+              <span class="upload-hint" *ngIf="!opticalForm">PDF, JPG veya PNG dosyası yükleyebilirsiniz</span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="action-buttons">
+        <button mat-stroked-button (click)="cancel()">
+          <mat-icon>close</mat-icon>
+          İptal
+        </button>
+        <button mat-flat-button color="primary" (click)="createExam()" [disabled]="!examForm.valid || !selectedTemplate">
+          <mat-icon>save</mat-icon>
+          Sınav Oluştur
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div> 

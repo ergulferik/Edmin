@@ -1,0 +1,72 @@
+<mat-card class="data-grid-card">
+  <mat-card-header>
+    <mat-card-title>{{ config.title }}</mat-card-title>
+    <mat-card-subtitle *ngIf="config.subtitle">{{ config.subtitle }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="data-grid-actions">
+      <mat-form-field *ngIf="config.showSearch" appearance="outline">
+        <mat-label>{{ config.searchPlaceholder || 'Ara...' }}</mat-label>
+        <input matInput [value]="searchTerm()" (input)="onSearchChange($event)" type="text">
+        <ng-icon name="heroMagnifyingGlass" matSuffix></ng-icon>
+      </mat-form-field>
+
+      <edmin-button
+        *ngIf="config.showAddButton"
+        [type]="config.addButtonType || 'primary'"
+        (click)="onAddClick()"
+      >
+        <ng-icon name="heroPlus"></ng-icon>
+        {{ config.addButtonText || 'Yeni Ekle' }}
+      </edmin-button>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="data-grid-error">
+      {{ error }}
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="data-grid-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- Table -->
+    <div class="data-grid-table" [style.maxHeight]="config.maxHeight">
+      <table mat-table [dataSource]="filteredData()" class="mat-elevation-z1">
+        <!-- Data Columns -->
+        <ng-container *ngFor="let column of config.columns" [matColumnDef]="column.key">
+          <th mat-header-cell *matHeaderCellDef [style.width]="getColumnWidth(column)">
+            {{ column.label }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions" *ngIf="actions?.length">
+          <th mat-header-cell *matHeaderCellDef [style.width]="'120px'">İşlemler</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-icon-button
+              *ngFor="let action of actions"
+              [color]="action.color"
+              [matTooltip]="action.label || ''"
+              (click)="onActionClick(action, element)"
+            >
+              <ng-icon [name]="action.icon || 'heroPencil'"></ng-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && filteredData().length === 0" class="data-grid-empty">
+        Gösterilecek veri bulunamadı.
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card> 

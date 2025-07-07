@@ -1,0 +1,12 @@
+<div class="card-list">
+  @for (template of examTemplates(); track template.id) {
+  <edmin-exam-template-item
+    [style.cursor]="selectable ? 'pointer' : 'default'"
+    [template]="template"
+    (edit)="editTemplate($event)"
+    (delete)="deleteTemplate($event)"
+    (click)="selectTemplate(template)"
+    [viewMode]="viewMode">
+  </edmin-exam-template-item>
+  }
+</div> 

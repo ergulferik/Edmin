@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
-import { ClassItem, Student, Field } from '../../models/class.model';
+import { Router } from '@angular/router';
+import { ClassItem, Field } from '../../models/class.model';
 import { ClassService } from '../../services/class.service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroPencilSquare } from '@ng-icons/heroicons/outline';
@@ -34,6 +35,8 @@ export class ClassList implements OnInit {
   @Output() addNewClass = new EventEmitter<void>();
 
   classService = inject(ClassService);
+  private router = inject(Router);
+
   ngOnInit() {
     // Component başlatıldığında filteredClasses'ı classes'a eşitle
     if (this.filteredClasses.length === 0) {
@@ -56,9 +59,9 @@ export class ClassList implements OnInit {
     this.drop.emit({ event, classItem });
   }
 
-  // Yeni sınıf ekleme
+  // Sınıfları düzenleme sayfasına yönlendirme
   onAddNewClass() {
-    this.addNewClass.emit();
+    this.router.navigate(['/class-definition']);
   }
 
   // Field bilgisini getir

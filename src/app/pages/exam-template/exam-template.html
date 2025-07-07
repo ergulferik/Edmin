@@ -1,0 +1,89 @@
+<!-- Modern Exam Template Yönetimi -->
+<div class="exam-template-container">
+  <div class="header">
+    <edmin-button type="back" (click)="goBack()">
+    </edmin-button>
+    <h1>Sınav Şablonu Tanımlama</h1>
+    <edmin-button (click)="openCreateForm()">
+      <mat-icon>add</mat-icon> Yeni Şablon
+    </edmin-button>
+  </div>
+
+  <!-- Şablon Listesi -->
+  <edmin-exam-template-list
+    viewMode="edit"
+    (edit)="editTemplate($event)"
+    (delete)="deleteTemplate($event)">
+  </edmin-exam-template-list>
+
+  <!-- Şablon Ekle/Düzenle Modalı -->
+  <div class="modal" *ngIf="showForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 *ngIf="!editMode">Yeni Şablon Ekle</h2>
+        <h2 *ngIf="editMode">Şablonu Düzenle</h2>
+        <button mat-icon-button class="modal-close-button" (click)="closeForm()">
+          <ng-icon name="heroXMark"></ng-icon>
+        </button>
+      </div>
+      <form [formGroup]="templateForm" (ngSubmit)="saveTemplate()">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Adı</mat-label>
+          <input matInput formControlName="name" placeholder="Şablon adını giriniz">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Açıklama</mat-label>
+          <input matInput formControlName="description" placeholder="Şablon açıklamasını giriniz">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Sürüm</mat-label>
+          <input matInput formControlName="version" placeholder="Sürüm numarasını giriniz">
+        </mat-form-field>
+
+        <!-- Dersler için dinamik alanlar -->
+        <div class="course-config-container" formArrayName="courseConfigs">
+          <div *ngFor="let course of courseConfigs.controls; let i = index" [formGroupName]="i"
+            class="course-config-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Ders</mat-label>
+              <mat-select formControlName="courseId">
+                @for (course of courses; track course.id) {
+                <mat-option [value]="course.id" [disabled]="isSelectedCourse(course.id)">
+                  {{ course.name }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Soru Sayısı</mat-label>
+              <input matInput type="number" formControlName="questionCount" placeholder="Soru sayısını giriniz">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Katsayı</mat-label>
+              <input matInput type="number" step="0.01" formControlName="weight" placeholder="Katsayı giriniz">
+            </mat-form-field>
+
+            <button mat-icon-button type="button" (click)="removeCourseConfig(i)">
+              <mat-icon class="icon-danger">delete</mat-icon>
+            </button>
+          </div>
+          <button matButton="outlined" type="button" (click)="addCourseConfig()">
+            <mat-icon>add</mat-icon> Ders Ekle
+          </button>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" mat-raised-button color="primary" class="submit-button">
+            Kaydet
+          </button>
+          <button type="button" mat-button (click)="closeForm()" class="cancel-button">
+            İptal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

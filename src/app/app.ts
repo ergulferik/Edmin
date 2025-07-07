@@ -1,40 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SidebarModel } from '@angulogic/ng-sidebar';
-import { NgSidebarModule } from '@angulogic/ng-sidebar';
+import { NgSidebarComponent, NgSidebarService, SidebarModel } from '@angulogic/ng-sidebar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgSidebarModule, MatCardModule, MatButtonModule,],
+  imports: [RouterOutlet, NgSidebarComponent, MatCardModule, MatButtonModule, ReactiveFormsModule],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
-export class App {
+export class App{
   protected title = 'Edmin';
+  sidebarWidth = 0;
 
+  constructor() {
+    this.sidebarService.sidebarWidth$.pipe(takeUntilDestroyed()).subscribe((width) => {
+      this.sidebarWidth = width;
+    });
+  }
+
+  sidebarService = inject(NgSidebarService);
   sidebar: SidebarModel = {
     bannerOptions: {
       title: 'Edmin',
     },
     userOptions: {
       name: 'John Doe',
-      
+
     },
     sidebarData: [
       {
         title: 'Sınıf',
         data: [
           { name: 'Sınıf İşlemleri', route: '/class-operations' },
+          { name: 'Ders Tanımlama', route: '/class' },
+          { name: 'Sınav Oluşturma', route: '/exam-create' },
+          { name: 'Öğrenci Detay', route: '/student-detail' },
+          { name: 'Ders Tanımlama', route: '/course-definition' },
+          { name: 'Sınav Şablonu Tanımlama', route: '/exam-template' },
         ],
       },
     ],
     options: {
       expand: true,
       theme: 'light',
-      autoPosition:true,
+      autoPosition: true,
       viewMode: 'hover'
     },
   }

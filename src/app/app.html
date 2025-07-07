@@ -1,4 +1,6 @@
-<!-- <ng-sidebar [options]="sidebar">
-</ng-sidebar> -->
+<ng-sidebar [options]="sidebar">
+</ng-sidebar>
 
-<router-outlet />
+<div class="app-container" [style.margin-left]="sidebarWidth + 'px'">
+  <router-outlet />
+</div>

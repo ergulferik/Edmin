@@ -3,12 +3,12 @@
     <div class="class-list-section">
         <div class="section-header">
             <h2>Sınıflar</h2>
-            <app-field 
+            <edmin-field 
                 [fields]="fields" 
                 [selectedField]="selectedField"
                 (fieldSelected)="onFieldSelected($event)"
                 (fieldsUpdated)="onFieldsUpdated($event)">
-            </app-field>
+            </edmin-field>
         </div>
 
         <app-class-list
@@ -19,8 +19,7 @@
             [filteredClasses]="filteredClasses"
             (classSelected)="selectClass($event)"
             (dragOver)="onDragOver($event.event, $event.classItem)"
-            (drop)="onDrop($event.event, $event.classItem)"
-            (addNewClass)="addNewClass()">
+            (drop)="onDrop($event.event, $event.classItem)">
         </app-class-list>
     </div>
 

@@ -1,0 +1,17 @@
+
+button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-weight: 500;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  background: linear-gradient(90deg, var(--primary-600, #3A506B) 0%, var(--secondary-500, #168AAD) 100%);
+  color: var(--text-light, #fff);
+  transition: background 0.2s;
+
+  &:hover {
+    background: linear-gradient(90deg, var(--primary-700, #274156) 0%, var(--secondary-700, #1E6091) 100%);
+  }
+}

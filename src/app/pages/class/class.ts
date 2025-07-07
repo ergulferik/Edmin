@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -7,8 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ClassItem, Student, Field } from '../../models/class.model';
-import { ClassStore } from '../../stores/class.store';
+import { ClassItem, Field } from '../../models/class.model';
+import { Student } from '../../models/student.model';
 import { HelperService } from '../../services/helper.service';
 import { FieldComponent } from '../../components/field/field';
 import { ClassList } from '../../components/class-list/class-list';
@@ -35,7 +35,7 @@ import Swal from 'sweetalert2';
   templateUrl: './class.html',
   styleUrl: './class.scss'
 })
-export class Class implements OnInit {
+export class Class {
   // Sınıf verileri
   classes: ClassItem[] = [];
 
@@ -56,15 +56,13 @@ export class Class implements OnInit {
 
   classService = inject(ClassService);
 
-  constructor(private classStore: ClassStore, private toast:DcToastService, private helperService: HelperService) { }
-
-  ngOnInit() {
-    // Store'dan verileri getValue() ile al
-    const state = this.classStore.getValue();
-    this.classes = state.classes;
-    this.students = state.students;
-    this.fields = state.fields;
-    this.filteredClasses = this.classes;
+  constructor(private toast:DcToastService) {
+    effect(async () => {
+      this.classes = await this.classService.getClasses();
+      this.students = await this.classService.getStudents();
+      this.fields = await this.classService.getFields();
+      this.filteredClasses = this.classes;
+    });
   }
 
   // Sınıf seçimi
@@ -83,7 +81,6 @@ export class Class implements OnInit {
   // Field güncelleme event handler
   onFieldsUpdated(event: { fields: Field[], selectedField: string }) {
     this.fields = event.fields;
-    this.classStore.update({ fields: event.fields });
     this.selectedField = event.selectedField;
     this.onFieldSelected(this.fields.find(f => f.id === this.selectedField)!);
   }
@@ -118,16 +115,8 @@ export class Class implements OnInit {
     })
     if (result.isConfirmed) {
       if (student && classItem) {
-        // Öğrencinin sınıfını güncelle
         const updatedStudent = { ...student, classId: classItem.id };
-
-        // Students listesini güncelle
-        this.students = this.students.map(s =>
-          s.id === student.id ? updatedStudent : s
-        );
-
-        // Store'u güncelle
-        this.classStore.update({ students: this.students });
+        this.classService.updateStudent(student.id, { classId: classItem.id });
 
         this.onDragEnd()
 

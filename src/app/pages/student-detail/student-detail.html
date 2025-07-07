@@ -1,0 +1,75 @@
+<div class="student-detail-container">
+  <h2>Student Detail</h2>
+  <div *ngIf="students">
+    <div *ngFor="let student of students">
+      <strong>Name:</strong> {{student.name}} {{student.surname}}
+    </div>
+  </div>
+  
+  <div>
+    <label>Student Selection:
+      <select [(ngModel)]="selectedStudentId">
+        <option *ngFor="let student of students" [value]="student.id">
+          {{student.name}} {{student.surname}}
+        </option>
+      </select>
+    </label>
+  </div>
+
+  <div>
+    <label>Exam Result Selection:
+      <select (change)="onExamResultChange($event)">
+        <option value="">Select exam result</option>
+        <option *ngFor="let result of getStudentExamResults(selectedStudentId) | async" [value]="result.id">
+          {{getExamName(result.examId) | async}} ({{result.uploadedAt | date}})
+        </option>
+      </select>
+    </label>
+  </div>
+
+  <div *ngIf="selectedExamResult">
+    <h3>Exam Details</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Correct</th>
+          <th>Wrong</th>
+          <th>Net</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stat of selectedExamResult.statistics">
+          <td>{{stat.courseId}}</td>
+          <td>{{stat.correctCount}}</td>
+          <td>{{stat.wrongCount}}</td>
+          <td>{{stat.netScore}}</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div>
+      <strong>Total Score:</strong> {{selectedExamResult.totalScore}}<br>
+      <strong>Total Net:</strong> {{selectedExamResult.totalNet}}
+    </div>
+
+    <div>
+      <h4>Answers</h4>
+      <button (click)="toggleAnswerEditing()">
+        {{isEditingAnswers ? 'Finish Editing' : 'Edit Answers'}}
+      </button>
+      <ul>
+        <li *ngFor="let answer of selectedExamResult.answers; let i = index">
+          <span>Question {{i+1}}: </span>
+          <span *ngIf="!isEditingAnswers">{{answer.selectedOption}}</span>
+          <input *ngIf="isEditingAnswers" 
+                 [value]="answer.selectedOption" 
+                 (change)="onAnswerChange(i, $event)"
+                 maxlength="1" 
+                 size="1">
+          <span> (Correct: {{answer.correctOption}})</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div> 

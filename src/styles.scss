@@ -55,6 +55,9 @@
     --dc-info-hover: --secondary-300 !important;
     --dc-dark: --primary-900 !important;
     --dc-light: --primary-100 !important;
+
+    /* === DIALOG STYLES === */
+    --mat-dialog-container-shape: 16px;
 }
 
 body {
@@ -190,6 +193,7 @@ dc-toast-ng {
     .toast-container {
         .toast {
             min-height: 3rem;
+
             &.success {
                 background-color: var(--success-600);
             }
@@ -209,6 +213,81 @@ dc-toast-ng {
     }
 }
 
+.mat-mdc-dialog-container {
+    --mdc-dialog-container-shape: 16px;
+}
+
+.submit-button {
+    background: linear-gradient(90deg, var(--primary-600, #3A506B) 0%, var(--secondary-500, #168AAD) 100%) !important;
+    color: var(--text-light, #fff) !important;
+    border-radius: 8px !important;
+    padding: 8px 24px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+
+    &:hover:not(:disabled) {
+        background: linear-gradient(90deg, var(--primary-700, #274156) 0%, var(--secondary-700, #1E6091) 100%) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    &:disabled {
+        background: var(--primary-300, #CED4DA) !important;
+        color: var(--primary-400, #9DB4C0) !important;
+        cursor: not-allowed;
+    }
+}
+
+.cancel-button {
+    color: var(--text-dark, #666) !important;
+    border: 1px solid var(--border-color, #dee2e6) !important;
+    border-radius: 8px !important;
+
+    &:hover {
+        background: var(--primary-100, #f8f9fa) !important;
+    }
+}
+
+.modal-close-button {
+    color: var(--primary-400, #666);
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: var(--error-600, #D90429);
+    }
+}
+
+.mat-mdc-raised-button {
+    border-radius: 8px !important;
+}
+
+.icon-danger {
+    color: var(--error-400);
+}
+
+.icon-primary {
+    color: var(--primary-500);
+}
+
+
+edmin-button {
+    .back {
+        padding: 0 !important;
+        color: var(--text-dark) !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .mdc-button__label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: var(--text-light);
+    }
+}
 
 @keyframes up-scale {
     0% {

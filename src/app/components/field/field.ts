@@ -11,7 +11,7 @@ import { DcToastService } from 'dc-toast-ng';
 import Swal from 'sweetalert2'
 
 @Component({
-  selector: 'app-field',
+  selector: 'edmin-field',
   imports: [
     CommonModule,
     FormsModule,
