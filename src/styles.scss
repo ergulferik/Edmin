@@ -61,27 +61,11 @@
 
  --link-color: --primary-500;
  --link-hover: --secondary-500;
- --linear-primary: linear-gradient(
-  90deg,
-  var(--primary-600, #3a506b) 0%,
-  var(--secondary-500, #168aad) 100%
- );
- --linear-primary-hover: linear-gradient(
-  90deg,
-  var(--primary-700, #274156) 0%,
-  var(--secondary-700, #1e6091) 100%
- );
+ --linear-primary: linear-gradient(90deg, var(--primary-600, #3a506b) 0%, var(--secondary-500, #168aad) 100%);
+ --linear-primary-hover: linear-gradient(90deg, var(--primary-700, #274156) 0%, var(--secondary-700, #1e6091) 100%);
  --linear-error-light: linear-gradient(90deg, var(--error-50) 0%, var(--error-100) 100%);
- --linear-error: linear-gradient(
-  90deg,
-  var(--error-600, #d9534f) 0%,
-  var(--error-400, #c9302c) 100%
- );
- --linear-error-hover: linear-gradient(
-  90deg,
-  var(--error-400, #c9302c) 0%,
-  var(--error-600, #d9534f) 100%
- );
+ --linear-error: linear-gradient(90deg, var(--error-600, #d9534f) 0%, var(--error-400, #c9302c) 100%);
+ --linear-error-hover: linear-gradient(90deg, var(--error-400, #c9302c) 0%, var(--error-600, #d9534f) 100%);
 
  /* === TOAST STYLES === */
  --dc-success: --success-600 !important;
