@@ -34,14 +34,12 @@ export class App{
     },
     sidebarData: [
       {
-        title: 'Sınıf',
+        title: 'Tanımlamalar',
         data: [
           { name: 'Sınıf İşlemleri', route: '/class-operations' },
-          { name: 'Ders Tanımlama', route: '/class' },
-          { name: 'Sınav Oluşturma', route: '/exam-create' },
-          { name: 'Öğrenci Detay', route: '/student-detail' },
-          { name: 'Ders Tanımlama', route: '/course-definition' },
-          { name: 'Sınav Şablonu Tanımlama', route: '/exam-template' },
+          { name: 'Sınav', route: '/exam' },
+          { name: 'Ders', route: '/course-definition' },
+          { name: 'Sınav Şablonu', route: '/exam-template' },
         ],
       },
     ],

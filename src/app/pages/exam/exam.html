@@ -1,0 +1,12 @@
+<div class="exam-create-container">
+  <!-- Header Section -->
+  <edmin-page-header title="Sınav" subtitle="Var olan sınavlarınızı yönetin, yeni sınavlarınızı oluşturabilirsiniz."/>
+
+  <edmin-data-grid
+  [config]="gridConfig"
+  [data]="exams"
+  [actions]="gridActions"
+  [searchableColumns]="['name', 'code']"
+  (addClick)="onAddClick()">
+</edmin-data-grid>
+</div> 

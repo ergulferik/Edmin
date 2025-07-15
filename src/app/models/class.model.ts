@@ -2,7 +2,7 @@
 export interface ClassItem {
     id: string;
     name: string;
-    fieldId: string;
+    fieldId?: string;
     studentCount: number;
     averageGrade: number;
 }

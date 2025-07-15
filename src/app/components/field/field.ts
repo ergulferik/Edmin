@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { heroTrash, heroPlus } from '@ng-icons/heroicons/outline';
 import { HelperService } from '../../services/helper.service';
 import { DcToastService } from 'dc-toast-ng';
 import Swal from 'sweetalert2'
+import { ClassService } from '../../services/class.service';
 
 @Component({
   selector: 'edmin-field',
@@ -24,10 +25,11 @@ import Swal from 'sweetalert2'
   viewProviders: [provideIcons({ heroTrash, heroPlus })]
 })
 export class FieldComponent {
-  @Input() fields: Field[] = [];
   @Input() selectedField: string = 'all';
   @Output() fieldSelected = new EventEmitter<Field>();
   @Output() fieldsUpdated = new EventEmitter<{fields: Field[], selectedField: string}>();
+
+  fields = signal<Field[]>([]);
 
   // Field düzenleme
   editingField: Field | null = null;
@@ -36,8 +38,13 @@ export class FieldComponent {
 
   constructor(
     private toast:DcToastService , 
-    private helperService: HelperService
-  ) { }
+    private helperService: HelperService,
+    private classService: ClassService
+  ) { 
+    effect(async () => {
+      this.fields.set(await this.classService.getFields());
+    });
+  }
 
   // Alan filtresi
   filterByField(field: Field) {
@@ -53,12 +60,12 @@ export class FieldComponent {
   // Field düzenleme kaydet
   saveEditField(value?: string) {
     if (this.editingField !== null && (value?.trim() || '').length > 0) {
-      const updatedFields = this.fields.map(f => 
+      const updatedFields = this.fields().map(f => 
         f.id === this.editingField?.id 
           ? { ...this.editingField, name: value?.trim() || '' } 
           : f
       );
-      this.fields = updatedFields;
+      this.fields.set(updatedFields);
       this.fieldsUpdated.emit({fields:updatedFields, selectedField: this.selectedField});
       this.editingField = null;
     } else {
@@ -82,7 +89,7 @@ export class FieldComponent {
   // Field sil
   async deleteField(fieldId: string) {
     const result = await Swal.fire({
-      html: `<strong>${this.fields.find(f => f.id === fieldId)?.name}</strong> alanını silmek istediğinizden emin misiniz?`,
+      html: `<strong>${this.fields().find(f => f.id === fieldId)?.name}</strong> alanını silmek istediğinizden emin misiniz?`,
       icon: 'warning',
       confirmButtonText: 'Evet',
       confirmButtonColor: 'var(--error-600)',
@@ -92,8 +99,8 @@ export class FieldComponent {
       focusCancel:true
     })
     if (result.isConfirmed) {
-      const updatedFields = this.fields.filter(f => f.id !== fieldId);
-      this.fields = updatedFields;
+      const updatedFields = this.fields().filter(f => f.id !== fieldId);
+      this.fields.set(updatedFields);
       this.fieldsUpdated.emit({fields:updatedFields, selectedField: this.selectedField});
     }
   }
@@ -101,7 +108,7 @@ export class FieldComponent {
   // Yeni field ekle
   addNewField() {
     const nextId = this.helperService.generateRandomId();
-    const nextOrder = Math.max(...this.fields.map(f => f.order), 0) + 1;
+    const nextOrder = Math.max(...this.fields().map(f => f.order), 0) + 1;
 
     const newField = {
       id: nextId,
@@ -110,8 +117,8 @@ export class FieldComponent {
     };
     this.editingField = newField;
 
-    const updatedFields = [...this.fields, newField];
-    this.fields = updatedFields;
+    const updatedFields = [...this.fields(), newField];
+    this.fields.set(updatedFields);
     this.fieldsUpdated.emit({fields:updatedFields, selectedField: this.selectedField});
   }
 
@@ -121,7 +128,7 @@ export class FieldComponent {
     const toIndex = event.currentIndex;
 
     if (fromIndex !== toIndex) {
-      const fieldsCopy = [...this.fields];
+      const fieldsCopy = [...this.fields()];
       const [movedField] = fieldsCopy.splice(fromIndex, 1);
       fieldsCopy.splice(toIndex, 0, movedField);
 
@@ -130,7 +137,7 @@ export class FieldComponent {
         order: index + 1
       }));
 
-      this.fields = reorderedFields;
+      this.fields.set(reorderedFields);
       this.fieldsUpdated.emit({fields:reorderedFields, selectedField: this.selectedField});
     }
   }
@@ -149,6 +156,6 @@ export class FieldComponent {
 
   // Alan filtrelerini al (Tümü dahil)
   getFieldFilters(): Field[] {
-    return [...this.fields.slice().sort((a, b) => a.order - b.order)];
+    return [...this.fields().slice().sort((a, b) => a.order - b.order)];
   }
 }

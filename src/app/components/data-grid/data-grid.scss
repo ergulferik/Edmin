@@ -4,27 +4,29 @@
   background: #fff;
   border: 1px solid var(--border-color, #f0f0f0);
 
-  mat-card-header {
-    padding: 24px 24px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    mat-card-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-dark, #333);
-      margin-bottom: 4px;
-    }
-
-    mat-card-subtitle {
-      color: var(--primary-400, #666);
-      font-size: 14px;
-    }
+  mat-card-content {
+    padding: 1.5rem;
   }
 
-  mat-card-content {
-    padding: 0 24px 24px;
+  /* Zebra striping - odd/even satır renklendirmesi */
+  ::ng-deep .mdc-data-table__content {
+    background-color: red;
+
+    tr:nth-child(odd) {
+      background: var(--background-light, #fff);
+    }
+
+    tr:nth-child(even) {
+      background: var(--primary-100, #f8f9fa);
+    }
+
+    tr:nth-child(odd):hover {
+      background: var(--secondary-100, #CAF0F8);
+    }
+
+    tr:nth-child(even):hover {
+      background: var(--secondary-200, #94f1ff);
+    }
   }
 
   .search-section {
@@ -113,32 +115,7 @@
       background: var(--background-light, #fff);
     }
 
-    .mat-column-actions {
-      width: 120px;
-      text-align: center;
-    }
 
-    tr.table-row:hover td {
-      background: var(--secondary-100, #CAF0F8);
-      transition: background 0.2s;
-    }
-
-    /* Zebra striping - odd/even satır renklendirmesi */
-    tr.table-row:nth-child(odd) td {
-      background: var(--background-light, #fff);
-    }
-
-    tr.table-row:nth-child(even) td {
-      background: var(--primary-100, #f8f9fa);
-    }
-
-    tr.table-row:nth-child(odd):hover td {
-      background: var(--secondary-100, #CAF0F8);
-    }
-
-    tr.table-row:nth-child(even):hover td {
-      background: var(--secondary-300, #56CFE1);
-    }
   }
 
   .loading-spinner {
@@ -158,6 +135,43 @@
 
     edmin-button {
       color: var(--text-light, #fff);
+    }
+  }
+
+  .file-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+
+    .file-icon {
+      font-size: 20px;
+      color: #666;
+      flex-shrink: 0;
+    }
+
+    .file-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .actions-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .primary {
+      color: var(--primary-500);
+    }
+
+    .warn {
+      color: var(--error-600);
+    }
+
+    .accent {
+      color: var(--secondary-500);
     }
   }
 }
@@ -222,6 +236,7 @@
 .data-grid-table {
   overflow: auto;
   position: relative;
+  border-radius: 0.5rem;
 
   table {
     width: 100%;

@@ -46,7 +46,7 @@ export const EXAMS_DATA: Exam[] = [
     date: new Date('2024-06-15'),
     durationInMinutes: 135,
     templateId: '1',
-    answerKeyFileUrl: '/assets/answer-keys/tyt-june-2024.pdf',
+    answerKeyFile: new File([], 'tyt-june-2024.pdf'),
     isActive: true
   },
   {
@@ -56,7 +56,7 @@ export const EXAMS_DATA: Exam[] = [
     date: new Date('2024-07-20'),
     durationInMinutes: 135,
     templateId: '2',
-    answerKeyFileUrl: '/assets/answer-keys/tyt-july-2024.pdf',
+    answerKeyFile: new File([], 'tyt-july-2024.pdf'),
     isActive: true
   },
   {
@@ -66,7 +66,7 @@ export const EXAMS_DATA: Exam[] = [
     date: new Date('2024-08-10'),
     durationInMinutes: 135,
     templateId: '3',
-    answerKeyFileUrl: '/assets/answer-keys/tyt-august-2024.pdf',
+    answerKeyFile: new File([], 'tyt-august-2024.pdf'),
     isActive: false
   }
 ];

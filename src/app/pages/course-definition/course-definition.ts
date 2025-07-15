@@ -9,13 +9,13 @@ import { provideIcons } from '@ng-icons/core';
 import { heroPlus, heroPencil, heroTrash } from '@ng-icons/heroicons/outline';
 import { Router } from '@angular/router';
 import { Course } from '../../models/course.model';
-import { ModalFormComponent, ModalFormConfig } from '../../components/modal-form/modal-form';
+import { ModalFormComponent, ModalFormConfig } from '../../components/modal/modal-form/modal-form';
 import Swal from 'sweetalert2';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { AppButtonComponent } from '../../components/button/button';
 import { CourseService } from '../../services/course.service';
 import { DataGridComponent, DataGridConfig, DataGridAction } from '../../components/data-grid/data-grid';
+import { PageHeaderComponent } from '../../components/page/page-header/page-header';
 
 @Component({
   selector: 'app-course-definition',
@@ -28,7 +28,7 @@ import { DataGridComponent, DataGridConfig, DataGridAction } from '../../compone
     MatInputModule,
     MatIconModule,
     DataGridComponent,
-    AppButtonComponent
+    PageHeaderComponent
 ],
   templateUrl: './course-definition.html',
   styleUrls: ['./course-definition.scss'],
@@ -176,7 +176,6 @@ export class CourseDefinitionPage {
   async addCourse(formData: any) {
     try {
       await this.courseService.createCourse(formData);
-      await this.loadCourses(); // Listeyi yenile
     } catch (error) {
       console.error('Ders eklenirken hata oluştu:', error);
     }
@@ -188,7 +187,6 @@ export class CourseDefinitionPage {
     
     try {
       await this.courseService.updateCourse(currentEditingCourse.id, formData);
-      await this.loadCourses(); // Listeyi yenile
       this.editingCourse.set(null);
     } catch (error) {
       console.error('Ders güncellenirken hata oluştu:', error);
@@ -209,7 +207,6 @@ export class CourseDefinitionPage {
     if (result.isConfirmed) {
       try {
         await this.courseService.deleteCourse(course.id);
-        await this.loadCourses(); // Listeyi yenile
       } catch (error) {
         console.error('Ders silinirken hata oluştu:', error);
       }

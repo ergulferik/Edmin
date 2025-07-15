@@ -2,20 +2,6 @@
   padding: 24px;
   max-width: 1200px;
   margin: 0 auto;
-
-  .header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 32px;
-    gap: 16px;
-
-    h1 {
-      margin: 0;
-      color: var(--text-dark, #333);
-      font-size: 28px;
-      font-weight: 600;
-    }
-  }
 }
 
 /* Responsive Design */

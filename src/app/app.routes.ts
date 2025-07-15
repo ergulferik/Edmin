@@ -6,12 +6,8 @@ export const routes: Routes = [
   { path: '', redirectTo: 'class-operations', pathMatch: 'full' },
   { path: 'class-operations', component: Class },
   {
-    path: 'class-definition',
-    loadComponent: () => import('./pages/class-definition/class-definition').then(m => m.ClassDefinitionPage)
-  },
-  {
-    path: 'exam-create',
-    loadComponent: () => import('./pages/exam-create/exam-create').then(m => m.ExamCreatePage)
+    path: 'exam',
+    loadComponent: () => import('./pages/exam/exam').then(m => m.ExamPage)
   },
   {
     path: 'student-detail',

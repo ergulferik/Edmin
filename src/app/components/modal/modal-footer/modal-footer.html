@@ -1,0 +1,8 @@
+<button type="submit" mat-raised-button color="primary" [disabled]="submitButton()?.disabled" class="submit-button"
+    (click)="submitButton()?.onClick()">
+    {{ submitButton()?.title || 'Kaydet' }}
+</button>
+
+<button type="button" mat-button (click)="cancelButton()?.onClick()" class="cancel-button">
+    {{ cancelButton()?.title || 'İptal' }}
+</button>

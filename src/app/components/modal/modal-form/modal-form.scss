@@ -24,31 +24,6 @@
   border: 1px solid var(--border-color, #f0f0f0);
 }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 24px 24px 16px;
-  border-bottom: 1px solid var(--border-color, #f0f0f0);
-  background: var(--primary-100, #f8f9fa);
-
-  .modal-title {
-    flex: 1;
-    
-    h2 {
-      margin: 0 0 4px 0;
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-dark, #333);
-    }
-    
-    .modal-subtitle {
-      margin: 0;
-      font-size: 14px;
-      color: var(--primary-400, #666);
-    }
-  }
-}
 
 .modal-content {
   padding: 24px;
@@ -59,11 +34,18 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-bottom: 24px;
 
     .field-container {
       .full-width {
         width: 100%;
+        ::ng-deep {   
+          .edmin-button {
+            width: 100%;
+          }
+          .mat-mdc-button-base {
+            width: 100%;
+          }
+        }
       }
 
       ::ng-deep .mat-mdc-form-field {
@@ -89,13 +71,86 @@
       }
     }
   }
+}
 
-  .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-color, #f0f0f0);
+.template-selection {
+  width: 100%;
+
+  .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  button {
+    height: 36px;
+  }
+}
+
+.date-selection {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.file-upload-container {
+  position: relative;
+  width: 100%;
+  margin: 8px 0;
+
+  .file-upload-label {
+    display: block;
+    cursor: pointer;
+    border: 2px dashed var(--mdc-outlined-text-field-outline-color);
+    border-radius: 4px;
+    padding: 16px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: var(--mdc-outlined-text-field-hover-outline-color);
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    .file-upload-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--mdc-outlined-text-field-label-text-color);
+
+      &.has-file {
+        color: var(--mdc-outlined-text-field-focus-label-text-color);
+      }
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      .file-name {
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .remove-file {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    color: var(--mdc-outlined-text-field-error-hover-outline-color);
+  }
+
+  mat-error {
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
   }
 }
 
@@ -128,26 +183,10 @@
     margin: 16px;
   }
 
-  .modal-header {
-    padding: 16px 16px 12px;
-    
-    .modal-title h2 {
-      font-size: 18px;
-    }
-  }
-
   .modal-content {
     padding: 16px;
     max-height: 70vh;
     
-    .modal-actions {
-      flex-direction: column-reverse;
-      
-      button {
-        width: 100%;
-        padding: 12px;
-      }
-    }
   }
 }
 

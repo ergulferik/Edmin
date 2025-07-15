@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ExamTemplate } from '../../models/exam.model';
 import { ExamService } from '../../services/exam.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { AppButtonComponent } from "../../components/button/button";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
-import { ExamTemplateListComponent } from '../../components/exam-template-list/exam-template-list';
 import { CourseService } from '../../services/course.service';
 import { Course } from '../../models/course.model';
 import Swal from 'sweetalert2';
+import { PageHeaderComponent } from '../../components/page/page-header/page-header';
+import { ExamTemplateItemComponent } from '../../components/exam-template-item/exam-template-item';
 
 /**
  * Sınav Şablonları yönetim sayfası
@@ -27,13 +27,13 @@ import Swal from 'sweetalert2';
     ReactiveFormsModule,
     CommonModule,
     MatIconModule,
-    AppButtonComponent,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
     NgIconComponent,
-    ExamTemplateListComponent
+    ExamTemplateItemComponent,
+    PageHeaderComponent
 ],
   templateUrl: './exam-template.html',
   styleUrls: ['./exam-template.scss'],
@@ -47,12 +47,17 @@ export class ExamTemplatePage implements OnInit {
   editingId: string | null = null;
   templateForm: FormGroup;
   courses: Course[] = [];
-
+  examTemplates = signal<ExamTemplate[]>([]);
+  
   constructor(
     private examService: ExamService, 
     private courseService: CourseService,
     private fb: FormBuilder
   ) {
+    effect(async () => {
+      this.examTemplates.set(await this.examService.getExamTemplates());
+    });
+    
     this.templateForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],

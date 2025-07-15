@@ -2,8 +2,9 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ExamTemplate } from '../../models/exam.model';
-import { Component, input, Input, Output, EventEmitter, signal, inject, computed } from '@angular/core';
+import { Component, input, signal, inject, output, effect } from '@angular/core';
 import { CourseService } from '../../services/course.service';
+import { ExamService } from '../../services/exam.service';
 
 @Component({
   selector: 'edmin-exam-template-item',
@@ -14,14 +15,23 @@ import { CourseService } from '../../services/course.service';
 })
 export class ExamTemplateItemComponent {
   template = input<ExamTemplate | null>(null);
-  @Input() viewMode: 'edit' | 'show' = 'show';
-  @Output() edit = new EventEmitter<ExamTemplate>();
-  @Output() delete = new EventEmitter<string>();
+  viewMode=input<'edit' | 'show'>('show');
+  edit = output<ExamTemplate>();
+  delete = output<string>();
   courseService = inject(CourseService);
   courseNames = signal<Record<string, string>>({});
-
+  examService = inject(ExamService);
+  selected = signal<boolean>(false);
   constructor() {
     this.loadCourseNames();
+
+    effect(() => {
+      if(this.examService.getSelectedExam()?.templateId === this.template()?.id) {
+        this.selected.set(true);
+      } else {
+        this.selected.set(false);
+      }
+    });
   }
 
   private async loadCourseNames() {

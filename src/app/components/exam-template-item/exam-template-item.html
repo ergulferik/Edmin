@@ -1,16 +1,18 @@
-<div class="exam-card">
+<div class="exam-card" [ngClass]="{'selected': selected()}">
   <div class="card-header">
     <div>
       <h2>{{ template()?.name }}</h2>
       <span class="version">v{{ template()?.version }}</span>
     </div>
     <div class="card-actions">
+      @if(viewMode() === 'edit') {
       <button mat-icon-button class="icon-btn" (click)="onEdit()">
         <mat-icon class="icon-primary">edit</mat-icon>
       </button>
       <button mat-icon-button class="icon-btn danger" (click)="onDelete()">
         <mat-icon class="icon-danger">delete</mat-icon>
       </button>
+      }
     </div>
   </div>
   <div class="card-body">
@@ -22,4 +24,4 @@
       </span>
     </div>
   </div>
-</div> 
+</div>

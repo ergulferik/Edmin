@@ -1,6 +1,7 @@
-:host{
+:host {
   display: contents;
 }
+
 .class-list {
   flex: 1;
   overflow-y: auto;
@@ -66,26 +67,74 @@
       }
     }
 
-    .class-stats {
+    .class-info-container {
       display: flex;
-      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
 
-      .stat {
+      .class-stats {
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        gap: 1rem;
 
-        .stat-label {
-          color: var(--primary-300);
-          font-size: 0.75rem;
-          margin-bottom: 0.25rem;
+        .stat {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .stat-label {
+            color: var(--primary-300);
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+          }
+
+          .stat-value {
+            color: var(--text-light);
+            font-size: 1.125rem;
+            font-weight: 600;
+          }
         }
+      }
 
-        .stat-value {
+      .class-actions {
+        .icon-btn {
+          width: 24px;
+          height: 24px;
           color: var(--text-light);
-          font-size: 1.125rem;
-          font-weight: 600;
+          border-radius: 50%;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          ng-icon {
+            width: 24px;
+            height: 24px;
+            overflow: unset;
+          }
+
+          &.edit {
+            color: var(--primary-500);
+
+            &:hover {
+              color: var(--primary-400);
+              filter: drop-shadow(0 0 10px rgba(91, 192, 190, 0.5));
+            }
+          }
+
+          &.delete {
+            color: var(--error-600);
+
+            &:hover {
+              color: var(--error-400);
+              filter: drop-shadow(0 0 10px rgba(239, 35, 59, 0.5));
+            }
+          }
+
+
         }
+
+        display: flex;
+        gap: 0.5rem;
       }
     }
 
@@ -126,11 +175,11 @@
   font-weight: 600;
   border: none;
   border-top: 1px solid var(--border-color);
-  padding: 1rem;
+  padding: 1rem 0px;
   width: 100%;
 
   &:hover {
-    background-color: var(--primary-600);
+    background-color: var(--primary-500);
   }
 
   &:active {
@@ -150,13 +199,17 @@
   }
 }
 
+
+
 @keyframes pulse {
   0% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.7;
   }
+
   100% {
     opacity: 1;
   }

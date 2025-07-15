@@ -19,7 +19,7 @@ export interface ExamTemplate {
     date: Date; // Exam date in ISO format (YYYY-MM-DD)
     durationInMinutes?: number; // Duration of the exam in minutes (optional)
     templateId: string; // Reference to the ExamTemplate
-    answerKeyFileUrl?: string; // URL or path to the uploaded answer sheet
+    answerKeyFile?: File; // URL or path to the uploaded answer sheet
     isActive: boolean; // Indicates if the exam is currently visible/active
     opticalForm?: File;
   }

@@ -1,20 +1,19 @@
 <!-- Modern Exam Template Yönetimi -->
 <div class="exam-template-container">
-  <div class="header">
-    <edmin-button type="back" (click)="goBack()">
-    </edmin-button>
-    <h1>Sınav Şablonu Tanımlama</h1>
-    <edmin-button (click)="openCreateForm()">
-      <mat-icon>add</mat-icon> Yeni Şablon
-    </edmin-button>
-  </div>
+  <edmin-page-header title="Sınav Şablonu" subtitle="Sınav şablonlarını yönetin, sınavlarınızı bu şablonlardan oluşturabilirsiniz."/>
 
   <!-- Şablon Listesi -->
-  <edmin-exam-template-list
-    viewMode="edit"
-    (edit)="editTemplate($event)"
-    (delete)="deleteTemplate($event)">
-  </edmin-exam-template-list>
+  <div class="card-list">
+    @for (template of examTemplates(); track template.id) {
+    <edmin-exam-template-item
+      [template]="template"
+      (edit)="editTemplate($event)"
+      (delete)="deleteTemplate($event)"
+      [viewMode]="'edit'">
+    </edmin-exam-template-item>
+    }
+  </div> 
+
 
   <!-- Şablon Ekle/Düzenle Modalı -->
   <div class="modal" *ngIf="showForm">

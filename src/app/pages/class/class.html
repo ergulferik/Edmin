@@ -4,16 +4,13 @@
         <div class="section-header">
             <h2>Sınıflar</h2>
             <edmin-field 
-                [fields]="fields" 
                 [selectedField]="selectedField"
-                (fieldSelected)="onFieldSelected($event)"
-                (fieldsUpdated)="onFieldsUpdated($event)">
+                (fieldSelected)="onFieldSelected($event)">
             </edmin-field>
         </div>
 
         <app-class-list
             [classes]="classes"
-            [fields]="fields"
             [selectedClass]="selectedClass"
             [selectedField]="selectedField"
             [filteredClasses]="filteredClasses"

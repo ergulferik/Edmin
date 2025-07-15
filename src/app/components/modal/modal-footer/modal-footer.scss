@@ -1,0 +1,18 @@
+:host {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color, #f0f0f0);
+}
+
+@media (max-width: 768px) {
+    :host {
+        flex-direction: column-reverse;
+
+        button {
+            width: 100%;
+            padding: 12px;
+        }
+    }
+}

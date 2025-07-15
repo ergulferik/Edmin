@@ -89,7 +89,9 @@ export class ClassService {
     // TODO: Replace with API call: return this.http.post<ClassItem>('/api/classes', classItem)
     const newClass: ClassItem = {
       ...classItem,
-      id: Math.random().toString(36).substring(2)
+      id: Math.random().toString(36).substring(2),
+      averageGrade: classItem.averageGrade ?? 0,
+      studentCount: classItem.studentCount ?? 0,
     };
     this.classes.update(classes => [...classes, newClass]);
     this.toast.create({
@@ -123,10 +125,11 @@ export class ClassService {
     if (index === -1) {
       return Promise.reject(new Error('Class not found'));
     }
+    const foundClass = this.classes()[index];
     this.classes.update(classes => classes.filter((_, i) => i !== index));
     this.toast.create({
       position: 'bottom-center',
-      content: `Sınıf "${this.classes()[index].name}" başarıyla silindi`,
+      content: `Sınıf "${foundClass.name}" başarıyla silindi`,
       type: 'success',
       time: 3
     });

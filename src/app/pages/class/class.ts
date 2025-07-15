@@ -42,9 +42,6 @@ export class Class {
   // Öğrenci verileri
   students: Student[] = [];
 
-  // Alan verileri
-  fields: Field[] = [];
-
   // Filtreleme ve arama
   selectedClass: ClassItem | null = null;
   selectedField = "all"
@@ -60,8 +57,9 @@ export class Class {
     effect(async () => {
       this.classes = await this.classService.getClasses();
       this.students = await this.classService.getStudents();
-      this.fields = await this.classService.getFields();
-      this.filteredClasses = this.classes;
+      this.filteredClasses = this.selectedField === 'all'
+      ? this.classes
+      : this.classes.filter(c => c.fieldId === this.selectedField);
     });
   }
 
@@ -76,13 +74,6 @@ export class Class {
     this.filteredClasses = field.id === 'all'
       ? this.classes
       : this.classes.filter(c => c.fieldId === this.selectedField);
-  }
-
-  // Field güncelleme event handler
-  onFieldsUpdated(event: { fields: Field[], selectedField: string }) {
-    this.fields = event.fields;
-    this.selectedField = event.selectedField;
-    this.onFieldSelected(this.fields.find(f => f.id === this.selectedField)!);
   }
 
   onDragOver(event: DragEvent, classItem: ClassItem) {

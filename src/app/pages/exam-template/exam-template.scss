@@ -3,29 +3,14 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-
-    h1 {
-      margin: 0;
-      color: var(--text-dark, #333);
-      font-size: 28px;
-      font-weight: 600;
-      flex: 1;
-    }
-    .add-btn {
-      margin-left: auto;
-    }
-  }
-
   .card-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-  }
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    align-self: center;
+  } 
 
   .modal {
     position: fixed;
@@ -95,10 +80,8 @@
 @media (max-width: 768px) {
   .exam-template-container {
     padding: 16px;
-    .header h1 {
-      font-size: 24px;
-    }
   }
+
   .card-list {
     gap: 1rem;
   }
@@ -109,7 +92,8 @@
     padding: 1.2rem 0.5rem;
     min-width: 90vw;
   }
+
   .modal-content form {
     gap: 0.7rem;
   }
-} 
+}

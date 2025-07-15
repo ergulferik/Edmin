@@ -12,6 +12,7 @@ export class ExamService {
   private examTemplates = signal<ExamTemplate[]>([...EXAM_TEMPLATES_DATA]);
   private exams = signal<Exam[]>([...EXAMS_DATA]);
   private studentExamResults = signal<StudentExamResult[]>([...STUDENT_EXAM_RESULTS_DATA]);
+  private selectedExam = signal<Exam | null>(null);
 
   // Exam Template CRUD Operations
   getExamTemplates(): Promise<ExamTemplate[]> {
@@ -156,5 +157,13 @@ export class ExamService {
     // TODO: Replace with server-side calculation API call
     // return this.http.post<any>('/api/calculate-results', { studentAnswers, answerKey })
     return Promise.resolve({ totalScore: 85.5, totalNet: 30.0, statistics: [] });
+  }
+
+  setSelectedExam(exam: Exam | null) {
+    this.selectedExam.set(exam);
+  }
+
+  getSelectedExam() {
+    return this.selectedExam();
   }
 }

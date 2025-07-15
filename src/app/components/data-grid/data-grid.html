@@ -1,9 +1,4 @@
 <mat-card class="data-grid-card">
-  <mat-card-header>
-    <mat-card-title>{{ config.title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="config.subtitle">{{ config.subtitle }}</mat-card-subtitle>
-  </mat-card-header>
-
   <mat-card-content>
     <div class="data-grid-actions">
       <mat-form-field *ngIf="config.showSearch" appearance="outline">
@@ -12,11 +7,7 @@
         <ng-icon name="heroMagnifyingGlass" matSuffix></ng-icon>
       </mat-form-field>
 
-      <edmin-button
-        *ngIf="config.showAddButton"
-        [type]="config.addButtonType || 'primary'"
-        (click)="onAddClick()"
-      >
+      <edmin-button *ngIf="config.showAddButton" [type]="config.addButtonType || 'primary'" (click)="onAddClick()">
         <ng-icon name="heroPlus"></ng-icon>
         {{ config.addButtonText || 'Yeni Ekle' }}
       </edmin-button>
@@ -40,22 +31,40 @@
           <th mat-header-cell *matHeaderCellDef [style.width]="getColumnWidth(column)">
             {{ column.label }}
           </th>
-          <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
+          <td mat-cell *matCellDef="let element">
+            <ng-container [ngSwitch]="column.type">
+              <!-- Tarih alanları için -->
+              <span *ngSwitchCase="'date'">{{ formatDate(element[column.key]) }}</span>
+
+              <!-- Boolean alanları için -->
+              <mat-checkbox *ngSwitchCase="'boolean'" [checked]="element[column.key]" [disabled]="true" color="primary">
+              </mat-checkbox>
+
+              <!-- Dosya alanları için -->
+              <div *ngSwitchCase="'file'" class="file-display" [matTooltip]="element[column.key]">
+                <ng-icon [name]="getFileIcon(element[column.key])" class="file-icon"></ng-icon>
+                <span class="file-name">{{ getFileDisplayName(element[column.key]) }}</span>
+              </div>
+
+              <!-- Template alanları için -->
+              <span *ngSwitchCase="'template'">{{ getTemplateDisplayValue(element[column.key], column.data, column.keyExpr, column.displayExpr) }}</span>
+
+              <!-- Varsayılan metin gösterimi -->
+              <span *ngSwitchDefault>{{ element[column.key] }}</span>
+            </ng-container>
+          </td>
         </ng-container>
 
         <!-- Actions Column -->
         <ng-container matColumnDef="actions" *ngIf="actions?.length">
           <th mat-header-cell *matHeaderCellDef [style.width]="'120px'">İşlemler</th>
           <td mat-cell *matCellDef="let element">
-            <button
-              mat-icon-button
-              *ngFor="let action of actions"
-              [color]="action.color"
-              [matTooltip]="action.label || ''"
-              (click)="onActionClick(action, element)"
-            >
-              <ng-icon [name]="action.icon || 'heroPencil'"></ng-icon>
-            </button>
+            <div class="actions-container">
+              <button [matTooltip]="action.label || ''" *ngFor="let action of actions" mat-icon-button class="icon-btn"
+                (click)="onActionClick(action, element)">
+                <ng-icon [class]="action.color" [name]="action.icon || 'heroPencil'"></ng-icon>
+              </button>
+            </div>
           </td>
         </ng-container>
 
@@ -69,4 +78,4 @@
       </div>
     </div>
   </mat-card-content>
-</mat-card> 
+</mat-card>
