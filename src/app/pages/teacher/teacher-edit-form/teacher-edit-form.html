@@ -1,188 +1,135 @@
 <edmin-modal-header [title]="'Öğretmen Düzenle'" (onClose)="onCancel()"></edmin-modal-header>
-<mat-stepper
-  #stepper
-  (selectionChange)="onStepperIndexChange($event.previouslySelectedIndex, $event.selectedIndex)"
->
-  <mat-step
-    [stepControl]="stepperForms[0]"
-    [hasError]="stepperForms[0].invalid && !stepperForms[0].untouched"
-    [errorMessage]="getFirstError(stepperForms[0])"
-    label="Kişisel Bilgiler"
-  >
-    <form [formGroup]="stepperForms[0]">
-      <div class="top-row">
-        <div class="image-container">
-          <img
-            *ngIf="stepperForms[0].value.image; else defaultAvatar"
-            [src]="stepperForms[0].value.image"
-            alt="Fotoğraf"
-          />
-          <ng-template #defaultAvatar>
-            <edmin-avatar [data]="{ initials: getInitials() }" [size]="'120px'"></edmin-avatar>
-          </ng-template>
+<mat-stepper #stepper (selectionChange)="onStepperIndexChange($event.previouslySelectedIndex, $event.selectedIndex)">
+ <mat-step
+  [stepControl]="stepperForms[0]"
+  [hasError]="stepperForms[0].invalid && !stepperForms[0].untouched"
+  [errorMessage]="getFirstError(stepperForms[0])"
+  label="Kişisel Bilgiler"
+ >
+  <form [formGroup]="stepperForms[0]">
+   <div class="top-row">
+    <div class="image-container">
+     <img *ngIf="stepperForms[0].value.image; else defaultAvatar" [src]="stepperForms[0].value.image" alt="Fotoğraf" />
+     <ng-template #defaultAvatar>
+      <edmin-avatar [data]="{ initials: getInitials() }" [size]="'120px'"></edmin-avatar>
+     </ng-template>
 
-          <ng-icon
-            class="menu-btn"
-            [matMenuTriggerFor]="editMenu"
-            size="12"
-            name="heroPencilSquare"
-          ></ng-icon>
+     <ng-icon class="menu-btn" [matMenuTriggerFor]="editMenu" size="12" name="heroPencilSquare"></ng-icon>
 
-          <mat-menu #editMenu="matMenu" class="floating-menu">
-            <button
-              class="menu-item primary"
-              mat-menu-item
-              type="button"
-              (click)="onEditPhoto(fileInput)"
-            >
-              <ng-icon size="16" name="heroPencilSquare"></ng-icon>
-              <span>{{ stepperForms[0].value.image ? 'Fotoğrafı Düzenle' : 'Fotoğraf Ekle' }}</span>
-              <input
-                #fileInput
-                type="file"
-                (change)="onPhotoSelected($event)"
-                accept="image/*"
-                hidden
-              />
-            </button>
-            <button
-              *ngIf="stepperForms[0].value.image"
-              class="menu-item warn"
-              mat-menu-item
-              type="button"
-              (click)="onDeletePhoto()"
-            >
-              <ng-icon size="16" name="heroTrash"></ng-icon>
-              <span>Fotoğrafı Sil</span>
-            </button>
-          </mat-menu>
-        </div>
-        <mat-form-field appearance="outline">
-          <mat-label>Telefon</mat-label>
-          <input
-            matInput
-            formControlName="phone"
-            placeholder="+90XXXXXXXXXX"
-            maxlength="13"
-            (input)="onPhoneInput($event)"
-          />
-          <mat-error *ngIf="stepperForms[0].get('phone')?.hasError('required')"
-            >Telefon zorunludur</mat-error
-          >
-          <mat-error *ngIf="stepperForms[0].get('phone')?.hasError('pattern')"
-            >Geçerli bir telefon giriniz</mat-error
-          >
-        </mat-form-field>
-      </div>
-      <mat-form-field appearance="outline">
-        <mat-label>Adı</mat-label>
-        <input matInput formControlName="name" />
-        <mat-error *ngIf="stepperForms[0].get('name')?.hasError('required')"
-          >Adı zorunludur</mat-error
-        >
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Soyadı</mat-label>
-        <input matInput formControlName="surname" />
-        <mat-error *ngIf="stepperForms[0].get('surname')?.hasError('required')"
-          >Soyadı zorunludur</mat-error
-        >
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" />
-        <mat-error *ngIf="stepperForms[0].get('email')?.hasError('required')"
-          >Email zorunludur</mat-error
-        >
-        <mat-error *ngIf="stepperForms[0].get('email')?.hasError('email')"
-          >Geçerli bir email giriniz</mat-error
-        >
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Cinsiyet</mat-label>
-        <mat-select formControlName="gender">
-          <mat-option value="">Belirtmek istemiyorum</mat-option>
-          <mat-option value="male">Erkek</mat-option>
-          <mat-option value="female">Kadın</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Adres</mat-label>
-        <textarea matInput formControlName="address"></textarea>
-        <mat-error *ngIf="stepperForms[0].get('address')?.hasError('required')"
-          >Adres zorunludur</mat-error
-        >
-        <mat-error *ngIf="stepperForms[0].get('address')?.hasError('minlength')"
-          >Adres en az 5 karakter olmalı</mat-error
-        >
-      </mat-form-field>
-    </form>
-  </mat-step>
-  <mat-step
-    [stepControl]="stepperForms[1]"
-    [hasError]="stepperForms[1].invalid && !stepperForms[1].untouched"
-    [errorMessage]="getFirstError(stepperForms[1])"
-    label="Kurum Bilgileri"
-  >
-    <form [formGroup]="stepperForms[1]">
-      <div class="row-flex">
-        <mat-form-field appearance="outline" class="flex-1">
-          <mat-label>Şifre</mat-label>
-          <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password" />
-          <button mat-icon-button matSuffix type="button" (click)="toggleShowPassword()">
-            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-          <mat-error *ngIf="stepperForms[1].get('password')?.hasError('required')"
-            >Şifre zorunludur</mat-error
-          >
-          <mat-error *ngIf="stepperForms[1].get('password')?.hasError('minlength')"
-            >Şifre en az 6 karakter olmalı</mat-error
-          >
-        </mat-form-field>
-        <mat-checkbox style="margin-bottom: 1rem" formControlName="isActive" class="ml-2">
-          Aktif mi?
-        </mat-checkbox>
-      </div>
-      <mat-form-field appearance="outline">
-        <mat-label>Dersler</mat-label>
-        <mat-select formControlName="courses" multiple>
-          <mat-option *ngFor="let course of coursesOptions()" [value]="course.id">{{
-            course.name
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="stepperForms[1].get('courses')?.hasError('required')"
-          >Dersler zorunludur</mat-error
-        >
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Sınıflar</mat-label>
-        <mat-select formControlName="classes" multiple>
-          <mat-option *ngFor="let classItem of classesOptions()" [value]="classItem.id">{{
-            classItem.name + getFieldNameById(classItem.fieldId)
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="stepperForms[1].get('classes')?.hasError('required')"
-          >Sınıf bilgisi zorunludur</mat-error
-        >
-      </mat-form-field>
-      <div class="row-flex">
-        <mat-form-field appearance="outline" class="flex-1">
-          <mat-label>İşe Başlama Tarihi</mat-label>
-          <input matInput [matDatepicker]="workStartPicker" formControlName="workStart" />
-          <mat-datepicker-toggle matSuffix [for]="workStartPicker"></mat-datepicker-toggle>
-          <mat-datepicker #workStartPicker></mat-datepicker>
-          <mat-error *ngIf="stepperForms[1].get('workStart')?.hasError('required')"
-            >Başlama tarihi zorunludur</mat-error
-          >
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="flex-1 ml-2">
-          <mat-label>İşten Ayrılma Tarihi</mat-label>
-          <input matInput [matDatepicker]="workEndPicker" formControlName="workEnd" />
-          <mat-datepicker-toggle matSuffix [for]="workEndPicker"></mat-datepicker-toggle>
-          <mat-datepicker #workEndPicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </form>
-  </mat-step>
+     <mat-menu #editMenu="matMenu" class="floating-menu">
+      <button class="menu-item primary" mat-menu-item type="button" (click)="onEditPhoto(fileInput)">
+       <ng-icon size="16" name="heroPencilSquare"></ng-icon>
+       <span>{{ stepperForms[0].value.image ? 'Fotoğrafı Düzenle' : 'Fotoğraf Ekle' }}</span>
+       <input #fileInput type="file" (change)="onPhotoSelected($event)" accept="image/*" hidden />
+      </button>
+      <button
+       *ngIf="stepperForms[0].value.image"
+       class="menu-item warn"
+       mat-menu-item
+       type="button"
+       (click)="onDeletePhoto()"
+      >
+       <ng-icon size="16" name="heroTrash"></ng-icon>
+       <span>Fotoğrafı Sil</span>
+      </button>
+     </mat-menu>
+    </div>
+    <mat-form-field appearance="outline">
+     <mat-label>Telefon</mat-label>
+     <input
+      matInput
+      formControlName="phone"
+      placeholder="+90XXXXXXXXXX"
+      maxlength="13"
+      (input)="onPhoneInput($event)"
+     />
+     <mat-error *ngIf="stepperForms[0].get('phone')?.hasError('required')">Telefon zorunludur</mat-error>
+     <mat-error *ngIf="stepperForms[0].get('phone')?.hasError('pattern')">Geçerli bir telefon giriniz</mat-error>
+    </mat-form-field>
+   </div>
+   <mat-form-field appearance="outline">
+    <mat-label>Adı</mat-label>
+    <input matInput formControlName="name" />
+    <mat-error *ngIf="stepperForms[0].get('name')?.hasError('required')">Adı zorunludur</mat-error>
+   </mat-form-field>
+   <mat-form-field appearance="outline">
+    <mat-label>Soyadı</mat-label>
+    <input matInput formControlName="surname" />
+    <mat-error *ngIf="stepperForms[0].get('surname')?.hasError('required')">Soyadı zorunludur</mat-error>
+   </mat-form-field>
+   <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" />
+    <mat-error *ngIf="stepperForms[0].get('email')?.hasError('required')">Email zorunludur</mat-error>
+    <mat-error *ngIf="stepperForms[0].get('email')?.hasError('email')">Geçerli bir email giriniz</mat-error>
+   </mat-form-field>
+   <mat-form-field appearance="outline">
+    <mat-label>Cinsiyet</mat-label>
+    <mat-select formControlName="gender">
+     <mat-option value="">Belirtmek istemiyorum</mat-option>
+     <mat-option value="male">Erkek</mat-option>
+     <mat-option value="female">Kadın</mat-option>
+    </mat-select>
+   </mat-form-field>
+   <mat-form-field appearance="outline">
+    <mat-label>Adres</mat-label>
+    <textarea matInput formControlName="address"></textarea>
+    <mat-error *ngIf="stepperForms[0].get('address')?.hasError('required')">Adres zorunludur</mat-error>
+    <mat-error *ngIf="stepperForms[0].get('address')?.hasError('minlength')">Adres en az 5 karakter olmalı</mat-error>
+   </mat-form-field>
+  </form>
+ </mat-step>
+ <mat-step
+  [stepControl]="stepperForms[1]"
+  [hasError]="stepperForms[1].invalid && !stepperForms[1].untouched"
+  [errorMessage]="getFirstError(stepperForms[1])"
+  label="Kurum Bilgileri"
+ >
+  <form [formGroup]="stepperForms[1]">
+   <div class="row-flex">
+    <mat-form-field appearance="outline" class="flex-1">
+     <mat-label>Şifre</mat-label>
+     <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password" />
+     <button mat-icon-button matSuffix type="button" (click)="toggleShowPassword()">
+      <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+     </button>
+     <mat-error *ngIf="stepperForms[1].get('password')?.hasError('required')">Şifre zorunludur</mat-error>
+     <mat-error *ngIf="stepperForms[1].get('password')?.hasError('minlength')">Şifre en az 6 karakter olmalı</mat-error>
+    </mat-form-field>
+    <mat-checkbox style="margin-bottom: 1rem" formControlName="isActive" class="ml-2"> Aktif mi? </mat-checkbox>
+   </div>
+   <mat-form-field appearance="outline">
+    <mat-label>Dersler</mat-label>
+    <mat-select formControlName="courses" multiple>
+     <mat-option *ngFor="let course of coursesOptions()" [value]="course.id">{{ course.name }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="stepperForms[1].get('courses')?.hasError('required')">Dersler zorunludur</mat-error>
+   </mat-form-field>
+   <mat-form-field appearance="outline">
+    <mat-label>Sınıflar</mat-label>
+    <mat-select formControlName="classes" multiple>
+     <mat-option *ngFor="let classItem of classesOptions()" [value]="classItem.id">{{
+      classItem.name + getFieldNameById(classItem.fieldId)
+     }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="stepperForms[1].get('classes')?.hasError('required')">Sınıf bilgisi zorunludur</mat-error>
+   </mat-form-field>
+   <div class="row-flex">
+    <mat-form-field appearance="outline" class="flex-1">
+     <mat-label>İşe Başlama Tarihi</mat-label>
+     <input matInput [matDatepicker]="workStartPicker" formControlName="workStart" />
+     <mat-datepicker-toggle matSuffix [for]="workStartPicker"></mat-datepicker-toggle>
+     <mat-datepicker #workStartPicker></mat-datepicker>
+     <mat-error *ngIf="stepperForms[1].get('workStart')?.hasError('required')">Başlama tarihi zorunludur</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="flex-1 ml-2">
+     <mat-label>İşten Ayrılma Tarihi</mat-label>
+     <input matInput [matDatepicker]="workEndPicker" formControlName="workEnd" />
+     <mat-datepicker-toggle matSuffix [for]="workEndPicker"></mat-datepicker-toggle>
+     <mat-datepicker #workEndPicker></mat-datepicker>
+    </mat-form-field>
+   </div>
+  </form>
+ </mat-step>
 </mat-stepper>
 <edmin-modal-footer [buttons]="footerButtons()"></edmin-modal-footer>

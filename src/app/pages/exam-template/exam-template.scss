@@ -1,99 +1,99 @@
 .exam-template-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+ padding: 2rem;
+ max-width: 1200px;
+ margin: 0 auto;
 
-  .card-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem;
-    margin-top: 1rem;
-    align-self: center;
-  }
+ .card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  align-self: center;
+ }
 
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+ .modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  .modal-content {
+   background: white;
+   border-radius: 8px;
+   width: 100%;
+   max-width: 600px;
+   max-height: 90vh;
+   overflow-y: auto;
+
+   h2 {
+    margin: 0 0 1.5rem;
+   }
+
+   form {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
 
-    .modal-content {
-      background: white;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
-
-      h2 {
-        margin: 0 0 1.5rem;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        padding: 2rem;
-
-        .full-width {
-          width: 100%;
-        }
-
-        .course-config-row {
-          display: grid;
-          grid-template-columns: 2fr 1fr 1fr auto;
-          gap: 1rem;
-          align-items: center;
-        }
-
-        .modal-actions {
-          display: flex;
-          justify-content: flex-end;
-          gap: 1rem;
-          margin-top: 1.5rem;
-        }
-      }
+    .full-width {
+     width: 100%;
     }
+
+    .course-config-row {
+     display: grid;
+     grid-template-columns: 2fr 1fr 1fr auto;
+     gap: 1rem;
+     align-items: center;
+    }
+
+    .modal-actions {
+     display: flex;
+     justify-content: flex-end;
+     gap: 1rem;
+     margin-top: 1.5rem;
+    }
+   }
   }
+ }
 }
 
 .modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
 }
 
 .course-config-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1rem;
+ display: flex;
+ flex-direction: column;
+ gap: 1rem;
+ margin-bottom: 1rem;
 }
 
 @media (max-width: 768px) {
-  .exam-template-container {
-    padding: 16px;
-  }
+ .exam-template-container {
+  padding: 16px;
+ }
 
-  .card-list {
-    gap: 1rem;
-  }
+ .card-list {
+  gap: 1rem;
+ }
 }
 
 @media (max-width: 600px) {
-  .modal-content {
-    padding: 1.2rem 0.5rem;
-    min-width: 90vw;
-  }
+ .modal-content {
+  padding: 1.2rem 0.5rem;
+  min-width: 90vw;
+ }
 
-  .modal-content form {
-    gap: 0.7rem;
-  }
+ .modal-content form {
+  gap: 0.7rem;
+ }
 }

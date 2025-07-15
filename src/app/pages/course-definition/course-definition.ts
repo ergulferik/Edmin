@@ -14,223 +14,219 @@ import Swal from 'sweetalert2';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CourseService } from '../../services/course.service';
-import {
-  DataGridComponent,
-  DataGridConfig,
-  DataGridAction,
-} from '../../components/data-grid/data-grid';
+import { DataGridComponent, DataGridConfig, DataGridAction } from '../../components/data-grid/data-grid';
 import { PageHeaderComponent } from '../../components/page/page-header/page-header';
 
 /**
  * Course definition page for managing courses
  */
 @Component({
-  selector: 'app-course-definition',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatInputModule,
-    MatIconModule,
-    DataGridComponent,
-    PageHeaderComponent,
-  ],
-  templateUrl: './course-definition.html',
-  styleUrls: ['./course-definition.scss'],
-  viewProviders: [
-    provideIcons({
-      heroPlus,
-      heroPencil,
-      heroTrash,
-    }),
-  ],
+ selector: 'app-course-definition',
+ standalone: true,
+ imports: [
+  CommonModule,
+  FormsModule,
+  MatCardModule,
+  MatButtonModule,
+  MatInputModule,
+  MatIconModule,
+  DataGridComponent,
+  PageHeaderComponent,
+ ],
+ templateUrl: './course-definition.html',
+ styleUrls: ['./course-definition.scss'],
+ viewProviders: [
+  provideIcons({
+   heroPlus,
+   heroPencil,
+   heroTrash,
+  }),
+ ],
 })
 export class CourseDefinitionPage {
-  private router = inject(Router);
-  private dialog = inject(MatDialog);
-  private courseService = inject(CourseService);
+ private router = inject(Router);
+ private dialog = inject(MatDialog);
+ private courseService = inject(CourseService);
 
-  // Signal tanımlamaları
-  courses = signal<Course[]>([]);
-  searchTerm = signal<string>('');
-  editingCourse = signal<Course | null>(null);
+ // Signal tanımlamaları
+ courses = signal<Course[]>([]);
+ searchTerm = signal<string>('');
+ editingCourse = signal<Course | null>(null);
 
-  // Computed signal ile filtrelenmiş kursları hesapla
-  filteredCourses = computed(() => {
-    const term = this.searchTerm();
-    const allCourses = this.courses();
+ // Computed signal ile filtrelenmiş kursları hesapla
+ filteredCourses = computed(() => {
+  const term = this.searchTerm();
+  const allCourses = this.courses();
 
-    if (!term) return allCourses;
+  if (!term) return allCourses;
 
-    return allCourses.filter(course => course.name.toLowerCase().includes(term.toLowerCase()));
+  return allCourses.filter(course => course.name.toLowerCase().includes(term.toLowerCase()));
+ });
+
+ // Data Grid Configuration
+ gridConfig: DataGridConfig = {
+  title: 'Dersler',
+  subtitle: 'Dersleri yönetin (Matematik, Fizik, vb.)',
+  columns: [
+   {
+    key: 'name',
+    label: 'Ders Adı',
+    type: 'text',
+   },
+  ],
+  searchPlaceholder: 'Ders adına göre ara...',
+  addButtonText: 'Yeni Ders Ekle',
+  showAddButton: true,
+  showSearch: true,
+  maxHeight: '380px',
+  searchableColumns: ['name'],
+ };
+
+ // Data Grid Actions
+ gridActions: DataGridAction[] = [
+  {
+   type: 'edit',
+   icon: 'heroPencilSquare',
+   color: 'primary',
+   label: 'Düzenle',
+   onClick: (course: Course) => this.editCourse(course),
+  },
+  {
+   type: 'delete',
+   icon: 'heroTrash',
+   color: 'warn',
+   label: 'Sil',
+   onClick: (course: Course) => this.deleteCourse(course),
+  },
+ ];
+
+ // Modal Form Configuration
+ modalConfig: ModalFormConfig = {
+  title: 'Ders Ekle',
+  subtitle: 'Yeni ders bilgilerini girin',
+  fields: [
+   {
+    key: 'name',
+    label: 'Ders Adı',
+    type: 'text',
+    placeholder: 'Örn: Matematik, Fizik, Kimya',
+    required: true,
+    validators: [Validators.minLength(2), Validators.maxLength(50)],
+   },
+  ],
+  submitText: 'Kaydet',
+  cancelText: 'İptal',
+  width: '500px',
+ };
+
+ constructor() {
+  // İlk yükleme effect'i
+  effect(() => {
+   this.loadCourses();
+  });
+ }
+
+ async loadCourses() {
+  try {
+   const coursesData = await this.courseService.getCourses();
+   this.courses.set(coursesData || []);
+  } catch (error) {
+   console.error('Dersler yüklenirken hata oluştu:', error);
+   this.courses.set([]);
+  }
+ }
+
+ onAddClick() {
+  this.editingCourse.set(null);
+  this.modalConfig.title = 'Yeni Ders Ekle';
+  this.modalConfig.subtitle = 'Yeni ders bilgilerini girin';
+  this.modalConfig.submitText = 'Ekle';
+  this.modalConfig.fields.forEach(field => {
+   field.value = '';
   });
 
-  // Data Grid Configuration
-  gridConfig: DataGridConfig = {
-    title: 'Dersler',
-    subtitle: 'Dersleri yönetin (Matematik, Fizik, vb.)',
-    columns: [
-      {
-        key: 'name',
-        label: 'Ders Adı',
-        type: 'text',
-      },
-    ],
-    searchPlaceholder: 'Ders adına göre ara...',
-    addButtonText: 'Yeni Ders Ekle',
-    showAddButton: true,
-    showSearch: true,
-    maxHeight: '380px',
-    searchableColumns: ['name'],
-  };
+  const dialogRef = this.dialog.open(ModalFormComponent, {
+   width: this.modalConfig.width || '500px',
+   data: {
+    config: this.modalConfig,
+   },
+  });
 
-  // Data Grid Actions
-  gridActions: DataGridAction[] = [
-    {
-      type: 'edit',
-      icon: 'heroPencilSquare',
-      color: 'primary',
-      label: 'Düzenle',
-      onClick: (course: Course) => this.editCourse(course),
-    },
-    {
-      type: 'delete',
-      icon: 'heroTrash',
-      color: 'warn',
-      label: 'Sil',
-      onClick: (course: Course) => this.deleteCourse(course),
-    },
-  ];
+  dialogRef.afterClosed().subscribe(result => {
+   if (result) {
+    this.addCourse(result);
+   }
+  });
+ }
 
-  // Modal Form Configuration
-  modalConfig: ModalFormConfig = {
-    title: 'Ders Ekle',
-    subtitle: 'Yeni ders bilgilerini girin',
-    fields: [
-      {
-        key: 'name',
-        label: 'Ders Adı',
-        type: 'text',
-        placeholder: 'Örn: Matematik, Fizik, Kimya',
-        required: true,
-        validators: [Validators.minLength(2), Validators.maxLength(50)],
-      },
-    ],
-    submitText: 'Kaydet',
-    cancelText: 'İptal',
-    width: '500px',
-  };
+ onSearchChange(searchTerm: string) {
+  this.searchTerm.set(searchTerm);
+ }
 
-  constructor() {
-    // İlk yükleme effect'i
-    effect(() => {
-      this.loadCourses();
-    });
+ editCourse(course: Course) {
+  this.editingCourse.set(course);
+  this.modalConfig.title = 'Dersi Düzenle';
+  this.modalConfig.subtitle = 'Ders bilgilerini güncelleyin';
+  this.modalConfig.submitText = 'Güncelle';
+  this.modalConfig.fields.forEach(field => {
+   field.value = course[field.key as keyof Course];
+  });
+
+  const dialogRef = this.dialog.open(ModalFormComponent, {
+   width: this.modalConfig.width || '500px',
+   data: {
+    config: this.modalConfig,
+   },
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+   if (result) {
+    this.updateCourse(result);
+   }
+  });
+ }
+
+ async addCourse(formData: any) {
+  try {
+   await this.courseService.createCourse(formData);
+  } catch (error) {
+   console.error('Ders eklenirken hata oluştu:', error);
   }
+ }
 
-  async loadCourses() {
-    try {
-      const coursesData = await this.courseService.getCourses();
-      this.courses.set(coursesData || []);
-    } catch (error) {
-      console.error('Dersler yüklenirken hata oluştu:', error);
-      this.courses.set([]);
-    }
+ async updateCourse(formData: any) {
+  const currentEditingCourse = this.editingCourse();
+  if (!currentEditingCourse) return;
+
+  try {
+   await this.courseService.updateCourse(currentEditingCourse.id, formData);
+   this.editingCourse.set(null);
+  } catch (error) {
+   console.error('Ders güncellenirken hata oluştu:', error);
   }
+ }
 
-  onAddClick() {
-    this.editingCourse.set(null);
-    this.modalConfig.title = 'Yeni Ders Ekle';
-    this.modalConfig.subtitle = 'Yeni ders bilgilerini girin';
-    this.modalConfig.submitText = 'Ekle';
-    this.modalConfig.fields.forEach(field => {
-      field.value = '';
-    });
+ async deleteCourse(course: Course) {
+  const result = await Swal.fire({
+   html: `<strong>${course.name}</strong> dersini silmek istediğinizden emin misiniz?`,
+   icon: 'warning',
+   confirmButtonText: 'Evet',
+   confirmButtonColor: 'var(--primary-600)',
+   showCancelButton: true,
+   cancelButtonText: 'Hayır',
+   cancelButtonColor: 'var(--error-600)',
+  });
 
-    const dialogRef = this.dialog.open(ModalFormComponent, {
-      width: this.modalConfig.width || '500px',
-      data: {
-        config: this.modalConfig,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.addCourse(result);
-      }
-    });
+  if (result.isConfirmed) {
+   try {
+    await this.courseService.deleteCourse(course.id);
+   } catch (error) {
+    console.error('Ders silinirken hata oluştu:', error);
+   }
   }
+ }
 
-  onSearchChange(searchTerm: string) {
-    this.searchTerm.set(searchTerm);
-  }
-
-  editCourse(course: Course) {
-    this.editingCourse.set(course);
-    this.modalConfig.title = 'Dersi Düzenle';
-    this.modalConfig.subtitle = 'Ders bilgilerini güncelleyin';
-    this.modalConfig.submitText = 'Güncelle';
-    this.modalConfig.fields.forEach(field => {
-      field.value = course[field.key as keyof Course];
-    });
-
-    const dialogRef = this.dialog.open(ModalFormComponent, {
-      width: this.modalConfig.width || '500px',
-      data: {
-        config: this.modalConfig,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.updateCourse(result);
-      }
-    });
-  }
-
-  async addCourse(formData: any) {
-    try {
-      await this.courseService.createCourse(formData);
-    } catch (error) {
-      console.error('Ders eklenirken hata oluştu:', error);
-    }
-  }
-
-  async updateCourse(formData: any) {
-    const currentEditingCourse = this.editingCourse();
-    if (!currentEditingCourse) return;
-
-    try {
-      await this.courseService.updateCourse(currentEditingCourse.id, formData);
-      this.editingCourse.set(null);
-    } catch (error) {
-      console.error('Ders güncellenirken hata oluştu:', error);
-    }
-  }
-
-  async deleteCourse(course: Course) {
-    const result = await Swal.fire({
-      html: `<strong>${course.name}</strong> dersini silmek istediğinizden emin misiniz?`,
-      icon: 'warning',
-      confirmButtonText: 'Evet',
-      confirmButtonColor: 'var(--primary-600)',
-      showCancelButton: true,
-      cancelButtonText: 'Hayır',
-      cancelButtonColor: 'var(--error-600)',
-    });
-
-    if (result.isConfirmed) {
-      try {
-        await this.courseService.deleteCourse(course.id);
-      } catch (error) {
-        console.error('Ders silinirken hata oluştu:', error);
-      }
-    }
-  }
-
-  goBack() {
-    this.router.navigate(['/class-operations']);
-  }
+ goBack() {
+  this.router.navigate(['/class-operations']);
+ }
 }

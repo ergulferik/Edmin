@@ -1,18 +1,16 @@
 <!-- Resim varsa ve hata yoksa resmi göster -->
 @if (data.image && !isError) {
-  <img
-    [style.width]="size"
-    [style.height]="size"
-    (error)="isError = true"
-    [src]="data.image"
-    alt="Avatar"
-    class="student-avatar"
-  />
+ <img
+  [style.width]="size"
+  [style.height]="size"
+  (error)="isError = true"
+  [src]="data.image"
+  alt="Avatar"
+  class="student-avatar"
+ />
 } @else {
-  <!-- Aksi halde harf avatarı göster -->
-  <div [style.width]="size" [style.height]="size" class="student-avatar">
-    <span [style.fontSize]="'calc(' + size + ' / 3)'" class="avatar-text">{{
-      data.initials || '?'
-    }}</span>
-  </div>
+ <!-- Aksi halde harf avatarı göster -->
+ <div [style.width]="size" [style.height]="size" class="student-avatar">
+  <span [style.fontSize]="'calc(' + size + ' / 3)'" class="avatar-text">{{ data.initials || '?' }}</span>
+ </div>
 }

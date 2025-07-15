@@ -1,15 +1,15 @@
 {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "[typescript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[html]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[scss]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "prettier.configPath": ".prettierrc"
-  }
-  
+ "editor.defaultFormatter": "esbenp.prettier-vscode",
+ "editor.formatOnSave": true,
+ "prettier.configPath": ".prettierrc",
+ "prettier.prettierPath": "./node_modules/prettier",
+ "[typescript]": {
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+ },
+ "[html]": {
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+ },
+ "[scss]": {
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+ }
+}

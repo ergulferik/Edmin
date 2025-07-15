@@ -1,72 +1,70 @@
 <div class="student-list-section">
-  <div *ngIf="selectedClass; else noClassSelected">
-    <div class="section-header">
-      <h2>{{ selectedClass.name }} - Öğrenci Listesi</h2>
-      <div class="student-controls">
-        <div class="search-box">
-          <mat-form-field appearance="outline" class="search-input">
-            <mat-label>Öğrenci ara</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Ad, soyad veya öğrenci no..."
-              [(ngModel)]="searchTerm"
-              (input)="onSearchChange()"
-            />
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
-        </div>
-        <div class="sort-controls">
-          <mat-form-field appearance="outline" class="sort-select">
-            <mat-label>Sıralama</mat-label>
-            <mat-select [(ngModel)]="sortBy" (selectionChange)="onSortChange()">
-              <mat-option value="A-Z">İsme Göre (A-Z)</mat-option>
-              <mat-option value="Z-A">İsme Göre (Z-A)</mat-option>
-              <mat-option value="studentNumber">Öğrenci No'ya Göre</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
+ <div *ngIf="selectedClass; else noClassSelected">
+  <div class="section-header">
+   <h2>{{ selectedClass.name }} - Öğrenci Listesi</h2>
+   <div class="student-controls">
+    <div class="search-box">
+     <mat-form-field appearance="outline" class="search-input">
+      <mat-label>Öğrenci ara</mat-label>
+      <input
+       matInput
+       type="text"
+       placeholder="Ad, soyad veya öğrenci no..."
+       [(ngModel)]="searchTerm"
+       (input)="onSearchChange()"
+      />
+      <mat-icon matSuffix>search</mat-icon>
+     </mat-form-field>
     </div>
-
-    <div class="student-list">
-      @for (student of filteredStudents; track student.id) {
-        <div
-          [draggable]="true"
-          class="student-card"
-          [attr.data-student-id]="student.id"
-          [class.dragging]="classService.draggedStudent()?.id === student.id"
-          (dragstart)="onDragStart($event, student)"
-          (dragend)="onDragEnd()"
-        >
-          <mat-icon class="drag-icon">drag_indicator</mat-icon>
-          <edmin-avatar
-            [data]="{ initials: student.name.charAt(0) + student.surname.charAt(0) }"
-          ></edmin-avatar>
-          <div class="student-info">
-            <h4 class="student-name">{{ student.name }} {{ student.surname }}</h4>
-            <p class="student-number">{{ student.studentNumber }}</p>
-          </div>
-          <div class="student-grade">
-            <span class="grade-badge" [class]="'grade-' + getGradeColor(student.averageGrade)">
-              {{ student.averageGrade.toFixed(1) }}
-            </span>
-          </div>
-        </div>
-      }
-      <div *ngIf="filteredStudents.length === 0" class="no-results">
-        <p>Öğrenci bulunamadı.</p>
-      </div>
+    <div class="sort-controls">
+     <mat-form-field appearance="outline" class="sort-select">
+      <mat-label>Sıralama</mat-label>
+      <mat-select [(ngModel)]="sortBy" (selectionChange)="onSortChange()">
+       <mat-option value="A-Z">İsme Göre (A-Z)</mat-option>
+       <mat-option value="Z-A">İsme Göre (Z-A)</mat-option>
+       <mat-option value="studentNumber">Öğrenci No'ya Göre</mat-option>
+      </mat-select>
+     </mat-form-field>
     </div>
+   </div>
   </div>
 
-  <ng-template #noClassSelected>
-    <div class="no-class-selected">
-      <div class="empty-state">
-        <div class="empty-icon">📚</div>
-        <h3>Sınıf Seçin</h3>
-        <p>Öğrenci listesini görüntülemek için sol taraftan bir sınıf seçin.</p>
-      </div>
+  <div class="student-list">
+   @for (student of filteredStudents; track student.id) {
+    <div
+     [draggable]="true"
+     class="student-card"
+     [attr.data-student-id]="student.id"
+     [class.dragging]="classService.draggedStudent()?.id === student.id"
+     (dragstart)="onDragStart($event, student)"
+     (dragend)="onDragEnd()"
+    >
+     <mat-icon class="drag-icon">drag_indicator</mat-icon>
+     <edmin-avatar [data]="{ initials: student.name.charAt(0) + student.surname.charAt(0) }"></edmin-avatar>
+     <div class="student-info">
+      <h4 class="student-name">{{ student.name }} {{ student.surname }}</h4>
+      <p class="student-number">{{ student.studentNumber }}</p>
+     </div>
+     <div class="student-grade">
+      <span class="grade-badge" [class]="'grade-' + getGradeColor(student.averageGrade)">
+       {{ student.averageGrade.toFixed(1) }}
+      </span>
+     </div>
     </div>
-  </ng-template>
+   }
+   <div *ngIf="filteredStudents.length === 0" class="no-results">
+    <p>Öğrenci bulunamadı.</p>
+   </div>
+  </div>
+ </div>
+
+ <ng-template #noClassSelected>
+  <div class="no-class-selected">
+   <div class="empty-state">
+    <div class="empty-icon">📚</div>
+    <h3>Sınıf Seçin</h3>
+    <p>Öğrenci listesini görüntülemek için sol taraftan bir sınıf seçin.</p>
+   </div>
+  </div>
+ </ng-template>
 </div>

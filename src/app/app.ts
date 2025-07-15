@@ -11,62 +11,62 @@ import { ReactiveFormsModule } from '@angular/forms';
  * @description Sidebar is managing on this component
  */
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, NgSidebarComponent, MatCardModule, MatButtonModule, ReactiveFormsModule],
-  templateUrl: './app.html',
-  styleUrls: ['./app.scss'],
+ selector: 'app-root',
+ standalone: true,
+ imports: [RouterOutlet, NgSidebarComponent, MatCardModule, MatButtonModule, ReactiveFormsModule],
+ templateUrl: './app.html',
+ styleUrls: ['./app.scss'],
 })
 export class App {
-  protected title = 'Edmin';
-  sidebarWidth = 0;
+ protected title = 'Edmin';
+ sidebarWidth = 0;
 
-  constructor() {
-    this.sidebarService.sidebarWidth$.pipe(takeUntilDestroyed()).subscribe(width => {
-      this.sidebarWidth = width;
-    });
-  }
+ constructor() {
+  this.sidebarService.sidebarWidth$.pipe(takeUntilDestroyed()).subscribe(width => {
+   this.sidebarWidth = width;
+  });
+ }
 
-  sidebarService = inject(NgSidebarService);
-  sidebar: SidebarModel = {
-    bannerOptions: {
-      title: 'Edmin',
-    },
-    userOptions: {
-      name: 'John Doe',
-    },
-    sidebarData: [
-      {
-        title: 'Tanımlamalar',
-        data: [
-          {
-            name: 'Sınıf İşlemleri',
-            route: '/class-operations',
-          },
-          {
-            name: 'Sınav',
-            route: '/exam',
-          },
-          {
-            name: 'Ders',
-            route: '/course-definition',
-          },
-          {
-            name: 'Sınav Şablonu',
-            route: '/exam-template',
-          },
-          {
-            name: 'Öğretmenler',
-            route: '/teacher',
-          },
-        ],
-      },
+ sidebarService = inject(NgSidebarService);
+ sidebar: SidebarModel = {
+  bannerOptions: {
+   title: 'Edmin',
+  },
+  userOptions: {
+   name: 'John Doe',
+  },
+  sidebarData: [
+   {
+    title: 'Tanımlamalar',
+    data: [
+     {
+      name: 'Sınıf İşlemleri',
+      route: '/class-operations',
+     },
+     {
+      name: 'Sınav',
+      route: '/exam',
+     },
+     {
+      name: 'Ders',
+      route: '/course-definition',
+     },
+     {
+      name: 'Sınav Şablonu',
+      route: '/exam-template',
+     },
+     {
+      name: 'Öğretmenler',
+      route: '/teacher',
+     },
     ],
-    options: {
-      expand: true,
-      theme: 'light',
-      autoPosition: true,
-      viewMode: 'hover',
-    },
-  };
+   },
+  ],
+  options: {
+   expand: true,
+   theme: 'light',
+   autoPosition: true,
+   viewMode: 'hover',
+  },
+ };
 }

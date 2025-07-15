@@ -1,44 +1,39 @@
-<div
-  class="field-filters"
-  cdkDropList
-  cdkDropListOrientation="mixed"
-  (cdkDropListDropped)="onFieldDrop($event)"
->
-  @for (field of getFieldFilters(); track field.id) {
-    <button
-      *ngIf="!editingField || editingField.id !== field.id"
-      class="field-chip"
-      cdkDrag
-      (cdkDragStarted)="onFieldDragStart(field)"
-      (cdkDragEnded)="onFieldDragEnd(field)"
-      [class.active]="selectedField === field.id"
-      (click)="filterByField(field)"
-      (dblclick)="startEditField(field)"
-    >
-      {{ field.name }}
-    </button>
-    <input
-      *ngIf="editingField && editingField.id === field.id"
-      #fieldInput
-      class="field-input"
-      type="text"
-      (blur)="cancelEditField()"
-      (keydown.enter)="saveEditField(fieldInput.value)"
-      [value]="editingField.name"
-      autofocus
-      placeholder="Alan adı"
-    />
-  }
-  <div
-    class="trash-icon-container"
-    *ngIf="draggingField && draggingField.id !== 'all'"
-    (mouseenter)="isTrashZone = true"
-    (mouseleave)="isTrashZone = false"
-    id="trash-zone"
+<div class="field-filters" cdkDropList cdkDropListOrientation="mixed" (cdkDropListDropped)="onFieldDrop($event)">
+ @for (field of getFieldFilters(); track field.id) {
+  <button
+   *ngIf="!editingField || editingField.id !== field.id"
+   class="field-chip"
+   cdkDrag
+   (cdkDragStarted)="onFieldDragStart(field)"
+   (cdkDragEnded)="onFieldDragEnd(field)"
+   [class.active]="selectedField === field.id"
+   (click)="filterByField(field)"
+   (dblclick)="startEditField(field)"
   >
-    <ng-icon class="trash-icon" name="heroTrash"></ng-icon>
-  </div>
-  <div class="add-icon-container" *ngIf="!draggingField" (click)="addNewField()">
-    <ng-icon class="add-icon" name="heroPlus"></ng-icon>
-  </div>
+   {{ field.name }}
+  </button>
+  <input
+   *ngIf="editingField && editingField.id === field.id"
+   #fieldInput
+   class="field-input"
+   type="text"
+   (blur)="cancelEditField()"
+   (keydown.enter)="saveEditField(fieldInput.value)"
+   [value]="editingField.name"
+   autofocus
+   placeholder="Alan adı"
+  />
+ }
+ <div
+  class="trash-icon-container"
+  *ngIf="draggingField && draggingField.id !== 'all'"
+  (mouseenter)="isTrashZone = true"
+  (mouseleave)="isTrashZone = false"
+  id="trash-zone"
+ >
+  <ng-icon class="trash-icon" name="heroTrash"></ng-icon>
+ </div>
+ <div class="add-icon-container" *ngIf="!draggingField" (click)="addNewField()">
+  <ng-icon class="add-icon" name="heroPlus"></ng-icon>
+ </div>
 </div>

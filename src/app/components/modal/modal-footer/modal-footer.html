@@ -1,14 +1,14 @@
 @for (button of buttons(); track button.title; let i = $index) {
-  @if (button.visible !== false) {
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      [disabled]="button.disabled"
-      [class]="(button.type ?? 'submit') + '-button'"
-      (click)="button.onClick?.()"
-    >
-      {{ button.title }}
-    </button>
-  }
+ @if (button.visible !== false) {
+  <button
+   type="submit"
+   mat-raised-button
+   color="primary"
+   [disabled]="button.disabled"
+   [class]="(button.type ?? 'submit') + '-button'"
+   (click)="button.onClick?.()"
+  >
+   {{ button.title }}
+  </button>
+ }
 }

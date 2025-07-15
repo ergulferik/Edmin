@@ -1,17 +1,17 @@
 :host {
-  display: block;
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+ display: block;
+ padding: 2rem;
+ max-width: 1200px;
+ margin: 0 auto;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .course-definition-container {
-    padding: 16px;
+ .course-definition-container {
+  padding: 16px;
 
-    .header h1 {
-      font-size: 24px;
-    }
+  .header h1 {
+   font-size: 24px;
   }
+ }
 }

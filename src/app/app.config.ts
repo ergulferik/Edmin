@@ -1,8 +1,8 @@
 import {
-  ApplicationConfig,
-  importProvidersFrom,
-  provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection,
+ ApplicationConfig,
+ importProvidersFrom,
+ provideBrowserGlobalErrorListeners,
+ provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -13,24 +13,24 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({
-      eventCoalescing: true,
-    }),
-    provideRouter(routes),
-    provideAnimations(),
-    importProvidersFrom(MatNativeDateModule),
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'tr-TR',
-    },
-    {
-      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: {
-        subscriptSizing: 'dynamic',
-      },
-    },
-    provideHttpClient(),
-  ],
+ providers: [
+  provideBrowserGlobalErrorListeners(),
+  provideZoneChangeDetection({
+   eventCoalescing: true,
+  }),
+  provideRouter(routes),
+  provideAnimations(),
+  importProvidersFrom(MatNativeDateModule),
+  {
+   provide: MAT_DATE_LOCALE,
+   useValue: 'tr-TR',
+  },
+  {
+   provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+   useValue: {
+    subscriptSizing: 'dynamic',
+   },
+  },
+  provideHttpClient(),
+ ],
 };

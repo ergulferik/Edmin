@@ -1,96 +1,78 @@
 <!-- Modern Exam Template Yönetimi -->
 <div class="exam-template-container">
-  <edmin-page-header
-    title="Sınav Şablonu"
-    subtitle="Sınav şablonlarını yönetin, sınavlarınızı bu şablonlardan oluşturabilirsiniz."
-  />
+ <edmin-page-header
+  title="Sınav Şablonu"
+  subtitle="Sınav şablonlarını yönetin, sınavlarınızı bu şablonlardan oluşturabilirsiniz."
+ />
 
-  <!-- Şablon Listesi -->
-  <div class="card-list">
-    @for (template of examTemplates(); track template.id) {
-      <edmin-exam-template-item
-        [template]="template"
-        (edit)="editTemplate($event)"
-        (delete)="deleteTemplate($event)"
-        [viewMode]="'edit'"
-      >
-      </edmin-exam-template-item>
-    }
-  </div>
+ <!-- Şablon Listesi -->
+ <div class="card-list">
+  @for (template of examTemplates(); track template.id) {
+   <edmin-exam-template-item
+    [template]="template"
+    (edit)="editTemplate($event)"
+    (delete)="deleteTemplate($event)"
+    [viewMode]="'edit'"
+   >
+   </edmin-exam-template-item>
+  }
+ </div>
 
-  <!-- Şablon Ekle/Düzenle Modalı -->
-  <div class="modal" *ngIf="showForm">
-    <div class="modal-content">
-      <edmin-modal-header
-        [title]="editMode ? 'Şablonu Düzenle' : 'Yeni Şablon Ekle'"
-        (onClose)="closeForm()"
-      />
-      <form [formGroup]="templateForm" (ngSubmit)="saveTemplate()">
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Adı</mat-label>
-          <input matInput formControlName="name" placeholder="Şablon adını giriniz" />
-        </mat-form-field>
+ <!-- Şablon Ekle/Düzenle Modalı -->
+ <div class="modal" *ngIf="showForm">
+  <div class="modal-content">
+   <edmin-modal-header [title]="editMode ? 'Şablonu Düzenle' : 'Yeni Şablon Ekle'" (onClose)="closeForm()" />
+   <form [formGroup]="templateForm" (ngSubmit)="saveTemplate()">
+    <mat-form-field appearance="fill" class="full-width">
+     <mat-label>Adı</mat-label>
+     <input matInput formControlName="name" placeholder="Şablon adını giriniz" />
+    </mat-form-field>
 
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Açıklama</mat-label>
-          <input matInput formControlName="description" placeholder="Şablon açıklamasını giriniz" />
-        </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+     <mat-label>Açıklama</mat-label>
+     <input matInput formControlName="description" placeholder="Şablon açıklamasını giriniz" />
+    </mat-form-field>
 
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Sürüm</mat-label>
-          <input matInput formControlName="version" placeholder="Sürüm numarasını giriniz" />
-        </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+     <mat-label>Sürüm</mat-label>
+     <input matInput formControlName="version" placeholder="Sürüm numarasını giriniz" />
+    </mat-form-field>
 
-        <!-- Dersler için dinamik alanlar -->
-        <div class="course-config-container" formArrayName="courseConfigs">
-          <div
-            *ngFor="let course of courseConfigs.controls; let i = index"
-            [formGroupName]="i"
-            class="course-config-row"
-          >
-            <mat-form-field appearance="fill">
-              <mat-label>Ders</mat-label>
-              <mat-select formControlName="courseId">
-                @for (course of courses; track course.id) {
-                  <mat-option [value]="course.id" [disabled]="isSelectedCourse(course.id)">
-                    {{ course.name }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+    <!-- Dersler için dinamik alanlar -->
+    <div class="course-config-container" formArrayName="courseConfigs">
+     <div *ngFor="let course of courseConfigs.controls; let i = index" [formGroupName]="i" class="course-config-row">
+      <mat-form-field appearance="fill">
+       <mat-label>Ders</mat-label>
+       <mat-select formControlName="courseId">
+        @for (course of courses; track course.id) {
+         <mat-option [value]="course.id" [disabled]="isSelectedCourse(course.id)">
+          {{ course.name }}
+         </mat-option>
+        }
+       </mat-select>
+      </mat-form-field>
 
-            <mat-form-field appearance="fill">
-              <mat-label>Soru Sayısı</mat-label>
-              <input
-                matInput
-                type="number"
-                formControlName="questionCount"
-                placeholder="Soru sayısını giriniz"
-              />
-            </mat-form-field>
+      <mat-form-field appearance="fill">
+       <mat-label>Soru Sayısı</mat-label>
+       <input matInput type="number" formControlName="questionCount" placeholder="Soru sayısını giriniz" />
+      </mat-form-field>
 
-            <mat-form-field appearance="fill">
-              <mat-label>Katsayı</mat-label>
-              <input
-                matInput
-                type="number"
-                step="0.01"
-                formControlName="weight"
-                placeholder="Katsayı giriniz"
-              />
-            </mat-form-field>
+      <mat-form-field appearance="fill">
+       <mat-label>Katsayı</mat-label>
+       <input matInput type="number" step="0.01" formControlName="weight" placeholder="Katsayı giriniz" />
+      </mat-form-field>
 
-            <button mat-icon-button type="button" (click)="removeCourseConfig(i)">
-              <mat-icon class="icon-danger">delete</mat-icon>
-            </button>
-          </div>
-          <button matButton="outlined" type="button" (click)="addCourseConfig()">
-            <mat-icon>add</mat-icon>
-            Ders Ekle
-          </button>
-        </div>
-      </form>
-      <edmin-modal-footer [buttons]="footer()" />
+      <button mat-icon-button type="button" (click)="removeCourseConfig(i)">
+       <mat-icon class="icon-danger">delete</mat-icon>
+      </button>
+     </div>
+     <button matButton="outlined" type="button" (click)="addCourseConfig()">
+      <mat-icon>add</mat-icon>
+      Ders Ekle
+     </button>
     </div>
+   </form>
+   <edmin-modal-footer [buttons]="footer()" />
   </div>
+ </div>
 </div>
