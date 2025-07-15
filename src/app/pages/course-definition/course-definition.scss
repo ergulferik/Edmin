@@ -1,5 +1,6 @@
-.course-definition-container {
-  padding: 24px;
+:host {
+  display: block;
+  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -8,9 +9,9 @@
 @media (max-width: 768px) {
   .course-definition-container {
     padding: 16px;
-    
+
     .header h1 {
       font-size: 24px;
     }
   }
-} 
+}

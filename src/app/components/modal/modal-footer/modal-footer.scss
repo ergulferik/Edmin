@@ -1,18 +1,19 @@
 :host {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 1rem;
-    border-top: 1px solid var(--border-color, #f0f0f0);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 1rem;
+  border-top: 1px solid var(--border-color, #f0f0f0);
+  background-color: var(--primary-100, #f8f9fa) !important;
 }
 
 @media (max-width: 768px) {
-    :host {
-        flex-direction: column-reverse;
+  :host {
+    flex-direction: column-reverse;
 
-        button {
-            width: 100%;
-            padding: 12px;
-        }
+    button {
+      width: 100%;
+      padding: 12px;
     }
+  }
 }

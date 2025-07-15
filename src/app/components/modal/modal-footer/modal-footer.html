@@ -1,8 +1,14 @@
-<button type="submit" mat-raised-button color="primary" [disabled]="submitButton()?.disabled" class="submit-button"
-    (click)="submitButton()?.onClick()">
-    {{ submitButton()?.title || 'Kaydet' }}
-</button>
-
-<button type="button" mat-button (click)="cancelButton()?.onClick()" class="cancel-button">
-    {{ cancelButton()?.title || 'İptal' }}
-</button>
+@for (button of buttons(); track button.title; let i = $index) {
+  @if (button.visible !== false) {
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="button.disabled"
+      [class]="(button.type ?? 'submit') + '-button'"
+      (click)="button.onClick?.()"
+    >
+      {{ button.title }}
+    </button>
+  }
+}

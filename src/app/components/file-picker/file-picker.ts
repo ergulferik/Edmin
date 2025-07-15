@@ -1,10 +1,13 @@
-import { Component, forwardRef, input, output, signal } from '@angular/core';
+import { Component, forwardRef, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+/**
+ * FilePickerComponent allows users to select, drag-and-drop, and download files. Implements ControlValueAccessor for form integration.
+ */
 @Component({
   selector: 'edmin-file-picker',
   standalone: true,
@@ -15,30 +18,45 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FilePickerComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class FilePickerComponent implements ControlValueAccessor {
-  label = input<string>('Dosya seçmek için tıklayın');
+  /** Label for the file picker */
+  label = input<string>('Click to select a file');
+  /** Accepted file types */
   accept = input<string>('*');
+  /** Is the file required? */
   required = input<boolean>(false);
 
+  /** Selected file */
   file: File | null = null;
+  /** Is the picker disabled? */
   disabled = false;
+  /** Has the field been touched? */
   touched = false;
+  /** Is the drag-over state active? */
   isDragOver = false;
 
-  onChange = (file: File | null) => {};
+  onChange = (file: File | null) => {
+    console.log(file);
+  };
   onTouched = () => {};
 
+  /**
+   * Returns the selected file's name.
+   */
   getFileName(): string {
     return this.file?.name || '';
   }
 
+  /**
+   * Returns the selected file's size as a human-readable string.
+   */
   getFileSize(): string {
     if (!this.file) return '';
-    
+
     const bytes = this.file.size;
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes === 0) return '0 Byte';
@@ -46,6 +64,9 @@ export class FilePickerComponent implements ControlValueAccessor {
     return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i];
   }
 
+  /**
+   * Handles file selection via input.
+   */
   onFileChange(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0] || null;
     this.writeValue(file);
@@ -53,18 +74,27 @@ export class FilePickerComponent implements ControlValueAccessor {
     this.markAsTouched();
   }
 
+  /**
+   * Handles drag over event.
+   */
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
     this.isDragOver = true;
   }
 
+  /**
+   * Handles drag leave event.
+   */
   onDragLeave(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
     this.isDragOver = false;
   }
 
+  /**
+   * Handles file drop event.
+   */
   onDrop(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -78,10 +108,15 @@ export class FilePickerComponent implements ControlValueAccessor {
     }
   }
 
+  /**
+   * Checks if the file type is accepted.
+   */
   private isFileTypeAccepted(file: File): boolean {
     if (this.accept() === '*') return true;
-    
-    const acceptedTypes = this.accept().split(',').map(type => type.trim());
+
+    const acceptedTypes = this.accept()
+      .split(',')
+      .map(type => type.trim());
     const fileType = file.type;
     const fileExtension = '.' + file.name.split('.').pop();
 
@@ -100,28 +135,46 @@ export class FilePickerComponent implements ControlValueAccessor {
     });
   }
 
+  /**
+   * Removes the selected file.
+   */
   removeFile(): void {
     this.writeValue(null);
     this.onChange(null);
     this.markAsTouched();
   }
 
+  /**
+   * Sets the file value.
+   */
   writeValue(file: File | null): void {
     this.file = file;
   }
 
+  /**
+   * Registers a change callback.
+   */
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
+  /**
+   * Registers a touched callback.
+   */
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
+  /**
+   * Sets the disabled state.
+   */
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
+  /**
+   * Marks the field as touched.
+   */
   private markAsTouched(): void {
     if (!this.touched) {
       this.onTouched();
@@ -129,23 +182,26 @@ export class FilePickerComponent implements ControlValueAccessor {
     }
   }
 
+  /**
+   * Downloads the selected file.
+   */
   downloadFile(): void {
     if (!this.file) return;
 
-    // Dosyayı indirmek için URL oluştur
+    // Create a URL for the file to download
     const url = URL.createObjectURL(this.file);
-    
-    // İndirme bağlantısı oluştur
+
+    // Create a download link
     const link = document.createElement('a');
     link.href = url;
     link.download = this.file.name;
-    
-    // Bağlantıyı tıkla ve temizle
+
+    // Click the link and clean up
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
-    // URL'yi temizle
+
+    // Revoke the URL
     URL.revokeObjectURL(url);
   }
-} 
+}

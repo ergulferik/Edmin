@@ -1,0 +1,10 @@
+<edmin-page-header [title]="'Öğretmenler'" [subtitle]="'Öğretmenleri yönetin'"></edmin-page-header>
+
+<edmin-data-grid
+  [config]="gridConfig"
+  [data]="filteredTeachers"
+  [actions]="gridActions"
+  (addClick)="onAddClick()"
+  (searchChange)="onSearchChange($event)"
+>
+</edmin-data-grid>

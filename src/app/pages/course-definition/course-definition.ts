@@ -14,9 +14,16 @@ import Swal from 'sweetalert2';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CourseService } from '../../services/course.service';
-import { DataGridComponent, DataGridConfig, DataGridAction } from '../../components/data-grid/data-grid';
+import {
+  DataGridComponent,
+  DataGridConfig,
+  DataGridAction,
+} from '../../components/data-grid/data-grid';
 import { PageHeaderComponent } from '../../components/page/page-header/page-header';
 
+/**
+ * Course definition page for managing courses
+ */
 @Component({
   selector: 'app-course-definition',
   standalone: true,
@@ -28,11 +35,17 @@ import { PageHeaderComponent } from '../../components/page/page-header/page-head
     MatInputModule,
     MatIconModule,
     DataGridComponent,
-    PageHeaderComponent
-],
+    PageHeaderComponent,
+  ],
   templateUrl: './course-definition.html',
   styleUrls: ['./course-definition.scss'],
-  viewProviders: [provideIcons({ heroPlus, heroPencil, heroTrash })]
+  viewProviders: [
+    provideIcons({
+      heroPlus,
+      heroPencil,
+      heroTrash,
+    }),
+  ],
 })
 export class CourseDefinitionPage {
   private router = inject(Router);
@@ -48,12 +61,10 @@ export class CourseDefinitionPage {
   filteredCourses = computed(() => {
     const term = this.searchTerm();
     const allCourses = this.courses();
-    
+
     if (!term) return allCourses;
-    
-    return allCourses.filter(course => 
-      course.name.toLowerCase().includes(term.toLowerCase())
-    );
+
+    return allCourses.filter(course => course.name.toLowerCase().includes(term.toLowerCase()));
   });
 
   // Data Grid Configuration
@@ -61,31 +72,36 @@ export class CourseDefinitionPage {
     title: 'Dersler',
     subtitle: 'Dersleri yönetin (Matematik, Fizik, vb.)',
     columns: [
-      { key: 'name', label: 'Ders Adı', type: 'text' }
+      {
+        key: 'name',
+        label: 'Ders Adı',
+        type: 'text',
+      },
     ],
     searchPlaceholder: 'Ders adına göre ara...',
     addButtonText: 'Yeni Ders Ekle',
     showAddButton: true,
     showSearch: true,
-    maxHeight: '380px'
+    maxHeight: '380px',
+    searchableColumns: ['name'],
   };
 
   // Data Grid Actions
   gridActions: DataGridAction[] = [
     {
       type: 'edit',
-      icon: 'heroPencil',
+      icon: 'heroPencilSquare',
       color: 'primary',
       label: 'Düzenle',
-      onClick: (course: Course) => this.editCourse(course)
+      onClick: (course: Course) => this.editCourse(course),
     },
     {
       type: 'delete',
       icon: 'heroTrash',
       color: 'warn',
       label: 'Sil',
-      onClick: (course: Course) => this.deleteCourse(course)
-    }
+      onClick: (course: Course) => this.deleteCourse(course),
+    },
   ];
 
   // Modal Form Configuration
@@ -99,15 +115,12 @@ export class CourseDefinitionPage {
         type: 'text',
         placeholder: 'Örn: Matematik, Fizik, Kimya',
         required: true,
-        validators: [
-          Validators.minLength(2),
-          Validators.maxLength(50)
-        ]
-      }
+        validators: [Validators.minLength(2), Validators.maxLength(50)],
+      },
     ],
     submitText: 'Kaydet',
     cancelText: 'İptal',
-    width: '500px'
+    width: '500px',
   };
 
   constructor() {
@@ -135,12 +148,14 @@ export class CourseDefinitionPage {
     this.modalConfig.fields.forEach(field => {
       field.value = '';
     });
-    
+
     const dialogRef = this.dialog.open(ModalFormComponent, {
       width: this.modalConfig.width || '500px',
-      data: { config: this.modalConfig }
+      data: {
+        config: this.modalConfig,
+      },
     });
-    
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.addCourse(result);
@@ -160,12 +175,14 @@ export class CourseDefinitionPage {
     this.modalConfig.fields.forEach(field => {
       field.value = course[field.key as keyof Course];
     });
-    
+
     const dialogRef = this.dialog.open(ModalFormComponent, {
       width: this.modalConfig.width || '500px',
-      data: { config: this.modalConfig }
+      data: {
+        config: this.modalConfig,
+      },
     });
-    
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.updateCourse(result);
@@ -184,7 +201,7 @@ export class CourseDefinitionPage {
   async updateCourse(formData: any) {
     const currentEditingCourse = this.editingCourse();
     if (!currentEditingCourse) return;
-    
+
     try {
       await this.courseService.updateCourse(currentEditingCourse.id, formData);
       this.editingCourse.set(null);
@@ -201,9 +218,9 @@ export class CourseDefinitionPage {
       confirmButtonColor: 'var(--primary-600)',
       showCancelButton: true,
       cancelButtonText: 'Hayır',
-      cancelButtonColor: 'var(--error-600)'
+      cancelButtonColor: 'var(--error-600)',
     });
-    
+
     if (result.isConfirmed) {
       try {
         await this.courseService.deleteCourse(course.id);
@@ -216,4 +233,4 @@ export class CourseDefinitionPage {
   goBack() {
     this.router.navigate(['/class-operations']);
   }
-} 
+}

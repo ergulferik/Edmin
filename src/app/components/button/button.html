@@ -1,10 +1,22 @@
 @if (type === 'back') {
-  <button mat-icon-button color="primary" (click)="onClick.emit($event)" [ngClass]="type" [disabled]="disabled">
+  <button
+    mat-icon-button
+    color="primary"
+    (click)="onClick.emit($event)"
+    [ngClass]="type"
+    [disabled]="disabled"
+  >
     <mat-icon>arrow_back</mat-icon>
     <ng-content></ng-content>
   </button>
 } @else {
-  <button mat-raised-button color="primary" (click)="onClick.emit($event)" [ngClass]="type" [disabled]="disabled">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onClick.emit($event)"
+    [ngClass]="type"
+    [disabled]="disabled"
+  >
     <ng-content></ng-content>
   </button>
 }

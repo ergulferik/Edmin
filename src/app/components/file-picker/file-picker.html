@@ -1,40 +1,61 @@
 <div class="file-picker-container" [class.disabled]="disabled">
-  <label [for]="'file-input-' + label" class="file-picker-label"
+  <label
+    [for]="'file-input-' + label"
+    class="file-picker-label"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)"
-    [class.drag-over]="isDragOver">
+    [class.drag-over]="isDragOver"
+  >
     <div class="file-picker-content" [class.has-file]="file">
       <div class="icon-container">
         <mat-icon class="upload-icon">{{ file ? 'description' : 'cloud_upload' }}</mat-icon>
-        @if(!file) {
+        @if (!file) {
           <mat-icon class="action-icon">add_circle</mat-icon>
         }
       </div>
       <div class="text-container">
         <span class="primary-text">{{ getFileName() || label() }}</span>
-        @if(!file) {
+        @if (!file) {
           <span class="secondary-text">veya buraya sürükleyip bırakın</span>
         }
-        @if(file) {
+        @if (file) {
           <span class="file-size">{{ getFileSize() }}</span>
         }
       </div>
     </div>
-    <input [id]="'file-input-' + label" type="file" class="file-input" 
-      (change)="onFileChange($event)" [disabled]="disabled"
-      [required]="required()" [accept]="accept()">
+    <input
+      [id]="'file-input-' + label"
+      type="file"
+      class="file-input"
+      (change)="onFileChange($event)"
+      [disabled]="disabled"
+      [required]="required()"
+      [accept]="accept()"
+    />
   </label>
-  @if(file) {
+  @if (file) {
     <div class="file-actions">
-      <button type="button" mat-icon-button class="action-button download-file" 
-        (click)="downloadFile()" [disabled]="disabled" matTooltip="Dosyayı İndir">
+      <button
+        type="button"
+        mat-icon-button
+        class="action-button download-file"
+        (click)="downloadFile()"
+        [disabled]="disabled"
+        matTooltip="Dosyayı İndir"
+      >
         <mat-icon>download</mat-icon>
       </button>
-      <button type="button" mat-icon-button class="action-button remove-file" 
-        (click)="removeFile()" [disabled]="disabled" matTooltip="Dosyayı Kaldır">
+      <button
+        type="button"
+        mat-icon-button
+        class="action-button remove-file"
+        (click)="removeFile()"
+        [disabled]="disabled"
+        matTooltip="Dosyayı Kaldır"
+      >
         <mat-icon>close</mat-icon>
       </button>
     </div>
   }
-</div> 
+</div>

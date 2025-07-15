@@ -1,10 +1,14 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { delay } from 'rxjs/operators';
 import { Course } from '../models/course.model';
 import { COURSES_DATA } from '../data/class.data';
 import { DcToastService } from 'dc-toast-ng';
 
-@Injectable({ providedIn: 'root' })
+/**
+ * Course service for managing courses, CRUD operations
+ */
+@Injectable({
+  providedIn: 'root',
+})
 export class CourseService {
   private courses = signal<Course[]>([...COURSES_DATA]);
   private toast = inject(DcToastService);
@@ -20,14 +24,14 @@ export class CourseService {
   createCourse(course: Omit<Course, 'id'>): Promise<Course> {
     const newCourse: Course = {
       ...course,
-      id: Math.random().toString(36).substring(2)
+      id: Math.random().toString(36).substring(2),
     };
     this.courses.update(courses => [...courses, newCourse]);
     this.toast.create({
       position: 'bottom-center',
       content: `"${course.name}" dersi başarıyla eklendi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(newCourse);
   }
@@ -37,12 +41,21 @@ export class CourseService {
     if (index === -1) {
       return Promise.reject(new Error('Course not found'));
     }
-    this.courses.update(courses => courses.map((c, i) => i === index ? { ...c, ...course } : c));
+    this.courses.update(courses =>
+      courses.map((c, i) =>
+        i === index
+          ? {
+              ...c,
+              ...course,
+            }
+          : c
+      )
+    );
     this.toast.create({
       position: 'bottom-center',
       content: `"${course.name}" dersi başarıyla güncellendi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(this.courses()[index]);
   }
@@ -58,8 +71,8 @@ export class CourseService {
       position: 'bottom-center',
       content: `"${deletedCourse.name}" dersi başarıyla silindi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve();
   }
-} 
+}

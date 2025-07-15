@@ -1,5 +1,4 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { delay } from 'rxjs/operators';
 import { Student } from '../models/student.model';
 import { ClassItem, Field } from '../models/class.model';
 import { CLASSES_DATA, FIELDS_DATA, COURSES_DATA } from '../data/class.data';
@@ -7,26 +6,29 @@ import { STUDENTS_DATA } from '../data/student.data';
 import { Course } from '../models/course.model';
 import { DcToastService } from 'dc-toast-ng';
 
+/**
+ * Class service for managing classes, CRUD operations
+ */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClassService {
   // In-memory data storage (will be replaced with API calls)
 
-  private classes = signal<ClassItem[]>([...CLASSES_DATA]);
-  private fields = signal<Field[]>([...FIELDS_DATA]);
-  private courses = signal<Course[]>([...COURSES_DATA]);
-  private students = signal<Student[]>([...STUDENTS_DATA]);
+  classes = signal<ClassItem[]>([...CLASSES_DATA]);
+  fields = signal<Field[]>([...FIELDS_DATA]);
+  courses = signal<Course[]>([...COURSES_DATA]);
+  students = signal<Student[]>([...STUDENTS_DATA]);
   private toast = inject(DcToastService);
 
   draggedStudent = signal<Student | null>(null);
 
-  addClass(classItem: ClassItem):Promise<ClassItem> {
+  addClass(classItem: ClassItem): Promise<ClassItem> {
     this.classes.update(classes => [...classes, classItem]);
     return Promise.resolve(classItem);
   }
 
-  addField(field: Field):Promise<Field> {
+  addField(field: Field): Promise<Field> {
     this.fields.update(fields => [...fields, field]);
     return Promise.resolve(field);
   }
@@ -47,7 +49,7 @@ export class ClassService {
     // TODO: Replace with API call: return this.http.post<Course>('/api/courses', course)
     const newCourse: Course = {
       ...course,
-      id: Math.random().toString(36).substring(2)
+      id: Math.random().toString(36).substring(2),
     };
     this.courses.update(courses => [...courses, newCourse]);
     return Promise.resolve(newCourse);
@@ -59,7 +61,16 @@ export class ClassService {
     if (index === -1) {
       return Promise.reject(new Error('Course not found'));
     }
-    this.courses.update(courses => courses.map((c, i) => i === index ? { ...c, ...course } : c));
+    this.courses.update(courses =>
+      courses.map((c, i) =>
+        i === index
+          ? {
+              ...c,
+              ...course,
+            }
+          : c
+      )
+    );
     return Promise.resolve(this.courses()[index]);
   }
 
@@ -98,7 +109,7 @@ export class ClassService {
       position: 'bottom-center',
       content: `Sınıf "${classItem.name}" başarıyla oluşturuldu`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(newClass);
   }
@@ -107,14 +118,23 @@ export class ClassService {
     // TODO: Replace with API call: return this.http.put<ClassItem>(`/api/classes/${id}`, classItem)
     const index = this.classes().findIndex(c => c.id === id);
     if (index === -1) {
-        return Promise.reject(new Error('Class not found'));
+      return Promise.reject(new Error('Class not found'));
     }
-    this.classes.update(classes => classes.map((c, i) => i === index ? { ...c, ...classItem } : c));
+    this.classes.update(classes =>
+      classes.map((c, i) =>
+        i === index
+          ? {
+              ...c,
+              ...classItem,
+            }
+          : c
+      )
+    );
     this.toast.create({
       position: 'bottom-center',
       content: `Sınıf "${classItem.name}" başarıyla güncellendi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(this.classes()[index]);
   }
@@ -131,7 +151,7 @@ export class ClassService {
       position: 'bottom-center',
       content: `Sınıf "${foundClass.name}" başarıyla silindi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve();
   }
@@ -152,14 +172,14 @@ export class ClassService {
     // TODO: Replace with API call: return this.http.post<Field>('/api/fields', field)
     const newField: Field = {
       ...field,
-      id: Math.random().toString(36).substring(2)
+      id: Math.random().toString(36).substring(2),
     };
     this.fields.update(fields => [...fields, newField]);
     this.toast.create({
       position: 'bottom-center',
       content: `Alan "${field.name}" başarıyla oluşturuldu`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(newField);
   }
@@ -170,12 +190,21 @@ export class ClassService {
     if (index === -1) {
       return Promise.reject(new Error('Field not found'));
     }
-    this.fields.update(fields => fields.map((f, i) => i === index ? { ...f, ...field } : f));
+    this.fields.update(fields =>
+      fields.map((f, i) =>
+        i === index
+          ? {
+              ...f,
+              ...field,
+            }
+          : f
+      )
+    );
     this.toast.create({
       position: 'bottom-center',
       content: `Alan "${field.name}" başarıyla güncellendi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(this.fields()[index]);
   }
@@ -191,7 +220,7 @@ export class ClassService {
       position: 'bottom-center',
       content: `Alan "${this.fields()[index].name}" başarıyla silindi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve();
   }
@@ -218,14 +247,14 @@ export class ClassService {
     // TODO: Replace with API call: return this.http.post<Student>('/api/students', student)
     const newStudent: Student = {
       ...student,
-      id: Math.random().toString(36).substring(2)
+      id: Math.random().toString(36).substring(2),
     };
     this.students.update(students => [...students, newStudent]);
     this.toast.create({
       position: 'bottom-center',
       content: `Öğrenci "${student.name}" başarıyla oluşturuldu`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(newStudent);
   }
@@ -236,12 +265,21 @@ export class ClassService {
     if (index === -1) {
       return Promise.reject(new Error('Student not found'));
     }
-    this.students.update(students => students.map((s, i) => i === index ? { ...s, ...student } : s));
+    this.students.update(students =>
+      students.map((s, i) =>
+        i === index
+          ? {
+              ...s,
+              ...student,
+            }
+          : s
+      )
+    );
     this.toast.create({
       position: 'bottom-center',
       content: `Öğrenci "${this.students()[index].name}" başarıyla güncellendi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(this.students()[index]);
   }
@@ -257,7 +295,7 @@ export class ClassService {
       position: 'bottom-center',
       content: `Öğrenci "${this.students()[index].name}" başarıyla silindi`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve();
   }
@@ -269,14 +307,17 @@ export class ClassService {
     if (!student) {
       return Promise.reject(new Error('Student not found'));
     }
-    const updatedStudent = { ...student, classId };
+    const updatedStudent = {
+      ...student,
+      classId,
+    };
     const index = this.students().findIndex(s => s.id === studentId);
-    this.students.update(students => students.map((s, i) => i === index ? updatedStudent : s));
+    this.students.update(students => students.map((s, i) => (i === index ? updatedStudent : s)));
     this.toast.create({
       position: 'bottom-center',
       content: `Öğrenci "${this.students()[index].name}" başarıyla sınıfa taşındı`,
       type: 'success',
-      time: 3
+      time: 3,
     });
     return Promise.resolve(updatedStudent);
   }
@@ -284,10 +325,11 @@ export class ClassService {
   calculateClassStatistics(classId: string): Promise<any> {
     // TODO: Replace with API call: return this.http.get<any>(`/api/classes/${classId}/statistics`)
     const classStudents = this.students().filter(s => s.classId === classId);
-    const averageGrade = classStudents.reduce((sum, s) => sum + s.averageGrade, 0) / classStudents.length;
+    const averageGrade =
+      classStudents.reduce((sum, s) => sum + s.averageGrade, 0) / classStudents.length;
     return Promise.resolve({
       studentCount: classStudents.length,
-      averageGrade: Math.round(averageGrade * 100) / 100
+      averageGrade: Math.round(averageGrade * 100) / 100,
     });
   }
 }

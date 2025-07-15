@@ -1,4 +1,4 @@
-import { Component, effect, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ExamTemplate } from '../../models/exam.model';
 import { ExamService } from '../../services/exam.service';
@@ -8,17 +8,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
 import { CourseService } from '../../services/course.service';
 import { Course } from '../../models/course.model';
 import Swal from 'sweetalert2';
 import { PageHeaderComponent } from '../../components/page/page-header/page-header';
-import { ExamTemplateItemComponent } from '../../components/exam-template-item/exam-template-item';
-
+import { ExamTemplateItemComponent } from './exam-template-item/exam-template-item';
+import { ModalHeader } from '../../components/modal/modal-header/modal-header';
+import { ModalFooter } from '../../components/modal/modal-footer/modal-footer';
+import { ModalFooterButton } from '../../components/modal/modal-footer/modal-footer';
 /**
- * Sınav Şablonları yönetim sayfası
- * ExamService ile dummy veri üzerinden CRUD işlemleri yapılır.
+ * Exam template page for managing exam templates
  */
 @Component({
   selector: 'edmin-exam-template',
@@ -31,15 +32,18 @@ import { ExamTemplateItemComponent } from '../../components/exam-template-item/e
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    NgIconComponent,
     ExamTemplateItemComponent,
-    PageHeaderComponent
-],
+    PageHeaderComponent,
+    ModalHeader,
+    ModalFooter,
+  ],
   templateUrl: './exam-template.html',
   styleUrls: ['./exam-template.scss'],
   providers: [
-    provideIcons({ heroXMark })
-  ]
+    provideIcons({
+      heroXMark,
+    }),
+  ],
 })
 export class ExamTemplatePage implements OnInit {
   showForm = false;
@@ -48,21 +52,33 @@ export class ExamTemplatePage implements OnInit {
   templateForm: FormGroup;
   courses: Course[] = [];
   examTemplates = signal<ExamTemplate[]>([]);
-  
-  constructor(
-    private examService: ExamService, 
-    private courseService: CourseService,
-    private fb: FormBuilder
-  ) {
-    effect(async () => {
-      this.examTemplates.set(await this.examService.getExamTemplates());
+  footer = signal<ModalFooterButton[]>([
+    {
+      title: 'Kaydet',
+      disabled: false,
+      onClick: () => this.saveTemplate(),
+      type: 'submit',
+    },
+    {
+      title: 'İptal',
+      disabled: false,
+      onClick: () => this.closeForm(),
+      type: 'cancel',
+    },
+  ]);
+  examService = inject(ExamService);
+  courseService = inject(CourseService);
+  fb = inject(FormBuilder);
+  constructor() {
+    effect(() => {
+      this.examTemplates.set(this.examService.examTemplates());
     });
-    
+
     this.templateForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
       version: [''],
-      courseConfigs: this.fb.array([])
+      courseConfigs: this.fb.array([]),
     });
   }
 
@@ -92,15 +108,17 @@ export class ExamTemplatePage implements OnInit {
     this.templateForm.patchValue({
       name: template.name,
       description: template.description,
-      version: template.version
+      version: template.version,
     });
     this.courseConfigs.clear();
     template.courseConfigs.forEach(cfg => {
-      this.courseConfigs.push(this.fb.group({
-        courseId: [cfg.courseId, Validators.required],
-        questionCount: [cfg.questionCount, [Validators.required, Validators.min(1)]],
-        weight: [cfg.weight, [Validators.required, Validators.min(0.01)]]
-      }));
+      this.courseConfigs.push(
+        this.fb.group({
+          courseId: [cfg.courseId, Validators.required],
+          questionCount: [cfg.questionCount, [Validators.required, Validators.min(1)]],
+          weight: [cfg.weight, [Validators.required, Validators.min(0.01)]],
+        })
+      );
     });
     this.showForm = true;
   }
@@ -119,11 +137,13 @@ export class ExamTemplatePage implements OnInit {
 
   /** Yeni ders alanı ekle */
   addCourseConfig() {
-    this.courseConfigs.push(this.fb.group({
-      courseId: ['', Validators.required],
-      questionCount: [1, [Validators.required, Validators.min(1)]],
-      weight: [1, [Validators.required, Validators.min(0.01)]]
-    }));
+    this.courseConfigs.push(
+      this.fb.group({
+        courseId: ['', Validators.required],
+        questionCount: [1, [Validators.required, Validators.min(1)]],
+        weight: [1, [Validators.required, Validators.min(0.01)]],
+      })
+    );
   }
 
   /** Ders alanını sil */
@@ -133,9 +153,7 @@ export class ExamTemplatePage implements OnInit {
 
   /** Seçili dersleri kontrol et */
   isSelectedCourse(courseId: string): boolean {
-    return this.courseConfigs.controls.some(
-      control => control.get('courseId')?.value === courseId
-    );
+    return this.courseConfigs.controls.some(control => control.get('courseId')?.value === courseId);
   }
 
   /** Şablonu kaydet (ekle/güncelle) */
@@ -143,10 +161,10 @@ export class ExamTemplatePage implements OnInit {
     if (this.templateForm.invalid) return;
     const value = this.templateForm.value;
     if (this.editMode && this.editingId) {
-      await this.examService.updateExamTemplate(this.editingId, value)
+      await this.examService.updateExamTemplate(this.editingId, value);
       this.closeForm();
     } else {
-      await this.examService.createExamTemplate(value)
+      await this.examService.createExamTemplate(value);
       this.closeForm();
     }
   }
@@ -160,14 +178,14 @@ export class ExamTemplatePage implements OnInit {
       confirmButtonColor: 'var(--primary-600)',
       showCancelButton: true,
       cancelButtonText: 'Hayır',
-      cancelButtonColor: 'var(--error-600)'
+      cancelButtonColor: 'var(--error-600)',
     });
     if (result.isConfirmed) {
-      this.examService.deleteExamTemplate(id)
+      this.examService.deleteExamTemplate(id);
     }
   }
 
   goBack() {
     window.history.back();
   }
-} 
+}

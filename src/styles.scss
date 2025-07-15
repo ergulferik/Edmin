@@ -1,305 +1,452 @@
 /* You can add global styles to this file, and also import other style files */
 
 :root {
-    /* === PRIMARY (Ana tema rengi - koyu mavi) === */
-    --primary-900: #0D1B2A; // En koyu - dark background
-    --primary-800: #1B263B; // Sidebar, footer, header background
-    --primary-700: #274156; // Hover butonlar
-    --primary-600: #3A506B; // Ana buton rengi
-    --primary-500: #5BC0BE; // Vurgu – link, aktif öğe
-    --primary-400: #9DB4C0; // İkon, sınır, ikincil metin
-    --primary-300: #CED4DA; // Pasif metin
-    --primary-100: #F1F1F1; // Açık arkaplanlar (light mode)
+  /* === PRIMARY (Ana tema rengi - koyu mavi) === */
+  --primary-900: #0d1b2a; // En koyu - dark background
+  --primary-800: #1b263b; // Sidebar, footer, header background
+  --primary-700: #274156; // Hover butonlar
+  --primary-600: #3a506b; // Ana buton rengi
+  --primary-500: #5bc0be; // Vurgu – link, aktif öğe
+  --primary-400: #9db4c0; // İkon, sınır, ikincil metin
+  --primary-300: #ced4da; // Pasif metin
+  --primary-200: #e9ecef;
+  --primary-100: #f1f1f1; // Açık arkaplanlar (light mode)
 
-    /* === SECONDARY (Tamamlayıcı mavi tonları) === */
-    --secondary-700: #1E6091;
-    --secondary-500: #168AAD;
-    --secondary-300: #56CFE1;
-    --secondary-200: #a4dfeb;
-    --secondary-100: #CAF0F8;
+  /* === SECONDARY (Tamamlayıcı mavi tonları) === */
+  --secondary-700: #1e6091;
+  --secondary-500: #168aad;
+  --secondary-300: #56cfe1;
+  --secondary-200: #a4dfeb;
+  --secondary-100: #caf0f8;
 
-    /* === STATE COLORS === */
-    --success-600: #38B000;
-    --success-400: #70E000;
+  /* === STATE COLORS === */
+  --success-700: #2d8f00;
+  --success-600: #38b000;
+  --success-500: #54c400;
+  --success-400: #70e000;
+  --success-300: #90ea3f;
+  --success-200: #b1f274;
+  --success-100: #d4f9ad;
+  --success-50: #edfde0;
 
-    --error-600: #D90429;
-    --error-400: #EF233C;
+  --error-700: #b40323;
+  --error-600: #d90429;
+  --error-500: #e92038;
+  --error-400: #ef233c;
+  --error-300: #f24857;
+  --error-200: #f68584;
+  --error-100: #fbb9b8;
+  --error-50: #fde4e4;
 
-    --warning-600: #FFBA08;
-    --warning-400: #FAA307;
+  --warning-700: #cc9606;
+  --warning-600: #ffba08;
+  --warning-500: #ffc221;
+  --warning-400: #faa307;
+  --warning-300: #fbb647;
+  --warning-200: #fccc7d;
+  --warning-100: #fde1b2;
+  --warning-50: #fff5e3;
 
-    /* === NEUTRALS === */
-    --text-light: #ffffff;
-    --text-dark: #1a1a1a;
-    --border-color: #dee2e6;
-    --background-dark: --primary-900;
-    --background-light: #ffffff;
+  /* === NEUTRALS === */
+  --text-light: #ffffff;
+  --text-dark: #1a1a1a;
+  --border-color: #dee2e6;
+  --background-dark: --primary-900;
+  --background-light: #ffffff;
 
-    /* === DEFAULT USAGE EXAMPLES === */
-    --btn-bg: --primary-600;
-    --btn-bg-hover: --primary-700;
-    --btn-text: --text-light;
+  /* === DEFAULT USAGE EXAMPLES === */
+  --btn-bg: --primary-600;
+  --btn-bg-hover: --primary-700;
+  --btn-text: --text-light;
 
-    --link-color: --primary-500;
-    --link-hover: --secondary-500;
+  --link-color: --primary-500;
+  --link-hover: --secondary-500;
+  --linear-primary: linear-gradient(
+    90deg,
+    var(--primary-600, #3a506b) 0%,
+    var(--secondary-500, #168aad) 100%
+  );
+  --linear-primary-hover: linear-gradient(
+    90deg,
+    var(--primary-700, #274156) 0%,
+    var(--secondary-700, #1e6091) 100%
+  );
+  --linear-error-light: linear-gradient(90deg, var(--error-50) 0%, var(--error-100) 100%);
+  --linear-error: linear-gradient(
+    90deg,
+    var(--error-600, #d9534f) 0%,
+    var(--error-400, #c9302c) 100%
+  );
+  --linear-error-hover: linear-gradient(
+    90deg,
+    var(--error-400, #c9302c) 0%,
+    var(--error-600, #d9534f) 100%
+  );
 
+  /* === TOAST STYLES === */
+  --dc-success: --success-600 !important;
+  --dc-success-hover: --success-400 !important;
+  --dc-error: --error-600 !important;
+  --dc-error-hover: --error-400 !important;
+  --dc-warn: --warning-600 !important;
+  --dc-warn-hover: --warning-400 !important;
+  --dc-info: --secondary-500 !important;
+  --dc-info-hover: --secondary-300 !important;
+  --dc-dark: --primary-900 !important;
+  --dc-light: --primary-100 !important;
 
+  /* === DIALOG STYLES === */
+  --mat-dialog-container-shape: 16px;
+}
 
-    /* === TOAST STYLES === */
-    --dc-success: --success-600 !important;
-    --dc-success-hover: --success-400 !important;
-    --dc-error: --error-600 !important;
-    --dc-error-hover: --error-400 !important;
-    --dc-warn: --warning-600 !important;
-    --dc-warn-hover: --warning-400 !important;
-    --dc-info: --secondary-500 !important;
-    --dc-info-hover: --secondary-300 !important;
-    --dc-dark: --primary-900 !important;
-    --dc-light: --primary-100 !important;
+.ng-sidebar {
+  --bg-color: var(--primary-100) !important;
+  --text-color: var(--text-dark) !important;
 
-    /* === DIALOG STYLES === */
-    --mat-dialog-container-shape: 16px;
+  --primary: var(--primary-500) !important;
+  --default-font-family: 'Inter', sans-serif !important;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
 }
 
 /* === CUSTOM SCROLLBAR STYLES === */
 /* Webkit tabanlı tarayıcılar için (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--primary-100);
-    border-radius: 4px;
+  background: var(--primary-100);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--primary-400);
-    border-radius: 4px;
-    transition: background 0.3s ease;
+  background: var(--primary-400);
+  border-radius: 4px;
+  transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-500);
+  background: var(--primary-500);
 }
 
 ::-webkit-scrollbar-thumb:active {
-    background: var(--primary-600);
+  background: var(--primary-600);
 }
 
 /* Koyu tema için scrollbar */
 @media (prefers-color-scheme: dark) {
-    ::-webkit-scrollbar-track {
-        background: var(--primary-800);
-    }
+  ::-webkit-scrollbar-track {
+    background: var(--primary-800);
+  }
 
-    ::-webkit-scrollbar-thumb {
-        background: var(--primary-600);
-    }
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary-600);
+  }
 
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--primary-500);
-    }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-500);
+  }
 
-    ::-webkit-scrollbar-thumb:active {
-        background: var(--primary-400);
-    }
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--primary-400);
+  }
 }
 
 /* Firefox için scrollbar stilleri */
 * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-400) var(--primary-100);
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-400) var(--primary-100);
 }
 
 /* Koyu tema için Firefox scrollbar */
 @media (prefers-color-scheme: dark) {
-    * {
-        scrollbar-color: var(--primary-600) var(--primary-800);
-    }
+  * {
+    scrollbar-color: var(--primary-600) var(--primary-800);
+  }
 }
 
 /* Belirli elementler için özel scrollbar stilleri */
 .scrollable-content {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-400) var(--primary-100);
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-400) var(--primary-100);
 }
 
 .scrollable-content::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+  width: 6px;
+  height: 6px;
 }
 
 .scrollable-content::-webkit-scrollbar-track {
-    background: var(--primary-100);
-    border-radius: 3px;
+  background: var(--primary-100);
+  border-radius: 3px;
 }
 
 .scrollable-content::-webkit-scrollbar-thumb {
-    background: var(--primary-400);
-    border-radius: 3px;
+  background: var(--primary-400);
+  border-radius: 3px;
 }
 
 .scrollable-content::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-500);
+  background: var(--primary-500);
 }
 
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-
 .field-chip {
-    &.cdk-drag-preview {
-        background-color: var(--primary-500);
-        color: var(--text-light);
-        opacity: 0.9;
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-        pointer-events: none;
-        border-radius: 20px;
-        cursor: grabbing;
-    }
+  &.cdk-drag-preview {
+    background-color: var(--primary-500);
+    color: var(--text-light);
+    opacity: 0.9;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    border-radius: 20px;
+    cursor: grabbing;
+  }
 
-    // Drag edilen elementin yerini tutan boşluk (placeholder)
-    &.cdk-drag-placeholder {
-        opacity: 0.3;
-        border: 2px dashed var(--primary-400);
-        background: transparent;
-        min-width: 80px;
-        height: 32px;
-        border-radius: 20px;
-    }
+  // Drag edilen elementin yerini tutan boşluk (placeholder)
+  &.cdk-drag-placeholder {
+    opacity: 0.3;
+    border: 2px dashed var(--primary-400);
+    background: transparent;
+    min-width: 80px;
+    height: 32px;
+    border-radius: 20px;
+  }
 }
 
 .student-card {
-    .cdk-drag-dragging {
-        position: absolute;
-        z-index: 9999;
-    }
+  .cdk-drag-dragging {
+    position: absolute;
+    z-index: 9999;
+  }
 }
 
 dc-toast-ng {
-    .toast-container {
-        .toast {
-            min-height: 3rem;
+  .toast-container {
+    .toast {
+      min-height: 3rem;
 
-            &.success {
-                background-color: var(--success-600);
-            }
+      &.success {
+        background-color: var(--success-600);
+      }
 
-            &.error {
-                background-color: var(--error-600);
-            }
+      &.error {
+        background-color: var(--error-600);
+      }
 
-            &.warn {
-                background-color: var(--warning-600);
-            }
+      &.warn {
+        background-color: var(--warning-600);
+      }
 
-            &.info {
-                background-color: var(--secondary-500);
-            }
-        }
+      &.info {
+        background-color: var(--secondary-500);
+      }
     }
+  }
 }
 
 .mat-mdc-dialog-container {
-    --mdc-dialog-container-shape: 16px;
+  --mdc-dialog-container-shape: 16px;
 }
 
 .submit-button {
-    background: linear-gradient(90deg, var(--primary-600, #3A506B) 0%, var(--secondary-500, #168AAD) 100%) !important;
-    color: var(--text-light, #fff) !important;
-    border-radius: 8px !important;
-    padding: 8px 24px !important;
-    font-weight: 500 !important;
-    transition: all 0.2s ease !important;
+  background: var(--linear-primary) !important;
+  color: var(--text-light, #fff) !important;
+  border-radius: 8px !important;
+  padding: 8px 24px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
 
-    &:hover:not(:disabled) {
-        background: linear-gradient(90deg, var(--primary-700, #274156) 0%, var(--secondary-700, #1E6091) 100%) !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-    }
+  &:hover:not(:disabled) {
+    background: var(--linear-primary-hover) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
 
-    &:disabled {
-        background: var(--primary-300, #CED4DA) !important;
-        color: var(--primary-400, #9DB4C0) !important;
-        cursor: not-allowed;
-    }
+  &:disabled {
+    background: var(--primary-300, #ced4da) !important;
+    color: var(--primary-400, #9db4c0) !important;
+    cursor: not-allowed;
+  }
 }
 
 .cancel-button {
-    color: var(--text-dark, #666) !important;
-    border: 1px solid var(--border-color, #dee2e6) !important;
-    border-radius: 8px !important;
+  color: var(--text-dark, #666) !important;
+  border: 1px solid var(--border-color, #dee2e6) !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  background-color: var(--primary-100, #f8f9fa) !important;
 
-    &:hover {
-        background: var(--primary-100, #f8f9fa) !important;
-    }
+  &:hover:not(:disabled) {
+    background: var(--linear-error-light) !important;
+    border-color: var(--error-100) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  &:disabled {
+    background: var(--primary-200, #e9ecef) !important;
+    color: var(--primary-300, #ced4da) !important;
+    cursor: not-allowed;
+  }
 }
 
 .modal-close-button {
-    color: var(--primary-400, #666);
-    transition: color 0.2s ease;
+  color: var(--primary-400, #666);
+  transition: color 0.2s ease;
 
-    &:hover {
-        color: var(--error-600, #D90429);
-    }
+  &:hover {
+    color: var(--error-600, #d90429);
+  }
 }
 
 .mat-mdc-raised-button {
-    border-radius: 8px !important;
+  border-radius: 8px !important;
 }
 
 .icon-danger {
-    color: var(--error-400);
+  color: var(--error-400);
 }
 
 .icon-primary {
-    color: var(--primary-500);
+  color: var(--primary-500);
 }
 
-
 edmin-button {
-    .back {
-        padding: 0 !important;
-        color: var(--text-dark) !important;
-        justify-content: center !important;
-        border-radius: 50% !important;
-        background: transparent !important;
-        box-shadow: none !important;
+  .back {
+    padding: 0 !important;
+    color: var(--text-dark) !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .mdc-button__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text-light);
+  }
+}
+
+.mat-mdc-menu-content {
+  padding: 0px !important;
+}
+
+.floating-menu.mat-mdc-menu-panel {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  .mat-mdc-menu-content {
+    background: transparent !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0px !important;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  color: var(--text-light);
+  transition: background 0.2s;
+
+  .mat-mdc-menu-item-text {
+    display: flex;
+    gap: 8px;
+  }
+
+  &.primary {
+    background: var(--linear-primary);
+    color: var(--text-light);
+
+    &:hover {
+      background: var(--linear-primary-hover);
+    }
+  }
+
+  &.warn {
+    background: var(--linear-error);
+    color: var(--text-light);
+
+    &:hover {
+      background: var(--linear-error-hover);
+    }
+  }
+}
+
+.mat-step-header {
+  &:hover,
+  &:focus,
+  &:active,
+  &.cdk-focused {
+    background-color: transparent !important;
+
+    .mat-step-label:after {
+      width: 80% !important;
+    }
+  }
+
+  .mat-step-label {
+    &:after {
+      display: block;
+      position: absolute;
+      left: 1.25rem !important;
+      bottom: 1rem;
+      content: '' !important;
+      background-color: var(--secondary-700) !important;
+      width: 0% !important;
+      height: 2px !important;
+      border-radius: 4px !important;
+      transition: all 0.3s ease !important;
     }
 
-    .mdc-button__label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        color: var(--text-light);
+    &.mat-step-label-error {
+      &:after {
+        background-color: var(--error-600) !important;
+      }
     }
+  }
+
+  .mat-step-icon-selected,
+  .mat-step-icon-state-edit {
+    background-color: var(--secondary-700) !important;
+  }
 }
 
 @keyframes up-scale {
-    0% {
-        transform: scale(1);
-    }
+  0% {
+    transform: scale(1);
+  }
 
-    50% {
-        transform: scale(1.1);
-    }
+  50% {
+    transform: scale(1.1);
+  }
 
-    100% {
-        transform: scale(1);
-    }
+  100% {
+    transform: scale(1);
+  }
 }

@@ -1,5 +1,5 @@
-:host{
-    display: contents;
+:host {
+  display: contents;
 }
 .student-list-section {
   flex: 1;
@@ -191,21 +191,8 @@
         }
       }
 
-      .student-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      edmin-avatar {
         margin-right: 1rem;
-
-        .avatar-text {
-          color: var(--text-light);
-          font-weight: 600;
-          font-size: 1rem;
-        }
       }
 
       .student-info {
@@ -299,7 +286,7 @@
   border: 2px solid #007bff;
   border-radius: 8px;
   padding: 12px 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   font-family: inherit;
   font-size: 14px;
   color: #333;
@@ -341,9 +328,9 @@
 @media (max-width: 375px) {
   .student-list-section {
     .student-list {
-        .student-card {
-          flex-direction: column;
-        }
+      .student-card {
+        flex-direction: column;
       }
+    }
   }
 }

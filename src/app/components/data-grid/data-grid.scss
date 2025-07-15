@@ -1,6 +1,6 @@
 .data-grid-card {
   border-radius: 16px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
   background: #fff;
   border: 1px solid var(--border-color, #f0f0f0);
 
@@ -21,11 +21,18 @@
     }
 
     tr:nth-child(odd):hover {
-      background: var(--secondary-100, #CAF0F8);
+      background: var(--secondary-100, #caf0f8);
     }
 
     tr:nth-child(even):hover {
       background: var(--secondary-200, #94f1ff);
+    }
+
+    .mdc-data-table__cell.image-cell {
+      img {
+        margin-left: 50%;
+        transform: translateX(-50%);
+      }
     }
   }
 
@@ -54,7 +61,7 @@
         }
 
         &.mat-focused .mat-mdc-text-field-wrapper {
-          border-color: var(--primary-500, #5BC0BE);
+          border-color: var(--primary-500, #5bc0be);
           box-shadow: 0 0 0 2px rgba(91, 192, 190, 0.1);
         }
 
@@ -69,7 +76,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: var(--error-600, #D90429);
+    background: var(--error-600, #d90429);
     color: var(--text-light, #fff);
     padding: 12px 16px;
     border-radius: 8px;
@@ -114,8 +121,6 @@
       border-bottom: 1px solid var(--border-color, #dee2e6);
       background: var(--background-light, #fff);
     }
-
-
   }
 
   .loading-spinner {
@@ -124,7 +129,7 @@
     align-items: center;
     gap: 12px;
     padding: 24px;
-    color: var(--primary-600, #3A506B);
+    color: var(--primary-600, #3a506b);
     font-size: 14px;
   }
 

@@ -1,0 +1,30 @@
+<div class="exam-card" [ngClass]="{ selected: selected() }">
+  <div class="card-header">
+    <div>
+      <h2>{{ template()?.name }}</h2>
+      <span class="version">v{{ template()?.version }}</span>
+    </div>
+    <div class="card-actions">
+      @if (viewMode() === 'edit') {
+        <button mat-icon-button class="icon-btn" (click)="onEdit()">
+          <ng-icon name="heroPencilSquare" class="icon-primary"></ng-icon>
+        </button>
+        <button mat-icon-button class="icon-btn danger" (click)="onDelete()">
+          <ng-icon name="heroTrash" class="icon-danger"></ng-icon>
+        </button>
+      }
+    </div>
+  </div>
+  <div class="card-body">
+    <p class="desc">{{ template()?.description }}</p>
+    <div class="courses">
+      <span *ngFor="let c of template()?.courseConfigs" class="course-chip">
+        <mat-icon class="icon-primary">school</mat-icon>
+        {{ courseNames()[c.courseId] }}:
+        <strong>{{ c.questionCount }}</strong>
+        soru x
+        <strong>{{ c.weight }}</strong>
+      </span>
+    </div>
+  </div>
+</div>

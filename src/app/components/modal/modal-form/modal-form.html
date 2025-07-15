@@ -1,16 +1,19 @@
-<edmin-modal-header [title]="config.title" [subtitle]="config.subtitle"/> 
+<edmin-modal-header [title]="config.title" (onClose)="onCancel()" [subtitle]="config.subtitle" />
 <div class="modal-content">
   <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-fields">
       <div *ngFor="let field of config.fields" class="field-container">
-        
         <!-- Text Input -->
-        @if(field.type === 'text') {
+        @if (field.type === 'text') {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ field.label }}</mat-label>
-            <input matInput [formControlName]="field.key" type="text"
+            <input
+              matInput
+              [formControlName]="field.key"
+              type="text"
               [placeholder]="field.placeholder || field.label"
-              [required]="field.required || false">
+              [required]="field.required || false"
+            />
             <mat-error *ngIf="isFieldInvalid(field.key)">
               {{ getFieldError(field.key) }}
             </mat-error>
@@ -18,12 +21,16 @@
         }
 
         <!-- Number Input -->
-        @if(field.type === 'number') {
+        @if (field.type === 'number') {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ field.label }}</mat-label>
-            <input matInput [formControlName]="field.key" type="number"
+            <input
+              matInput
+              [formControlName]="field.key"
+              type="number"
               [placeholder]="field.placeholder || field.label"
-              [required]="field.required || false">
+              [required]="field.required || false"
+            />
             <mat-error *ngIf="isFieldInvalid(field.key)">
               {{ getFieldError(field.key) }}
             </mat-error>
@@ -31,12 +38,16 @@
         }
 
         <!-- Email Input -->
-        @if(field.type === 'email') {
+        @if (field.type === 'email') {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ field.label }}</mat-label>
-            <input matInput [formControlName]="field.key" type="email"
+            <input
+              matInput
+              [formControlName]="field.key"
+              type="email"
               [placeholder]="field.placeholder || field.label"
-              [required]="field.required || false">
+              [required]="field.required || false"
+            />
             <mat-error *ngIf="isFieldInvalid(field.key)">
               {{ getFieldError(field.key) }}
             </mat-error>
@@ -44,13 +55,16 @@
         }
 
         <!-- Textarea -->
-        @if(field.type === 'textarea') {
+        @if (field.type === 'textarea') {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ field.label }}</mat-label>
-            <textarea matInput [formControlName]="field.key"
+            <textarea
+              matInput
+              [formControlName]="field.key"
               [placeholder]="field.placeholder || field.label"
               [required]="field.required || false"
-              [rows]="field.rows || 3"></textarea>
+              [rows]="field.rows || 3"
+            ></textarea>
             <mat-error *ngIf="isFieldInvalid(field.key)">
               {{ getFieldError(field.key) }}
             </mat-error>
@@ -58,12 +72,15 @@
         }
 
         <!-- Select -->
-        @if(field.type === 'select') {
+        @if (field.type === 'select') {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ field.label }}</mat-label>
-            <mat-select [formControlName]="field.key"
-              [required]="field.required || false" [value]="field.value">
-              <mat-option *ngFor="let option of field.options" [value]="option.value" >
+            <mat-select
+              [formControlName]="field.key"
+              [required]="field.required || false"
+              [value]="field.value"
+            >
+              <mat-option *ngFor="let option of field.options" [value]="option.value">
                 {{ option.label }}
               </mat-option>
             </mat-select>
@@ -74,24 +91,30 @@
         }
 
         <!-- Template -->
-        @if(field.type === 'template') {
-            <edmin-button class="full-width" type="primary" buttonType="button" (click)="$event.preventDefault(); $event.stopPropagation(); openTemplateDialog(field)">
-              <mat-icon>library_books</mat-icon>
-              {{field.template?.displayValue || field.placeholder || field.label}}
-            </edmin-button>
-            <mat-error *ngIf="isFieldInvalid(field.key)">
-              {{ getFieldError(field.key) }}
-            </mat-error>
+        @if (field.type === 'template') {
+          <edmin-button
+            class="full-width"
+            type="primary"
+            buttonType="button"
+            (click)="$event.preventDefault(); $event.stopPropagation(); openTemplateDialog(field)"
+          >
+            <mat-icon>library_books</mat-icon>
+            {{ field.template?.displayValue || field.placeholder || field.label }}
+          </edmin-button>
+          <mat-error *ngIf="isFieldInvalid(field.key)"> {{ getFieldError(field.key) }} </mat-error>
         }
 
         <!-- Date -->
-        @if(field.type === 'date') {
+        @if (field.type === 'date') {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ field.label }}</mat-label>
-            <input matInput [formControlName]="field.key"
+            <input
+              matInput
+              [formControlName]="field.key"
               [matDatepicker]="picker"
               [placeholder]="field.placeholder || field.label"
-              [required]="field.required || false">
+              [required]="field.required || false"
+            />
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="isFieldInvalid(field.key)">
@@ -101,24 +124,22 @@
         }
 
         <!-- File -->
-        @if(field.type === 'file') {
+        @if (field.type === 'file') {
           <div class="field-container">
             <edmin-file-picker
               [formControlName]="field.key"
               [label]="field.placeholder || field.label"
               [required]="field.required || false"
-              [accept]="field.accept || '*'">
+              [accept]="field.accept || '*'"
+            >
             </edmin-file-picker>
             <mat-error *ngIf="isFieldInvalid(field.key)">
               {{ getFieldError(field.key) }}
             </mat-error>
           </div>
         }
-
       </div>
     </div>
-
-
   </form>
 </div>
-<edmin-modal-footer [submitButton]="footer.submitButton" [cancelButton]="footer.cancelButton"/>
+<edmin-modal-footer [buttons]="footer()" />

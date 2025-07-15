@@ -1,4 +1,4 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -11,13 +11,20 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Exam, ExamTemplate } from '../../models/exam.model';
-import { DataGridAction, DataGridComponent, DataGridConfig } from '../../components/data-grid/data-grid';
+import {
+  DataGridAction,
+  DataGridComponent,
+  DataGridConfig,
+} from '../../components/data-grid/data-grid';
 import { ExamService } from '../../services/exam.service';
 import { ModalFormComponent, ModalFormConfig } from '../../components/modal/modal-form/modal-form';
 import Swal from 'sweetalert2';
 import { PageHeaderComponent } from '../../components/page/page-header/page-header';
 import { ExamTemplateListComponent } from './exam-template-list';
 
+/**
+ * Exam page for managing exams
+ */
 @Component({
   selector: 'app-exam',
   templateUrl: './exam.html',
@@ -36,49 +43,49 @@ import { ExamTemplateListComponent } from './exam-template-list';
     MatDialogModule,
     MatTooltipModule,
     DataGridComponent,
-    PageHeaderComponent
-  ]
+    PageHeaderComponent,
+  ],
 })
 export class ExamPage {
   opticalForm: File | null = null;
   isDragOver = false;
   exams = signal<Exam[]>([]);
-  editingExam?: Exam
+  editingExam?: Exam;
   examTemplates = signal<ExamTemplate[]>([]);
-  constructor(
-    private dialog: MatDialog,
-    private examService: ExamService
-  ) {
 
+  dialog = inject(MatDialog);
+  examService = inject(ExamService);
+
+  constructor() {
     effect(() => {
       this.loadExams();
     });
   }
 
   async loadExams() {
-    this.exams.set(await this.examService.getExams() || []);
-    this.examTemplates.set(await this.examService.getExamTemplates() || []);
+    this.exams.set((await this.examService.getExams()) || []);
+    this.examTemplates.set((await this.examService.getExamTemplates()) || []);
 
     this.setGridConfig();
   }
 
-  gridConfig!: DataGridConfig
+  gridConfig!: DataGridConfig;
 
   gridActions: DataGridAction[] = [
     {
       type: 'edit',
-      icon: 'heroPencil',
+      icon: 'heroPencilSquare',
       color: 'primary',
       label: 'Düzenle',
-      onClick: (exam: Exam) => this.editExam(exam)
+      onClick: (exam: Exam) => this.editExam(exam),
     },
     {
       type: 'delete',
       icon: 'heroTrash',
       color: 'warn',
       label: 'Sil',
-      onClick: (exam: Exam) => this.deleteExam(exam)
-    }
+      onClick: (exam: Exam) => this.deleteExam(exam),
+    },
   ];
 
   // Modal Form Configuration
@@ -95,7 +102,7 @@ export class ExamPage {
           component: ExamTemplateListComponent,
           displayExpr: 'name',
           keyExpr: 'id',
-        }
+        },
       },
       {
         key: 'name',
@@ -103,10 +110,7 @@ export class ExamPage {
         type: 'text',
         placeholder: 'Örn: Matematik Final Sınavı',
         required: true,
-        validators: [
-          Validators.minLength(2),
-          Validators.maxLength(50)
-        ]
+        validators: [Validators.minLength(2), Validators.maxLength(50)],
       },
       {
         key: 'code',
@@ -121,10 +125,7 @@ export class ExamPage {
         type: 'date',
         placeholder: 'Örn: 2024-01-01',
         required: true,
-        validators: [
-          Validators.minLength(10),
-          Validators.maxLength(10)
-        ]
+        validators: [Validators.minLength(10), Validators.maxLength(10)],
       },
       {
         key: 'durationInMinutes',
@@ -138,11 +139,11 @@ export class ExamPage {
         label: 'Cevap Anahtarı',
         type: 'file',
         placeholder: 'Cevap Anahtarı Seç',
-      }
+      },
     ],
     submitText: 'Kaydet',
     cancelText: 'İptal',
-    width: '500px'
+    width: '500px',
   };
 
   setGridConfig() {
@@ -150,15 +151,47 @@ export class ExamPage {
       title: 'Sınavlar',
       subtitle: 'Sınavları yönetin',
       columns: [
-        { key: 'name', label: 'Sınav Adı', type: 'text' },
-        { key: 'code', label: 'Sınav Kodu', type: 'text' },
-        { key: 'date', label: 'Sınav Tarihi', type: 'date' },
-        { key: 'durationInMinutes', label: 'Süre', type: 'number' },
-        { key: 'templateId', label: 'Şablon', type: 'template', data: this.examTemplates(), keyExpr: 'id', displayExpr: 'name' },
-        { key: 'answerKeyFileUrl', label: 'Cevap Anahtarı', type: 'file' },
-        { key: 'isActive', label: 'Aktif', type: 'boolean' },
+        {
+          key: 'name',
+          label: 'Sınav Adı',
+          type: 'text',
+        },
+        {
+          key: 'code',
+          label: 'Sınav Kodu',
+          type: 'text',
+        },
+        {
+          key: 'date',
+          label: 'Sınav Tarihi',
+          type: 'date',
+        },
+        {
+          key: 'durationInMinutes',
+          label: 'Süre',
+          type: 'number',
+        },
+        {
+          key: 'templateId',
+          label: 'Şablon',
+          type: 'template',
+          data: this.examTemplates(),
+          keyExpr: 'id',
+          displayExpr: 'name',
+        },
+        {
+          key: 'answerKeyFileUrl',
+          label: 'Cevap Anahtarı',
+          type: 'file',
+        },
+        {
+          key: 'isActive',
+          label: 'Aktif',
+          type: 'boolean',
+        },
       ],
       searchPlaceholder: 'Sınav adına göre ara...',
+      searchableColumns: ['name', 'code'],
       addButtonText: 'Yeni Sınav Ekle',
       showAddButton: true,
       showSearch: true,
@@ -176,7 +209,9 @@ export class ExamPage {
 
     const dialogRef = this.dialog.open(ModalFormComponent, {
       width: this.modalConfig.width || '500px',
-      data: { config: this.modalConfig }
+      data: {
+        config: this.modalConfig,
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -198,15 +233,16 @@ export class ExamPage {
       code: '',
       date: new Date(),
       templateId: '',
-      isActive: true
+      isActive: true,
     });
 
     this.assignFieldValues();
 
-
     const dialogRef = this.dialog.open(ModalFormComponent, {
       width: this.modalConfig.width || '500px',
-      data: { config: this.modalConfig }
+      data: {
+        config: this.modalConfig,
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -217,16 +253,18 @@ export class ExamPage {
     });
   }
 
-  async assignFieldValues(){
-    const template = await this.examService.getExamTemplateById(this.examService.getSelectedExam()?.templateId || '');
+  async assignFieldValues() {
+    const template = await this.examService.getExamTemplateById(
+      this.examService.getSelectedExam()?.templateId || ''
+    );
 
     this.modalConfig.fields.forEach(field => {
       field.value = this.examService.getSelectedExam()?.[field.key as keyof Exam] || '';
       if (field.type === 'template' && field.template) {
         if (template) {
-          field.template.displayValue = template?.name || '';;
+          field.template.displayValue = template?.name || '';
           field.value = template.id;
-        }else{
+        } else {
           field.template.displayValue = '';
           field.value = '';
         }
@@ -242,11 +280,11 @@ export class ExamPage {
       confirmButtonColor: 'var(--primary-600)',
       showCancelButton: true,
       cancelButtonText: 'Hayır',
-      cancelButtonColor: 'var(--error-600)'
+      cancelButtonColor: 'var(--error-600)',
     });
 
     if (result.isConfirmed) {
-      try { 
+      try {
         await this.examService.deleteExam(exam.id);
       } catch (error) {
         console.error('Sınav silinirken hata oluştu:', error);
@@ -256,7 +294,7 @@ export class ExamPage {
 
   createExam(formData: any): void {
     try {
-      this.examService.createExam(formData)
+      this.examService.createExam(formData);
     } catch (error) {
       console.error('Error creating exam:', error);
     }
@@ -265,9 +303,9 @@ export class ExamPage {
   updateExam(formData: any): void {
     if (!this.editingExam) return;
     try {
-      this.examService.updateExam(this.editingExam.id, formData)
+      this.examService.updateExam(this.editingExam.id, formData);
     } catch (error) {
       console.error('Error updating exam:', error);
     }
   }
-} 
+}

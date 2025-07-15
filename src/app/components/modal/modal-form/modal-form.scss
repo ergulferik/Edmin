@@ -24,7 +24,6 @@
   border: 1px solid var(--border-color, #f0f0f0);
 }
 
-
 .modal-content {
   padding: 24px;
   max-height: 60vh;
@@ -38,7 +37,7 @@
     .field-container {
       .full-width {
         width: 100%;
-        ::ng-deep {   
+        ::ng-deep {
           .edmin-button {
             width: 100%;
           }
@@ -52,19 +51,19 @@
         .mat-mdc-form-field-focus-overlay {
           background-color: transparent;
         }
-        
+
         .mat-mdc-text-field-wrapper {
           background-color: var(--background-light, #fff);
           border-radius: 8px;
           border: 1px solid var(--border-color, #dee2e6);
           transition: all 0.2s ease;
         }
-        
+
         &.mat-focused .mat-mdc-text-field-wrapper {
-          border-color: var(--primary-500, #5BC0BE);
+          border-color: var(--primary-500, #5bc0be);
           box-shadow: 0 0 0 2px rgba(91, 192, 190, 0.1);
         }
-        
+
         .mat-mdc-form-field-subscript-wrapper {
           display: none;
         }
@@ -186,7 +185,6 @@
   .modal-content {
     padding: 16px;
     max-height: 70vh;
-    
   }
 }
 
@@ -202,4 +200,4 @@
   .modal-content {
     max-height: calc(100vh - 120px);
   }
-} 
+}

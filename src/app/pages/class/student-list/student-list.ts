@@ -6,10 +6,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ClassItem } from '../../models/class.model';
-import { Student } from '../../models/student.model';
-import { ClassService } from '../../services/class.service';
+import { ClassItem } from '../../../models/class.model';
+import { Student } from '../../../models/student.model';
+import { ClassService } from '../../../services/class.service';
+import { Avatar } from '../../../components/avatar/avatar';
 
+/**
+ * StudentList component displays and manages the list of students for a selected class. Supports search, sort, and drag-and-drop.
+ */
 @Component({
   selector: 'app-student-list',
   imports: [
@@ -19,57 +23,82 @@ import { ClassService } from '../../services/class.service';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    Avatar,
   ],
   templateUrl: './student-list.html',
-  styleUrl: './student-list.scss'
+  styleUrl: './student-list.scss',
 })
+/**
+ * Provides student list display, search, sort, and drag-and-drop functionality.
+ */
 export class StudentList implements OnInit {
-  @Input() selectedClass: ClassItem | null = null;
-  @Input() students: Student[] = [];
-  @Input() dragOverClass: string | null = null;
+  /** Currently selected class */
+  @Input()
+  selectedClass: ClassItem | null = null;
+  /** List of all students */
+  @Input()
+  students: Student[] = [];
+  /** Class id for drag-over effect */
+  @Input()
+  dragOverClass: string | null = null;
 
-  @Output() studentMoved = new EventEmitter<{ student: Student, newClassId: string }>();
-  @Output() dragStart = new EventEmitter<Student>();
-  @Output() dragEnd = new EventEmitter<void>();
+  /** Emits when a student is moved to a new class */
+  @Output()
+  studentMoved = new EventEmitter<{
+    student: Student;
+    newClassId: string;
+  }>();
+  /** Emits on drag start event */
+  @Output()
+  dragStart = new EventEmitter<Student>();
+  /** Emits on drag end event */
+  @Output()
+  dragEnd = new EventEmitter<void>();
 
   classService = inject(ClassService);
 
-  // Filtreleme ve arama
+  /** Search term for filtering students */
   searchTerm: string = '';
+  /** Sort order for students */
   sortBy: string = 'A-Z';
-
-  // Filtrelenmiş veriler
+  /** Filtered students list */
   filteredStudents: Student[] = [];
 
+  /**
+   * Initializes the filtered student list on component init.
+   */
   ngOnInit() {
     this.updateStudentList();
   }
 
+  /**
+   * Updates the filtered student list on input changes.
+   */
   ngOnChanges() {
     this.updateStudentList();
   }
 
-  // Öğrenci listesini güncelle
+  /**
+   * Updates the filtered and sorted student list.
+   */
   updateStudentList() {
     if (!this.selectedClass) {
       this.filteredStudents = [];
       return;
     }
-
     let filtered = this.students.filter(s => s.classId === this.selectedClass!.id);
-
-    // Arama filtresi
+    // Search filter
     if (this.searchTerm) {
       const search = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(s =>
-        s.name.toLowerCase().includes(search) ||
-        s.surname.toLowerCase().includes(search) ||
-        s.studentNumber.includes(search)
+      filtered = filtered.filter(
+        s =>
+          s.name.toLowerCase().includes(search) ||
+          s.surname.toLowerCase().includes(search) ||
+          s.studentNumber.includes(search)
       );
     }
-
-    // Sıralama
+    // Sort
     filtered.sort((a, b) => {
       switch (this.sortBy) {
         case 'A-Z':
@@ -82,29 +111,37 @@ export class StudentList implements OnInit {
           return 0;
       }
     });
-
     this.filteredStudents = filtered;
   }
 
-  // Arama değişikliği
+  /**
+   * Handles search input change.
+   */
   onSearchChange() {
     this.updateStudentList();
   }
 
-  // Sıralama değişikliği
+  /**
+   * Handles sort order change.
+   */
   onSortChange() {
     this.updateStudentList();
   }
 
-  // Not ortalaması rengini belirle
+  /**
+   * Returns the color for the grade badge.
+   */
   getGradeColor(grade: number): string {
     if (grade >= 90) return 'success';
     if (grade >= 80) return 'warning';
     return 'error';
   }
 
+  /**
+   * Handles drag start for a student.
+   */
   onDragStart(event: DragEvent, student: Student) {
-    // Basit ve temiz bir drag preview oluştur
+    // Create a simple and clean drag preview
     const preview = document.createElement('div');
     preview.className = 'drag-preview';
     preview.style.cssText = `
@@ -125,8 +162,7 @@ export class StudentList implements OnInit {
       transform: rotate(2deg);
       opacity: 0.9;
     `;
-
-    // Öğrenci bilgilerini ekle
+    // Add student info
     preview.innerHTML = `
       <div style="display: flex; align-items: center; gap: 8px;">
         <div style="
@@ -147,32 +183,29 @@ export class StudentList implements OnInit {
         </div>
       </div>
     `;
-
     document.body.appendChild(preview);
-
-    // Drag image'i ayarla
+    // Set drag image
     event.dataTransfer!.effectAllowed = 'move';
     event.dataTransfer!.setDragImage(preview, 20, 20);
-
-    // Parent component'e drag start event'ini gönder
+    // Emit drag start event to parent
     this.dragStart.emit(student);
-
-    // Orijinal elementi hafifçe soluklaştır
+    // Fade the original element
     const originalElement = event.target as HTMLElement;
     originalElement.style.opacity = '0.5';
   }
 
+  /**
+   * Handles drag end for a student.
+   */
   onDragEnd() {
-    // Parent component'e drag end event'ini gönder
+    // Emit drag end event to parent
     this.dragEnd.emit();
-
-    // Orijinal elementin opacity'sini geri yükle
+    // Restore opacity of the original element
     const originalElement = document.querySelector(`[data-student-id]`) as HTMLElement;
     if (originalElement) {
       originalElement.style.opacity = '1';
     }
-
-    // Sadece drag-preview class'ına sahip elementleri temizle
+    // Remove all drag-preview elements
     const previews = document.querySelectorAll('.drag-preview');
     previews.forEach(preview => preview.remove());
   }

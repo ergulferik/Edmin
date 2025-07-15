@@ -3,14 +3,13 @@
   max-width: 1200px;
   margin: 0 auto;
 
-
   .content-wrapper {
     .exam-form-container {
       background-color: var(--background-light);
       border: 1px solid var(--border-color);
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      
+
       .form-content {
         padding: 1.5rem;
       }
@@ -52,7 +51,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
 
-            &:hover, &.drag-over {
+            &:hover,
+            &.drag-over {
               border-color: var(--primary-500);
               background-color: var(--primary-100);
             }
@@ -143,11 +143,11 @@
         }
 
         .btn-submit {
-          background: linear-gradient(90deg, var(--primary-600) 0%, var(--secondary-500) 100%);
+          background: var(--linear-primary);
           color: var(--text-light);
 
           &:hover:not(:disabled) {
-            background: linear-gradient(90deg, var(--primary-700) 0%, var(--secondary-700) 100%);
+            background: var(--linear-primary-hover);
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           }
@@ -192,4 +192,4 @@
       }
     }
   }
-} 
+}
