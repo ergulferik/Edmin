@@ -1,7 +1,7 @@
 .data-grid-card {
  border-radius: 16px;
  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
- background: #fff;
+ background: var(--background-light, #fff);
  border: 1px solid var(--border-color, #f0f0f0);
 
  mat-card-content {
@@ -10,7 +10,7 @@
 
  /* Zebra striping - odd/even satır renklendirmesi */
  ::ng-deep .mdc-data-table__content {
-  background-color: red;
+  background-color: var(--background-light, #fff);
 
   tr:nth-child(odd) {
    background: var(--background-light, #fff);
@@ -151,7 +151,7 @@
 
   .file-icon {
    font-size: 20px;
-   color: #666;
+   color: var(--primary-400, #666);
    flex-shrink: 0;
   }
 

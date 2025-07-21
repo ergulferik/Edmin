@@ -14,11 +14,12 @@ import { AppButtonComponent } from '../../button/button';
 import { FilePickerComponent } from '../../file-picker/file-picker';
 import { ModalHeader } from '../modal-header/modal-header';
 import { ModalFooter, ModalFooterButton } from '../modal-footer/modal-footer';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 
 export interface ModalFormField {
  key: string;
  label: string;
- type: 'text' | 'number' | 'email' | 'textarea' | 'select' | 'template' | 'date' | 'file';
+ type: 'text' | 'number' | 'email' | 'textarea' | 'select' | 'template' | 'date' | 'file' | 'time';
  placeholder?: string;
  required?: boolean;
  validators?: any[];
@@ -36,6 +37,11 @@ export interface ModalFormField {
   displayValue?: any;
  };
  accept?: string;
+ timeOptions?: {
+  min: string;
+  max: string;
+  interval: string;
+ };
 }
 
 export interface ModalFormConfig {
@@ -68,6 +74,7 @@ export interface ModalFormConfig {
   MatSelectModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatTimepickerModule,
   AppButtonComponent,
   FilePickerComponent,
   ModalHeader,

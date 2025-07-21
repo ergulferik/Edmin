@@ -1,10 +1,11 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Student } from '../models/student.model';
-import { ClassItem, Field } from '../models/class.model';
-import { CLASSES_DATA, FIELDS_DATA, COURSES_DATA } from '../data/class.data';
+import { ClassItem, CourseSchedule, Field } from '../models/class.model';
+import { CLASSES_DATA, FIELDS_DATA, COURSES_DATA, CLASS_SCHEDULE_DATA } from '../data/class.data';
 import { STUDENTS_DATA } from '../data/student.data';
 import { Course } from '../models/course.model';
 import { DcToastService } from 'dc-toast-ng';
+import { HelperService } from './helper.service';
 
 /**
  * Class service for managing classes, CRUD operations
@@ -19,8 +20,10 @@ export class ClassService {
  fields = signal<Field[]>([...FIELDS_DATA]);
  courses = signal<Course[]>([...COURSES_DATA]);
  students = signal<Student[]>([...STUDENTS_DATA]);
+ selectedClass = signal<ClassItem | null>(null);
+ classSchedule = signal<CourseSchedule[]>([]);
  private toast = inject(DcToastService);
-
+ private helperService = inject(HelperService);
  draggedStudent = signal<Student | null>(null);
 
  addClass(classItem: ClassItem): Promise<ClassItem> {
@@ -49,7 +52,7 @@ export class ClassService {
   // TODO: Replace with API call: return this.http.post<Course>('/api/courses', course)
   const newCourse: Course = {
    ...course,
-   id: Math.random().toString(36).substring(2),
+   id: this.helperService.generateRandomId(),
   };
   this.courses.update(courses => [...courses, newCourse]);
   return Promise.resolve(newCourse);
@@ -100,7 +103,7 @@ export class ClassService {
   // TODO: Replace with API call: return this.http.post<ClassItem>('/api/classes', classItem)
   const newClass: ClassItem = {
    ...classItem,
-   id: Math.random().toString(36).substring(2),
+   id: this.helperService.generateRandomId(),
    averageGrade: classItem.averageGrade ?? 0,
    studentCount: classItem.studentCount ?? 0,
   };
@@ -172,7 +175,7 @@ export class ClassService {
   // TODO: Replace with API call: return this.http.post<Field>('/api/fields', field)
   const newField: Field = {
    ...field,
-   id: Math.random().toString(36).substring(2),
+   id: this.helperService.generateRandomId(),
   };
   this.fields.update(fields => [...fields, newField]);
   this.toast.create({
@@ -247,7 +250,7 @@ export class ClassService {
   // TODO: Replace with API call: return this.http.post<Student>('/api/students', student)
   const newStudent: Student = {
    ...student,
-   id: Math.random().toString(36).substring(2),
+   id: this.helperService.generateRandomId(),
   };
   this.students.update(students => [...students, newStudent]);
   this.toast.create({
@@ -294,6 +297,58 @@ export class ClassService {
   this.toast.create({
    position: 'bottom-center',
    content: `Öğrenci "${this.students()[index].name}" başarıyla silindi`,
+   type: 'success',
+   time: 3,
+  });
+  return Promise.resolve();
+ }
+
+ getClasSchedule(classId: string): Promise<CourseSchedule[]> {
+  // TODO: Replace with API call: return this.http.get<Schedule[]>(`/api/classes/${classId}/schedule`)
+  const schedule = CLASS_SCHEDULE_DATA.filter(c => c.classId === classId);
+  this.classSchedule.update(() => schedule);
+  return Promise.resolve(schedule);
+ }
+
+ createCourseScheduleCourse(classSchedule: Omit<CourseSchedule, 'id'>): Promise<CourseSchedule> {
+  // TODO: Replace with API call: return this.http.post<CourseSchedule>(`/api/classes/${classId}/schedule`, classSchedule)
+  const newClassSchedule: CourseSchedule = {
+   ...classSchedule,
+   id: this.helperService.generateRandomId(),
+  };
+  this.classSchedule.update(classSchedule => [...classSchedule, newClassSchedule]);
+  this.toast.create({
+   position: 'bottom-center',
+   content: `Ders programı başarıyla oluşturuldu`,
+   type: 'success',
+   time: 3,
+  });
+  return Promise.resolve(newClassSchedule);
+ }
+
+ updateCourseScheduleCourse(id: string, classScheduleData: Partial<CourseSchedule>): Promise<CourseSchedule> {
+  // TODO: Replace with API call: return this.http.patch<CourseSchedule>(`/api/classes/${classId}/schedule`, classSchedule)
+  const index = this.classSchedule().findIndex(c => c.id === id);
+  if (index === -1) {
+   return Promise.reject(new Error('Class schedule not found'));
+  }
+  this.classSchedule.update(classSchedule =>
+   classSchedule.map((c, i) => (i === index ? { ...c, ...classScheduleData } : c))
+  );
+  this.toast.create({
+   position: 'bottom-center',
+   content: `Ders programı başarıyla güncellendi`,
+   type: 'success',
+   time: 3,
+  });
+  return Promise.resolve(this.classSchedule()[index]);
+ }
+
+ deleteCourseScheduleCourse(id: string): Promise<void> {
+  this.classSchedule.update(classSchedule => classSchedule.filter(c => c.id !== id));
+  this.toast.create({
+   position: 'bottom-center',
+   content: `Ders programı başarıyla silindi`,
    type: 'success',
    time: 3,
   });

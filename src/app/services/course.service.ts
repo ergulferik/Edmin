@@ -10,9 +10,9 @@ import { DcToastService } from 'dc-toast-ng';
  providedIn: 'root',
 })
 export class CourseService {
- private courses = signal<Course[]>([...COURSES_DATA]);
- private toast = inject(DcToastService);
- getCourses(): Promise<Course[]> {
+ courses = signal<Course[]>([...COURSES_DATA]);
+ toast = inject(DcToastService);
+ getCourseList(): Promise<Course[]> {
   return Promise.resolve(this.courses());
  }
 

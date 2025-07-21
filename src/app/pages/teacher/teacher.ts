@@ -119,8 +119,8 @@ export class Teacher {
   dialogRef.afterClosed().subscribe(result => {
    if (result) {
     this.teacherService.createTeacher(result);
-    this.teacherService.selectedTeacher.set(null);
    }
+   this.teacherService.selectedTeacher.set(null);
   });
  }
 
@@ -132,8 +132,8 @@ export class Teacher {
   dialogRef.afterClosed().subscribe(result => {
    if (result) {
     this.teacherService.updateTeacher(item.id, result);
-    this.teacherService.selectedTeacher.set(null);
    }
+   this.teacherService.selectedTeacher.set(null);
   });
  }
 

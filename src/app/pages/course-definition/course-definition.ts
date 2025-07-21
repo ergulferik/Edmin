@@ -128,7 +128,7 @@ export class CourseDefinitionPage {
 
  async loadCourses() {
   try {
-   const coursesData = await this.courseService.getCourses();
+   const coursesData = await this.courseService.getCourseList();
    this.courses.set(coursesData || []);
   } catch (error) {
    console.error('Dersler yüklenirken hata oluştu:', error);

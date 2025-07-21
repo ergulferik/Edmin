@@ -46,7 +46,7 @@ export class ExamTemplateItemComponent {
  }
 
  private async loadCourseNames() {
-  const courses = await this.courseService.getCourses();
+  const courses = await this.courseService.getCourseList();
   this.courseNames.set(Object.fromEntries(courses.map(c => [c.id, c.name])));
  }
 

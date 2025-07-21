@@ -1,5 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
 :root {
  /* === PRIMARY (Ana tema rengi - koyu mavi) === */
  --primary-900: #0d1b2a; // En koyu - dark background
@@ -81,14 +79,43 @@
 
  /* === DIALOG STYLES === */
  --mat-dialog-container-shape: 16px;
+
+ /* === CALENDAR STYLES === */
+ --calendar-primary: #1e90ff;
+ --calendar-secondary: #d1e8ff;
 }
 
 .ng-sidebar {
  --bg-color: var(--primary-100) !important;
  --text-color: var(--text-dark) !important;
+ --menu-wrapper-node-wrapper-title-icon-width: 24px !important;
+ --menu-wrapper-node-wrapper-title-icon-height: 24px !important;
 
  --primary: var(--primary-500) !important;
  --default-font-family: 'Inter', sans-serif !important;
+
+ .menu-container {
+  overflow: auto !important;
+ }
+
+ .icon-container {
+  align-items: center;
+  justify-content: center;
+ }
+
+ .user-container {
+  position: absolute;
+  bottom: 1rem;
+  width: 100%;
+
+  &.close {
+   padding: 0px !important;
+
+   .theme-toggler {
+    display: none;
+   }
+  }
+ }
 }
 
 body {
@@ -418,6 +445,60 @@ edmin-button {
  .mat-step-icon-selected,
  .mat-step-icon-state-edit {
   background-color: var(--secondary-700) !important;
+ }
+}
+
+mwl-calendar-week-view {
+ mwl-calendar-week-view-header {
+  .cal-day-headers .cal-header {
+   &.cal-today {
+    background-color: var(--primary-500);
+   }
+
+   span {
+    display: none;
+   }
+  }
+ }
+
+ .cal-week-view .cal-hour-segment {
+  &.cal-after-hour-start {
+   .cal-time {
+    display: block !important;
+    font-weight: 400;
+   }
+  }
+ }
+
+ mwl-calendar-week-view-hour-segment.current-time-label {
+  background-color: var(--primary-500);
+ }
+
+ mwl-calendar-event-title {
+  .cal-event-title {
+   display: flex;
+   flex-direction: column;
+   gap: 4px;
+   .course-name {
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 1px solid var(--calendar-primary);
+   }
+   .teacher-name {
+    font-weight: 400;
+    text-align: center;
+   }
+   .time {
+    font-weight: 400;
+    text-decoration: italic;
+    text-align: center;
+    border: 1px solid var(--calendar-primary);
+    border-radius: 4px;
+   }
+   .description {
+    font-weight: 400;
+   }
+  }
  }
 }
 

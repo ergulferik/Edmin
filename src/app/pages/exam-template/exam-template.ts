@@ -88,7 +88,7 @@ export class ExamTemplatePage implements OnInit {
 
  /** Dersleri yükle */
  private async loadCourses() {
-  this.courses = await this.courseService.getCourses();
+  this.courses = await this.courseService.getCourseList();
  }
 
  /** Formu aç */

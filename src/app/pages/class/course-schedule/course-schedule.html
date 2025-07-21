@@ -1,0 +1,42 @@
+<edmin-page-header [title]="'Ders Programı'" [subtitle]="'Ders programını görüntüleyin ve düzenleyin'">
+ <div class="calendar-header" end>
+  <mat-form-field appearance="outline">
+   <mat-select
+    [(ngModel)]="selectedClassId"
+    (selectionChange)="onClassChange($event.value)"
+    placeholder="Sınıf Seçiniz"
+   >
+    <mat-option *ngFor="let cls of listClass" [value]="cls.id">{{ cls.name }}</mat-option>
+   </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+   <mat-label>Öğretmen</mat-label>
+   <mat-select
+    [(ngModel)]="selectedTeacherId"
+    (selectionChange)="onTeacherChange($event.value)"
+    placeholder="Öğretmen Seçiniz"
+   >
+    <mat-option [value]="null">Tüm Öğretmenler</mat-option>
+    <mat-option *ngFor="let teacher of listTeacher" [value]="teacher.id">{{ teacher.name }}</mat-option>
+   </mat-select>
+  </mat-form-field>
+ </div>
+</edmin-page-header>
+<div class="calendar-container">
+ <mwl-calendar-week-view
+  [viewDate]="viewDate"
+  [events]="events"
+  [hourSegments]="TIME_PERIOD"
+  [dayStartHour]="DAY_START_HOUR.getHours()"
+  [dayEndHour]="DAY_END_HOUR.getHours()"
+  [refresh]="refresh"
+  [weekStartsOn]="1"
+  (eventTimesChanged)="courseScheduleTimesChanged($event)"
+  (eventClicked)="updateCourseSchedule($event.event)"
+  (hourSegmentClicked)="addCourseSchedule($event)"
+  (beforeViewRender)="beforeViewRender($event)"
+  [locale]="'tr-TR'"
+ >
+ </mwl-calendar-week-view>
+</div>

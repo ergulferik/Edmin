@@ -119,6 +119,31 @@
      </mat-form-field>
     }
 
+    <!-- Time -->
+
+    @if (field.type === 'time') {
+     <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ field.label }}</mat-label>
+      <input
+       matInput
+       [formControlName]="field.key"
+       [placeholder]="field.placeholder || field.label"
+       [required]="field.required || false"
+       type="time"
+       [matTimepicker]="picker"
+       [matTimepickerMin]="field.timeOptions?.min"
+       [matTimepickerMax]="field.timeOptions?.max"
+      />
+      <mat-timepicker-toggle matIconSuffix [for]="picker">
+       <mat-icon matTimepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-timepicker-toggle>
+      <mat-timepicker #picker [interval]="field.timeOptions?.interval || 10" />
+      <mat-error *ngIf="isFieldInvalid(field.key)">
+       {{ getFieldError(field.key) }}
+      </mat-error>
+     </mat-form-field>
+    }
+
     <!-- File -->
     @if (field.type === 'file') {
      <div class="field-container">

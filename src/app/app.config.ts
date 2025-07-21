@@ -11,6 +11,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, CalendarModule } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 export const appConfig: ApplicationConfig = {
  providers: [
@@ -32,5 +34,11 @@ export const appConfig: ApplicationConfig = {
    },
   },
   provideHttpClient(),
+  importProvidersFrom(
+   CalendarModule.forRoot({
+    provide: DateAdapter,
+    useFactory: adapterFactory,
+   })
+  ),
  ],
 };

@@ -6,17 +6,19 @@ import { MatRippleModule } from '@angular/material/core';
 import { ClassItem, Field } from '../../../models/class.model';
 import { ClassService } from '../../../services/class.service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroPencilSquare, heroTrash, heroPlus } from '@ng-icons/heroicons/outline';
+import { heroPencilSquare, heroTrash, heroPlus, heroCalendar } from '@ng-icons/heroicons/outline';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalFormComponent, ModalFormConfig } from '../../../components/modal/modal-form/modal-form';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 /**
  * ClassList component displays a list of classes with selection, drag-and-drop, and CRUD operations.
  */
 @Component({
  selector: 'app-class-list',
- imports: [CommonModule, MatIconModule, MatButtonModule, MatRippleModule, NgIcon],
+ imports: [CommonModule, MatIconModule, MatButtonModule, MatRippleModule, NgIcon, MatTooltipModule],
  templateUrl: './class-list.html',
  styleUrl: './class-list.scss',
  viewProviders: [
@@ -24,6 +26,7 @@ import Swal from 'sweetalert2';
    heroPencilSquare,
    heroTrash,
    heroPlus,
+   heroCalendar,
   }),
  ],
 })
@@ -66,7 +69,7 @@ export class ClassList implements OnInit {
  classService = inject(ClassService);
  dialog = inject(MatDialog);
  fields = signal<Field[]>([]);
-
+ router = inject(Router);
  /** Modal form configuration for class add/edit */
  modalConfig: ModalFormConfig = {
   title: 'Add Class',
@@ -223,5 +226,10 @@ export class ClassList implements OnInit {
     this.classService.deleteClass(classItem.id);
    }
   });
+ }
+
+ onCourseSchedule(classItem: ClassItem) {
+  this.classService.selectedClass.set(classItem);
+  this.router.navigate(['/class/course-schedule']);
  }
 }

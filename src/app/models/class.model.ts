@@ -11,3 +11,13 @@ export interface Field {
  name: string;
  order: number;
 }
+
+export interface CourseSchedule {
+ id: string;
+ classId: string;
+ courseId: string;
+ teacherId: string;
+ description: string;
+ start: Date;
+ end: Date;
+}

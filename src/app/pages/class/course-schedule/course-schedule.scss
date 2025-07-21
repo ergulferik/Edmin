@@ -1,0 +1,21 @@
+:host {
+ padding: 2rem;
+ max-width: 1200px;
+ margin: 0 auto;
+ display: block;
+}
+mwl-calendar-week-view {
+ display: block;
+ margin: auto;
+ max-height: calc(100vh - 12rem);
+ overflow: auto;
+ border-radius: 8px;
+ border: 1px solid var(--border-color);
+}
+
+.calendar-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ gap: 1rem;
+}
