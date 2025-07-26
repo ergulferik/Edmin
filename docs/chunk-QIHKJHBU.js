@@ -1,0 +1,1 @@
+import{$ as r,i as n,ja as o,ua as s}from"./chunk-C35VUVUC.js";function w(t){t||(t=o(s));let i=new n(e=>{if(t.destroyed){e.next();return}return t.onDestroy(e.next.bind(e))});return e=>e.pipe(r(i))}export{w as a};
