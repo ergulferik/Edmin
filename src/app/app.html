@@ -1,4 +1,12 @@
-<ng-sidebar [options]="sidebar"> </ng-sidebar>
+@if (authService.isLoggedIn()) {
+ <ng-sidebar [options]="sidebar">
+  <div al-sidebar-bottom-user>
+   <button mat-icon-button class="icon-btn danger" (click)="logout()">
+    <ng-icon name="heroArrowRightOnRectangle" class="icon-danger"></ng-icon>
+   </button>
+  </div>
+ </ng-sidebar>
+}
 
 <div class="app-container" [style.margin-left]="sidebarWidth + 'px'">
  <router-outlet />

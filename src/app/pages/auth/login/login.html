@@ -1,0 +1,66 @@
+<div class="login-container">
+ <div class="login-wrapper">
+  <mat-card class="login-card">
+   <div class="login-header">
+    <h1>Giriş Yap</h1>
+    <p>Hesabınıza giriş yapmak için bilgilerinizi girin</p>
+   </div>
+
+   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <mat-form-field appearance="outline" class="form-field">
+     <mat-label>E-posta</mat-label>
+     <input matInput type="email" formControlName="email" placeholder="ornek@email.com" />
+     <mat-icon matPrefix>email</mat-icon>
+     @if (emailControl?.invalid && emailControl?.touched) {
+      <mat-error>
+       @if (emailControl?.errors?.['required']) {
+        <span>E-posta adresi gereklidir</span>
+       } @else if (emailControl?.errors?.['email']) {
+        <span>Geçerli bir e-posta adresi girin</span>
+       }
+      </mat-error>
+     }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+     <mat-label>Şifre</mat-label>
+     <input
+      matInput
+      [type]="hidePassword ? 'password' : 'text'"
+      formControlName="password"
+      placeholder="Şifrenizi girin"
+     />
+     <mat-icon matPrefix>lock</mat-icon>
+     <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="togglePasswordVisibility()"
+      [attr.aria-label]="'Şifreyi göster'"
+      [attr.aria-pressed]="hidePassword"
+     >
+      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+     </button>
+     @if (passwordControl?.invalid && passwordControl?.touched) {
+      <mat-error>
+       @if (passwordControl?.errors?.['required']) {
+        <span>Şifre gereklidir</span>
+       } @else if (passwordControl?.errors?.['minlength']) {
+        <span>Şifre en az 6 karakter olmalıdır</span>
+       }
+      </mat-error>
+     }
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" class="submit-button" [disabled]="loginForm.invalid"> Giriş Yap </button>
+   </form>
+
+   <div class="login-footer">
+    <p>
+     Hesabınız yok mu?
+     <a routerLink="/register" class="link-text">Kayıt Ol</a>
+    </p>
+   </div>
+  </mat-card>
+ </div>
+</div>

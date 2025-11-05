@@ -1,5 +1,5 @@
 import { Component, effect, inject } from '@angular/core';
-import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarWeekViewBeforeRenderEvent } from 'angular-calendar';
+import { CalendarEvent, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { Subject } from 'rxjs';
 import { CalendarModule, CalendarWeekModule } from 'angular-calendar';
 import { CommonModule } from '@angular/common';
@@ -253,6 +253,9 @@ export class CourseSchedule {
       ...result,
       classId: this.selectedClassId,
      } as CourseScheduleModel);
+    } else {
+     this.events.pop();
+     this.refresh.next();
     }
    });
   }
@@ -263,7 +266,7 @@ export class CourseSchedule {
   if (foundedClass) {
    this.selectedClassId = classId;
    this.classService.getClasSchedule(classId);
-   this.classService.selectedClass.update(classes => foundedClass);
+   this.classService.selectedClass.update(() => foundedClass);
   }
   this.updateEvents();
  }
@@ -279,7 +282,7 @@ export class CourseSchedule {
      <div class="description"> Açıklama: ${event.description || ''} </div>`;
  }
 
- beforeViewRender(event: CalendarWeekViewBeforeRenderEvent): void {
+ beforeViewRender(): void {
   setTimeout(() => {
    const timeLabelColumn = document.querySelector('.cal-time-label-column');
    if (timeLabelColumn) {

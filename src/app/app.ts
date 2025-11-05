@@ -1,12 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { NgSidebarComponent, NgSidebarService, SidebarModel } from '@angulogic/ng-sidebar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { registerLocaleData } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import localeTr from '@angular/common/locales/tr';
+import { AuthService } from './services/auth.service';
+import { heroArrowRightOnRectangle } from '@ng-icons/heroicons/outline';
+import { DcToastService } from 'dc-toast-ng';
 
 registerLocaleData(localeTr, 'tr-TR');
 
@@ -17,15 +21,23 @@ registerLocaleData(localeTr, 'tr-TR');
 @Component({
  selector: 'app-root',
  standalone: true,
- imports: [RouterOutlet, NgSidebarComponent, MatCardModule, MatButtonModule, ReactiveFormsModule],
+ imports: [RouterOutlet, NgSidebarComponent, MatCardModule, MatButtonModule, ReactiveFormsModule, CommonModule, NgIcon],
  templateUrl: './app.html',
  styleUrls: ['./app.scss'],
+ providers: [
+  provideIcons({
+   heroArrowRightOnRectangle,
+  }),
+ ],
 })
 export class App {
  protected title = 'Edmin';
  sidebarWidth = 0;
  protected theme: 'light' | 'dark' = 'light';
 
+ authService = inject(AuthService);
+ toast = inject(DcToastService);
+ router = inject(Router);
  constructor() {
   this.sidebarService.sidebarWidth$.pipe(takeUntilDestroyed()).subscribe(width => {
    this.sidebarWidth = width;
@@ -117,5 +129,22 @@ export class App {
   } else {
    body.classList.remove('dark-theme');
   }
+ }
+
+ logout() {
+  this.authService
+   .logout()
+   .then(() => {
+    this.sidebarWidth = 0;
+    this.router.navigate(['/login']);
+   })
+   .catch(error => {
+    this.toast.create({
+     position: 'bottom-center',
+     content: error.error.message,
+     type: 'error',
+     time: 3,
+    });
+   });
  }
 }

@@ -1,0 +1,128 @@
+<div class="register-container">
+ <div class="register-wrapper">
+  <mat-card class="register-card">
+   <div class="register-header">
+    <h1>Kayıt Ol</h1>
+    <p>Yeni hesap oluşturmak için bilgilerinizi doldurun</p>
+   </div>
+
+   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+    <div class="name-row">
+     <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Ad</mat-label>
+      <input matInput type="text" formControlName="name" placeholder="Adınız" />
+      <mat-icon matPrefix>person</mat-icon>
+      @if (nameControl?.invalid && nameControl?.touched) {
+       <mat-error>
+        @if (nameControl?.errors?.['required']) {
+         <span>Ad gereklidir</span>
+        } @else if (nameControl?.errors?.['minlength']) {
+         <span>Ad en az 2 karakter olmalıdır</span>
+        }
+       </mat-error>
+      }
+     </mat-form-field>
+
+     <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Soyad</mat-label>
+      <input matInput type="text" formControlName="surname" placeholder="Soyadınız" />
+      <mat-icon matPrefix>person_outline</mat-icon>
+      @if (surnameControl?.invalid && surnameControl?.touched) {
+       <mat-error>
+        @if (surnameControl?.errors?.['required']) {
+         <span>Soyad gereklidir</span>
+        } @else if (surnameControl?.errors?.['minlength']) {
+         <span>Soyad en az 2 karakter olmalıdır</span>
+        }
+       </mat-error>
+      }
+     </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="form-field">
+     <mat-label>E-posta</mat-label>
+     <input matInput type="email" formControlName="email" placeholder="ornek@email.com" />
+     <mat-icon matPrefix>email</mat-icon>
+     @if (emailControl?.invalid && emailControl?.touched) {
+      <mat-error>
+       @if (emailControl?.errors?.['required']) {
+        <span>E-posta adresi gereklidir</span>
+       } @else if (emailControl?.errors?.['email']) {
+        <span>Geçerli bir e-posta adresi girin</span>
+       }
+      </mat-error>
+     }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+     <mat-label>Şifre</mat-label>
+     <input
+      matInput
+      [type]="hidePassword ? 'password' : 'text'"
+      formControlName="password"
+      placeholder="Şifrenizi girin"
+     />
+     <mat-icon matPrefix>lock</mat-icon>
+     <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="togglePasswordVisibility()"
+      [attr.aria-label]="'Şifreyi göster'"
+      [attr.aria-pressed]="hidePassword"
+     >
+      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+     </button>
+     @if (passwordControl?.invalid && passwordControl?.touched) {
+      <mat-error>
+       @if (passwordControl?.errors?.['required']) {
+        <span>Şifre gereklidir</span>
+       } @else if (passwordControl?.errors?.['minlength']) {
+        <span>Şifre en az 6 karakter olmalıdır</span>
+       }
+      </mat-error>
+     }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+     <mat-label>Şifre Tekrar</mat-label>
+     <input
+      matInput
+      [type]="hideConfirmPassword ? 'password' : 'text'"
+      formControlName="confirmPassword"
+      placeholder="Şifrenizi tekrar girin"
+     />
+     <mat-icon matPrefix>lock_outline</mat-icon>
+     <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="toggleConfirmPasswordVisibility()"
+      [attr.aria-label]="'Şifreyi göster'"
+      [attr.aria-pressed]="hideConfirmPassword"
+     >
+      <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+     </button>
+     @if (confirmPasswordControl?.invalid && confirmPasswordControl?.touched) {
+      <mat-error>
+       @if (confirmPasswordControl?.errors?.['required']) {
+        <span>Şifre tekrar gereklidir</span>
+       } @else if (confirmPasswordControl?.errors?.['passwordMismatch']) {
+        <span>Şifreler eşleşmiyor</span>
+       }
+      </mat-error>
+     }
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" class="submit-button" [disabled]="registerForm.invalid"> Kayıt Ol </button>
+   </form>
+
+   <div class="register-footer">
+    <p>
+     Zaten hesabınız var mı?
+     <a routerLink="/login" class="link-text">Giriş Yap</a>
+    </p>
+   </div>
+  </mat-card>
+ </div>
+</div>
