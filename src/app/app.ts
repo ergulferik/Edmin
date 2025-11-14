@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NgSidebarComponent, NgSidebarService, SidebarModel } from '@angulogic/ng-sidebar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,7 @@ import localeTr from '@angular/common/locales/tr';
 import { AuthService } from './services/auth.service';
 import { heroArrowRightOnRectangle } from '@ng-icons/heroicons/outline';
 import { DcToastService } from 'dc-toast-ng';
+import { sidebarRoutes } from './app.routes';
 
 registerLocaleData(localeTr, 'tr-TR');
 
@@ -34,15 +35,10 @@ export class App {
  protected title = 'Edmin';
  sidebarWidth = 0;
  protected theme: 'light' | 'dark' = 'light';
-
+ isSidebarVisible = signal<boolean>(false);
  authService = inject(AuthService);
  toast = inject(DcToastService);
  router = inject(Router);
- constructor() {
-  this.sidebarService.sidebarWidth$.pipe(takeUntilDestroyed()).subscribe(width => {
-   this.sidebarWidth = width;
-  });
- }
 
  sidebarService = inject(NgSidebarService);
  sidebar: SidebarModel = {
@@ -94,6 +90,15 @@ export class App {
      },
     ],
    },
+   {
+    title: 'Yönetim',
+    data: [
+     {
+      name: 'Roller',
+      route: '/role-management',
+     },
+    ],
+   },
   ],
   options: {
    favoritesTitle: 'Favoriler',
@@ -110,6 +115,18 @@ export class App {
    onThemeChange: (theme: 'light' | 'dark') => this.onThemeChange(theme),
   },
  };
+
+ constructor() {
+  this.sidebarService.sidebarWidth$.pipe(takeUntilDestroyed()).subscribe(width => {
+   this.sidebarWidth = width;
+  });
+
+  this.router.events.pipe(takeUntilDestroyed()).subscribe((event: any) => {
+   if (event instanceof NavigationEnd) {
+    this.isSidebarVisible.set(sidebarRoutes.some(route => event.url.startsWith(`/${route.path}`)));
+   }
+  });
+ }
 
  onSidebarWidthChange() {
   const interval = setInterval(() => {

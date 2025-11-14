@@ -7,11 +7,11 @@ import { unAuthPages } from '../data/auth.data';
  * Authentication guard
  * @description Kullanıcı oturum durumunu kontrol eder ve gerekli yönlendirmeleri yapar
  */
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = async (route, state) => {
  const authService = inject(AuthService);
  const router = inject(Router);
 
- const isAuthenticated = authService.isAuthenticated();
+ const isAuthenticated = await authService.isAuthenticated();
  const isAuthRoute = unAuthPages.some(page => state.url.startsWith(`/${page}`));
 
  // Kullanıcı giriş yapmamışsa ve auth sayfasında değilse login'e yönlendir
@@ -43,11 +43,11 @@ export const authGuard: CanActivateFn = (route, state) => {
  * Authentication child guard
  * @description Child route'lar için authentication kontrolü yapar
  */
-export const authGuardChild: CanActivateChildFn = (route, state) => {
+export const authGuardChild: CanActivateChildFn = async (route, state) => {
  const authService = inject(AuthService);
  const router = inject(Router);
 
- const isAuthenticated = authService.isAuthenticated();
+ const isAuthenticated = await authService.isAuthenticated();
  const isAuthRoute = unAuthPages.some(page => state.url.startsWith(`/${page}`));
 
  // Kullanıcı giriş yapmamışsa ve auth sayfasında değilse login'e yönlendir

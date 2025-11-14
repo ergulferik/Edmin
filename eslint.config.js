@@ -24,6 +24,7 @@ export default [
     clearTimeout: 'readonly',
     setInterval: 'readonly',
     clearInterval: 'readonly',
+    structuredClone: 'readonly',
    },
   },
   plugins: {

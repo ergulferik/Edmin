@@ -25,7 +25,7 @@ export class AppButtonComponent {
  icon?: string;
  /** Button type: 'primary', 'accent', 'warn', 'secondary', 'outlined', 'back' */
  @Input()
- type: 'primary' | 'accent' | 'warn' | 'secondary' | 'outlined' | 'back' = 'primary';
+ type: 'primary' | 'accent' | 'warn' | 'secondary' | 'outlined' | 'back' | 'danger' = 'primary';
  /** Is the button disabled? */
  @Input()
  disabled: boolean = false;

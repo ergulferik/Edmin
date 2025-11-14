@@ -48,9 +48,11 @@
  /* === NEUTRALS === */
  --text-light: #ffffff;
  --text-dark: #1a1a1a;
- --border-color: #dee2e6;
+ --border-color: #e2e8f0;
  --background-dark: --primary-900;
- --background-light: #ffffff;
+ --background-light: #f8fafc;
+ --border: 1px solid var(--border-color);
+ --rounded-lg: 0.5rem;
 
  /* === DEFAULT USAGE EXAMPLES === */
  --btn-bg: --primary-600;
@@ -121,6 +123,7 @@
 body {
  font-family: 'Inter', sans-serif;
  margin: 0px;
+ background-color: var(--background-light);
 }
 
 /* === CUSTOM SCROLLBAR STYLES === */
@@ -297,7 +300,7 @@ dc-toast-ng {
 
 .cancel-button {
  color: var(--text-dark, #666) !important;
- border: 1px solid var(--border-color, #dee2e6) !important;
+ border: var(--border) !important;
  border-radius: 8px !important;
  transition: all 0.2s ease !important;
  background-color: var(--primary-100, #f8f9fa) !important;
@@ -358,6 +361,14 @@ edmin-button {
 
 .mat-mdc-menu-content {
  padding: 0px !important;
+}
+
+.invalid-feedback {
+ display: block;
+}
+
+a.dropdown-item {
+ cursor: pointer;
 }
 
 .floating-menu.mat-mdc-menu-panel {

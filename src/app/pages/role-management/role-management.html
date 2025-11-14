@@ -1,0 +1,300 @@
+<!-- Liste Görünümü -->
+@if (viewMode() === ViewMode.LIST) {
+ <edmin-page-header title="Rol Yönetimi" subtitle="Rolleri yönetin, izin atayın ve kullanıcı erişimini kontrol edin" />
+
+ <div class="role-management-container">
+  <!-- Arama ve Ekleme Butonu -->
+  <div class="search-and-actions">
+   <div class="search-container">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input
+     class="search-input"
+     type="text"
+     placeholder="Rolleri ara..."
+     [value]="searchQuery()"
+     (input)="searchQuery.set($any($event.target).value)"
+    />
+   </div>
+   <button class="add-role-button" (click)="onAddClick()" *hasPermission="'role_create'">
+    <ng-icon name="heroPlus" class="icon"></ng-icon>
+    <span>Rol Ekle</span>
+   </button>
+  </div>
+
+  <!-- Yükleme Durumu -->
+  @if (isLoading()) {
+   <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+   </div>
+  }
+
+  <!-- Rol Kartları -->
+  @if (!isLoading() && filteredRoles().length > 0) {
+   <div class="roles-grid">
+    @for (role of filteredRoles(); track role.id) {
+     <div class="role-card" (click)="selectRole(role)">
+      <div class="role-card-header">
+       <div class="role-info">
+        <h3 class="role-name">{{ role.name }}</h3>
+        <div class="role-description-container">
+         <p class="role-description">{{ role.description || 'Açıklama yok' }}</p>
+         @if (role.isDefault) {
+          <span class="badge rounded-pill text-bg-success">Varsayılan</span>
+         }
+        </div>
+       </div>
+      </div>
+
+      <div class="role-card-footer">
+       <div class="user-avatars">
+        @if (role.users && role.users.length > 0) {
+         @for (user of role.users.slice(0, 3); track user.id) {
+          <edmin-avatar
+           [data]="{
+            image: user.image,
+            initials: getInitials(user),
+           }"
+           size="32px"
+           class="user-avatar"
+          ></edmin-avatar>
+         }
+         @if (role.users.length > 3) {
+          <div class="remaining-users"> +{{ role.users.length - 3 }} </div>
+         }
+        } @else {
+         <div class="no-users">Bu rolü kullanan kullanıcı yok</div>
+        }
+       </div>
+       <span class="user-count"> {{ role.users?.length || 0 }} kullanıcı </span>
+      </div>
+     </div>
+    }
+   </div>
+  }
+
+  <!-- Boş Durum -->
+  @if (!isLoading() && filteredRoles().length === 0) {
+   <div class="empty-state">
+    <mat-icon class="empty-icon">shield</mat-icon>
+    <h3>Rol bulunamadı</h3>
+    <p>{{ searchQuery() ? 'Arama kriterlerinize uygun rol bulunamadı.' : 'Henüz rol eklenmemiş.' }}</p>
+    @if (!searchQuery()) {
+     <button class="add-role-button" (click)="onAddClick()" *hasPermission="'role_create'">
+      <ng-icon name="heroPlus" class="icon"></ng-icon>
+      <span>İlk Rolü Ekle</span>
+     </button>
+    }
+   </div>
+  }
+ </div>
+}
+
+<!-- Detay Görünümü -->
+@if (viewMode() === ViewMode.DETAIL) {
+ <div class="role-detail-container">
+  <edmin-page-header
+   [title]="isEditMode() ? 'Rol Düzenle' : 'Rol Oluştur'"
+   [subtitle]="
+    selectedRole()
+     ? selectedRole()?.name + ' rolünü düzenleyin'
+     : 'Kurumunuzun kurallarını belirlemek için yeni bir rol oluşturun'
+   "
+  >
+   <div end class="form-actions">
+    @if (selectedRole() && !isEditMode()) {
+     <edmin-button (click)="editRole(selectedRole()!)" type="primary">Düzenle</edmin-button>
+    } @else {
+     <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="saveRole()"
+      [disabled]="roleForm.invalid"
+      class="submit-button"
+     >
+      {{ isEditMode() ? 'Güncelle' : 'Oluştur' }}
+     </button>
+     <button mat-button type="button" (click)="onCancelClick()" class="cancel-button">İptal</button>
+    }
+   </div>
+  </edmin-page-header>
+  <main class="main-content">
+   <!-- Sidebar -->
+   <aside class="role-sidebar">
+    <div class="sidebar-header">
+     <h2>Roller</h2>
+     <p>Bir rol seçin</p>
+    </div>
+    <nav class="sidebar-nav">
+     <button class="sidebar-back-button" (click)="backToList()">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Listeye Dön</span>
+     </button>
+     @for (role of roles(); track role.id) {
+      <button class="sidebar-role-item" [class.active]="selectedRole()?.id === role.id" (click)="selectRole(role)">
+       <mat-icon class="role-icon">shield</mat-icon>
+       <span>{{ role.name }}</span>
+      </button>
+     }
+    </nav>
+   </aside>
+
+   <!-- Ana İçerik -->
+   <main class="role-detail-main">
+    <div class="detail-content">
+     @if (isEditMode() || !selectedRole()) {
+      <!-- Rol Formu -->
+      <form class="role-form-card needs-validation" [formGroup]="roleForm" (ngSubmit)="saveRole()">
+       <div class="row mb-3 align-items-end">
+        <div class="col-8">
+         <label for="exampleFormControlInput1" class="form-label">Rol Adı *</label>
+         <input type="text" class="form-control" placeholder="Rol Adı" formControlName="name" />
+         <!-- Angular template syntax'ına göre hata mesajları -->
+         <div
+          *ngIf="roleForm.get('name')?.errors?.['required'] && roleForm.get('name')?.touched"
+          class="invalid-feedback d-block"
+         >
+          Rol adı zorunludur.
+         </div>
+         <div
+          *ngIf="roleForm.get('name')?.errors?.['minlength'] && roleForm.get('name')?.touched"
+          class="invalid-feedback d-block"
+         >
+          Rol adı en az 2 karakter olmalıdır.
+         </div>
+        </div>
+
+        <div class="col-4">
+         <div class="dropdown">
+          <button
+           class="btn btn-secondary dropdown-toggle w-100"
+           [ngClass]="roleForm.value.isActive ? 'btn-success' : 'btn-secondary'"
+           type="button"
+           data-bs-toggle="dropdown"
+           aria-expanded="true"
+          >
+           {{ roleForm.value.isActive ? 'Aktif' : 'Pasif' }}
+          </button>
+          <ul class="dropdown-menu">
+           <li><a class="dropdown-item" (click)="changeActiveStatus(true)">Aktif</a></li>
+           <li><a class="dropdown-item" (click)="changeActiveStatus(false)">Pasif</a></li>
+          </ul>
+         </div>
+        </div>
+       </div>
+       <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Rol Açıklaması</label>
+        <textarea class="form-control" placeholder="Rol Açıklaması" formControlName="description" rows="3"></textarea>
+        @if (roleForm.get('description')?.errors?.['maxlength'] && roleForm.get('description')?.touched) {
+         <div class="invalid-feedback"> Rol açıklaması en fazla 200 karakter olabilir. </div>
+        }
+       </div>
+      </form>
+     } @else if (selectedRole()) {
+      <!-- Rol Detayları -->
+      <div class="role-detail-card">
+       <div class="detail-card-header">
+        <div>
+         <h2 class="detail-title">{{ selectedRole()!.name }}</h2>
+         <p class="detail-description">{{ selectedRole()!.description || 'Açıklama yok' }}</p>
+        </div>
+        <div class="detail-actions">
+         @if (selectedRole()!.isActive === true) {
+          <span class="badge rounded-pill text-bg-success">Aktif</span>
+         } @else {
+          <span class="badge rounded-pill text-bg-secondary">Pasif</span>
+         }
+         @if (selectedRole()?.isDefault) {
+          <span class="badge rounded-pill text-bg-success">Varsayılan</span>
+         }
+        </div>
+       </div>
+
+       <div class="detail-info-grid">
+        <div class="info-item">
+         <h4 class="info-label">Oluşturulma Tarihi</h4>
+         <p class="info-value">{{ formatDate(selectedRole()!.createdAt) }}</p>
+        </div>
+        <div class="info-item">
+         <h4 class="info-label">Atanan Kullanıcılar</h4>
+         <p class="info-value">{{ selectedRole()?.users?.length || 0 }}</p>
+        </div>
+        <div class="info-item">
+         <h4 class="info-label">Rol ID</h4>
+         <p class="info-value code">{{ selectedRole()!.id }}</p>
+        </div>
+       </div>
+      </div>
+     }
+     <!-- İzinler -->
+     <div class="permissions-card">
+      <div class="permissions-header">
+       <h3 class="permissions-title">İzinler</h3>
+      </div>
+
+      <div class="permissions-list">
+       <mat-accordion multi>
+        @for (permission of permissions; track $index) {
+         <mat-expansion-panel>
+          <mat-expansion-panel-header>
+           <mat-panel-title>
+            <mat-checkbox
+             [disabled]="selectedRole() && !isEditMode()"
+             [checked]="checkPerm(permission.id)"
+             (change)="changeParentPermission(permission)"
+            ></mat-checkbox>
+
+            {{ permission.desc }}
+           </mat-panel-title>
+          </mat-expansion-panel-header>
+          @for (item of permission.child; track $index) {
+           <div
+            class="permission-item"
+            [class.disabled]="selectedRole() && !isEditMode()"
+            (click)="togglePermission(item.id)"
+           >
+            <mat-checkbox [checked]="checkPerm(item.id)" [disabled]="selectedRole() && !isEditMode()"></mat-checkbox>
+            {{ item.desc }}
+           </div>
+          }
+         </mat-expansion-panel>
+        }
+       </mat-accordion>
+      </div>
+     </div>
+
+     @if ((isEditMode() || !selectedRole()) && roleForm.value.isDefault == false && roleForm.value.isActive == true) {
+      <!-- Default Role Section -->
+      <div class="default-role-section footer-section">
+       <div class="text-content">
+        <h1> Varsayılan Rol </h1>
+        <p>
+         Varsayılan rol olarak seçmek istediğinize emin misiniz? Başka bir varsayılan rol varsa onun varsayılan özelliği
+         kaldırılacaktır.
+        </p>
+       </div>
+       <edmin-button (click)="changeDefaultRole()" type="secondary">
+        <ng-icon name="heroArrowPath" class="icon"></ng-icon>
+        <span>Seç</span>
+       </edmin-button>
+      </div>
+     }
+
+     @if (isEditMode() && selectedRole()) {
+      <!-- Delete Section -->
+      <div class="delete-section footer-section">
+       <div class="text-content">
+        <h1> Rolü Sil </h1>
+        <p> Bu işlem geri alınamaz. Rolü silmek istediğinize emin misiniz? </p>
+       </div>
+       <edmin-button (click)="deleteRole(selectedRole()!)" type="danger">
+        <ng-icon name="heroTrash" class="icon"></ng-icon>
+        <span>Sil</span>
+       </edmin-button>
+      </div>
+     }
+    </div>
+   </main>
+  </main>
+ </div>
+}

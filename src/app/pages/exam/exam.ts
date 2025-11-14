@@ -219,7 +219,6 @@ export class ExamPage {
  }
 
  onAddClick(): void {
-  console.log('Adding exam');
   this.modalConfig.title = 'Yeni Sınav Ekle';
   this.modalConfig.subtitle = 'Yeni sınav bilgilerini girin';
   this.modalConfig.submitText = 'Ekle';

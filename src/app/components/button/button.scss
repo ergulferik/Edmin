@@ -13,4 +13,19 @@ button {
  &:hover {
   background: var(--linear-primary-hover);
  }
+
+ &.danger {
+  background: var(--error-500);
+  color: var(--text-light, #fff);
+  &:hover {
+   background: var(--error-600);
+  }
+ }
+ &.secondary {
+  background: var(--primary-600);
+  color: var(--text-light, #fff);
+  &:hover {
+   background: var(--primary-800);
+  }
+ }
 }
