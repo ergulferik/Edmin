@@ -1,0 +1,8 @@
+<div
+ class="edmin-card"
+ [class.clickable]="clickable"
+ [class]="cardClass"
+ (click)="clickable && onClick ? onClick.emit($event) : null"
+>
+ <ng-content></ng-content>
+</div>

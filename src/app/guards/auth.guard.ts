@@ -22,7 +22,6 @@ export const authGuard: CanActivateFn = async (route, state) => {
 
  // Kullanıcı giriş yapmışsa ve login/register sayfasındaysa ana sayfaya yönlendir
  if (isAuthenticated && isAuthRoute) {
-  router.navigate(['/class-operations']);
   return false;
  }
 

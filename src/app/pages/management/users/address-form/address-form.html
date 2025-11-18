@@ -1,0 +1,74 @@
+<div class="address-form-content">
+ <form [formGroup]="addressForm">
+  <div class="row mb-3 align-items-end">
+   <div class="col-md-6">
+    <label for="city" class="form-label">Şehir</label>
+    <div class="dropdown" id="cityDropdownContainer">
+     <button
+      class="btn btn-secondary dropdown-toggle w-100"
+      type="button"
+      id="cityDropdown"
+      data-bs-toggle="dropdown"
+      aria-expanded="true"
+     >
+      {{ selectedCityName() }}
+     </button>
+     <ul class="dropdown-menu" aria-labelledby="cityDropdown">
+      @for (province of provinces(); track province.id) {
+       <a class="dropdown-item" href="#" (click)="onSelectCity(province.id, province.name); $event.preventDefault()">
+        {{ province.name }}
+       </a>
+      }
+     </ul>
+    </div>
+   </div>
+
+   <div class="col-md-6">
+    <label for="district" class="form-label">İlçe</label>
+    <div class="dropdown" id="districtDropdownContainer">
+     <button
+      class="btn btn-secondary dropdown-toggle w-100"
+      type="button"
+      [disabled]="districts().length === 0"
+      id="districtDropdown"
+      data-bs-toggle="dropdown"
+      aria-expanded="true"
+     >
+      {{ selectedDistrictName() }}
+     </button>
+     <ul class="dropdown-menu" aria-labelledby="districtDropdown">
+      @for (district of districts(); track district.id) {
+       <li>
+        <a
+         class="dropdown-item"
+         href="#"
+         (click)="onSelectDistrict(district.id, district.name); $event.preventDefault()"
+        >
+         {{ district.name }}
+        </a>
+       </li>
+      }
+     </ul>
+    </div>
+   </div>
+  </div>
+
+  <div class="row mb-3 align-items-end">
+   <div class="col-md-8">
+    <label for="fullAddress" class="form-label">Tam Adres</label>
+    <textarea
+     class="form-control"
+     id="fullAddress"
+     placeholder="Tam adres bilgisi"
+     formControlName="fullAddress"
+     rows="3"
+    ></textarea>
+   </div>
+
+   <div class="col-md-4 align-self-start">
+    <label for="postalCode" class="form-label">Posta Kodu</label>
+    <input type="text" class="form-control" id="postalCode" placeholder="Posta Kodu" formControlName="postalCode" />
+   </div>
+  </div>
+ </form>
+</div>

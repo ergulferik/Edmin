@@ -1,0 +1,139 @@
+<div class="personal-info-form-content">
+ <form [formGroup]="personalInfoForm">
+  <!-- Ad ve Soyad -->
+  <div class="row mb-3 align-items-end justify-content-between">
+   @if (personalInfoForm.get('photo')?.value) {
+    <div class="col-md-6 d-flex justify-content-center align-items-center">
+     <div class="img-fluid" (click)="onChangePhoto()">
+      <img
+       [src]="personalInfoForm.get('photo')?.value"
+       alt="Fotoğraf"
+       class="d-flex justify-content-center align-items-center"
+      />
+      <div class="change-photo-btn">Değiştir</div>
+     </div>
+    </div>
+   } @else {
+    <edmin-file-picker
+     (onSelectFile)="onSelectFile($event)"
+     class="col-md-6"
+     label="Fotoğraf seçiniz"
+     [required]="true"
+     accept="image/*"
+    />
+   }
+
+   <div class="col-md-6">
+    <div class="row m-0">
+     <label for="name" class="form-label">Ad *</label>
+     <input
+      type="text"
+      class="form-control"
+      id="name"
+      placeholder="Ad"
+      formControlName="name"
+      [class.is-invalid]="isFieldInvalid('name')"
+     />
+     @if (isFieldInvalid('name')) {
+      <div class="invalid-feedback d-block">{{ getFieldError('name') }}</div>
+     }
+    </div>
+
+    <div class="row m-0">
+     <label for="surname" class="form-label">Soyad *</label>
+     <input
+      type="text"
+      class="form-control"
+      id="surname"
+      placeholder="Soyad"
+      formControlName="surname"
+      [class.is-invalid]="isFieldInvalid('surname')"
+     />
+     @if (isFieldInvalid('surname')) {
+      <div class="invalid-feedback d-block">{{ getFieldError('surname') }}</div>
+     }
+    </div>
+   </div>
+  </div>
+
+  <!-- Cinsiyet ve Doğum Tarihi -->
+  <div class="row mb-3 align-items-end">
+   <div class="col-md-6">
+    <div class="dropdown">
+     <label for="gender" class="form-label">Cinsiyet *</label>
+     <button
+      class="btn btn-secondary dropdown-toggle w-100"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="true"
+      id="genderDropdown"
+     >
+      {{ selectedGender() }}
+     </button>
+     <ul class="dropdown-menu" aria-labelledby="genderDropdown">
+      <li><a class="dropdown-item" (click)="onSelectGender('male'); $event.preventDefault()">Erkek</a></li>
+      <li><a class="dropdown-item" (click)="onSelectGender('female'); $event.preventDefault()">Kadın</a></li>
+      <li><a class="dropdown-item" (click)="onSelectGender('other'); $event.preventDefault()">Diğer</a></li>
+     </ul>
+    </div>
+   </div>
+
+   <div class="col-md-6">
+    <label for="dateOfBirth" class="form-label">Doğum Tarihi</label>
+    <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth" />
+   </div>
+  </div>
+
+  <!-- TC Kimlik No ve Telefon -->
+  <div class="row mb-3 align-items-end">
+   <div class="col-md-6">
+    <label for="nationalId" class="form-label">TC Kimlik No</label>
+    <input
+     type="text"
+     class="form-control"
+     id="nationalId"
+     placeholder="11 haneli TC Kimlik No"
+     formControlName="nationalId"
+     maxlength="11"
+     [class.is-invalid]="isFieldInvalid('nationalId')"
+    />
+    @if (isFieldInvalid('nationalId')) {
+     <div class="invalid-feedback d-block">{{ getFieldError('nationalId') }}</div>
+    }
+   </div>
+
+   <div class="col-md-6">
+    <label for="phone" class="form-label">Telefon *</label>
+    <input
+     type="tel"
+     class="form-control"
+     id="phone"
+     placeholder="5XX XXX XX XX"
+     formControlName="phone"
+     [class.is-invalid]="isFieldInvalid('phone')"
+    />
+    @if (isFieldInvalid('phone')) {
+     <div class="invalid-feedback d-block">{{ getFieldError('phone') }}</div>
+    }
+   </div>
+  </div>
+
+  <!-- E-posta -->
+  <div class="row mb-3 align-items-end">
+   <div class="col-md-12">
+    <label for="email" class="form-label">E-posta</label>
+    <input
+     type="email"
+     class="form-control"
+     id="email"
+     placeholder="ornek@email.com"
+     formControlName="email"
+     [class.is-invalid]="isFieldInvalid('email')"
+    />
+    @if (isFieldInvalid('email')) {
+     <div class="invalid-feedback d-block">{{ getFieldError('email') }}</div>
+    }
+   </div>
+  </div>
+ </form>
+</div>

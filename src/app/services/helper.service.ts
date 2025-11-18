@@ -1,5 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { CourseStatistics } from '../models/exam.model';
+import { District, Province } from '../models/general.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { catchError, firstValueFrom, tap, throwError } from 'rxjs';
+import { DcToastService } from 'dc-toast-ng';
 
 /**
  * Helper service for managing helper functions
@@ -8,8 +13,15 @@ import { CourseStatistics } from '../models/exam.model';
  providedIn: 'root',
 })
 export class HelperService {
- constructor() {}
-
+ private readonly apiUrl = `${environment.apiUrl}/helper`;
+ constructor(
+  private http: HttpClient,
+  private toast: DcToastService
+ ) {}
+ private _provinces = signal<Province[]>([]);
+ provinces = this._provinces.asReadonly();
+ private _districts = signal<District[]>([]);
+ districts = this._districts.asReadonly();
  generateRandomId(): string {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
  }
@@ -140,5 +152,70 @@ export class HelperService {
   const squaredDifferences = numbers.map(num => Math.pow(num - mean, 2));
   const variance = this.calculateAverage(squaredDifferences);
   return Math.sqrt(variance);
+ }
+
+ getProvinces(): Promise<Province[]> {
+  if (this._provinces().length > 0) {
+   return Promise.resolve(this._provinces());
+  }
+  return firstValueFrom(
+   this.http.get<Province[]>(`${this.apiUrl}/provinces`).pipe(
+    tap(provinces => {
+     this._provinces.set(provinces);
+    }),
+    catchError(error => {
+     this.toast.create({
+      position: 'bottom-center',
+      content: 'İller yüklenirken hata oluştu',
+      type: 'error',
+      time: 3,
+     });
+     return throwError(() => error);
+    })
+   )
+  );
+ }
+
+ getDistricts(provinceId: number): Promise<District[]> {
+  if (this._districts().length > 0 && this._districts().find(district => district.provinceId === provinceId)) {
+   return Promise.resolve(this._districts().filter(district => district.provinceId === provinceId) || []);
+  }
+  return firstValueFrom(
+   this.http.get<District[]>(`${this.apiUrl}/districts/${provinceId}`).pipe(
+    tap(districts => {
+     this._districts.set(districts);
+    }),
+    catchError(error => {
+     this.toast.create({
+      position: 'bottom-center',
+      content: 'İlçeler yüklenirken hata oluştu',
+      type: 'error',
+      time: 3,
+     });
+     return throwError(() => error);
+    })
+   )
+  );
+ }
+
+ uploadFile(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append('file', file);
+  return firstValueFrom(
+   this.http.post<string>(`${this.apiUrl}/upload-image`, formData).pipe(
+    tap(url => {
+     return url;
+    }),
+    catchError(error => {
+     this.toast.create({
+      position: 'bottom-center',
+      content: 'Dosya yüklenirken hata oluştu',
+      type: 'error',
+      time: 3,
+     });
+     return throwError(() => error);
+    })
+   )
+  );
  }
 }

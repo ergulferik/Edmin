@@ -1,109 +1,109 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
-{
-  "project": {
-    "name": "Edmin",
-    "framework": "Angular 20",
-    "stateManagement": "Akita",
-    "description": "A modular and scalable education center management system built with Angular 20 and Akita for professional use."
-  },
-  "architecture": {
-    "pattern": "Modular + Clean Architecture",
-    "components": "Standalone",
-    "directoryStructure": "Atomic Design + Feature-based structure",
-    "routing": "Lazy-loaded modules with route guards"
-  },
-  "codingStandards": {
-    "typescript": {
-      "strict": true,
-      "naming": {
-        "services": "camelCase",
-        "components": "PascalCase",
-        "interfaces": "IPrefix",
-        "stores": "FeatureNameStore"
-      }
-    },
-    "rxjs": {
-      "usage": "Only pipeable operators",
-      "subscriptions": "Use async pipe instead of manual subscription"
-    },
-    "comments": "All methods and classes must include JSDoc-style comments.",
-    "linting": {
-      "tools": ["eslint", "prettier"],
-      "preCommit": true,
-      "customRules": ["Each new method must include a documentation comment."]
-    },
-    "testing": {
-      "unitTestsRequired": false,
-      "generateSpecFiles": false
-    }
-  },
-  "stateManagement": {
-    "library": "Akita",
-    "pattern": "Store - Query - Service",
-    "facadeUsage": true,
-    "guidelines": {
-      "storeCreation": "Create stores using Akita's createStore or class-based Store structure",
-      "queryStructure": "Use Query classes to expose observable states and derived selectors",
-      "updateFlow": "All state changes must go through the store's update method",
-      "entityStore": "Use entity stores for list-based data like students, payments, and appointments"
-    }
-  },
-  "uiComponents": {
-    "structure": "Atomic Design",
-    "formHandling": "Reactive Forms only",
-    "readableTextLanguage":"Turkish - TR",
-    "tableComponent": {
-      "features": ["custom columns", "sorting", "pagination", "filtering"]
-    },
-    "modals": "Use a global modal service with observable control",
-    "permissionDirectives": "Custom directive: *hasPermission"
-  },
-  "features": [
-    "Student enrollment and attendance tracking",
-    "Private, group, and class-based appointment scheduling",
-    "Installment and payment tracking",
-    "Advanced accounting system",
-    "Personnel and teacher management",
-    "Student and teacher dashboards",
-    "Document printing (contracts, receipts, etc.)",
-    "National ID verification"
-  ],
-  "accessControl": {
-    "roles": "Dynamically retrieved from backend",
-    "guard": "PermissionGuard",
-    "directive": "*hasPermission",
-    "roleStorage": "Roles and permissions should be provided via backend (e.g., API or token claims)",
-    "branchScope": true
-  },
-  "i18n": {
-    "library": "ngx-translate",
-    "modular": true,
-    "languageFiles": "Feature-based JSON files",
-    "dynamicLoad": true
-  },
-  "printing": {
-    "documents": [
-      "Contract",
-      "Payment Receipt",
-      "Payment Table",
-      "Notice Document",
-      "Invoice (Printed / E-Invoice)"
-    ],
-    "printService": "All printing handled through a global PrintService and dedicated print views"
-  },
-  "devOps": {
-    "preCommitHooks": ["lint", "build"],
-    "coverageThreshold": null,
-    "ciCd": false
-  },
-  "promptExamples": [
-    "Using Angular 20 and Akita, create a Student Registration component with a reactive form. Include national ID validation, payment plan selection, and a button to print the contract.",
-    "Build an Appointment Scheduling module using Akita entity store. Include weekly group and private scheduling, teacher assignment, and attendance tracking.",
-    "Create a dynamic Payment Table using Angular and Akita. Filter by student, show payment status, and enable printing of receipts. Control access with *hasPermission."
-  ]
-}
 
+{
+"project": {
+"name": "Edmin",
+"framework": "Angular 20",
+"stateManagement": "Akita",
+"description": "A modular and scalable education center management system built with Angular 20 and Akita for professional use."
+},
+"architecture": {
+"pattern": "Modular + Clean Architecture",
+"components": "Standalone",
+"directoryStructure": "Atomic Design + Feature-based structure",
+"routing": "Lazy-loaded modules with route guards"
+},
+"codingStandards": {
+"typescript": {
+"strict": true,
+"naming": {
+"services": "camelCase",
+"components": "PascalCase",
+"interfaces": "IPrefix",
+"stores": "FeatureNameStore"
+}
+},
+"rxjs": {
+"usage": "Only pipeable operators",
+"subscriptions": "Use async pipe instead of manual subscription"
+},
+"comments": "All methods and classes must include JSDoc-style comments. All comments has to English",
+"linting": {
+"tools": ["eslint", "prettier"],
+"preCommit": true,
+"customRules": ["Each new method must include a documentation comment."]
+},
+"testing": {
+"unitTestsRequired": false,
+"generateSpecFiles": false
+}
+},
+"stateManagement": {
+"library": "Akita",
+"pattern": "Store - Query - Service",
+"facadeUsage": true,
+"guidelines": {
+"storeCreation": "Create stores using Akita's createStore or class-based Store structure",
+"queryStructure": "Use Query classes to expose observable states and derived selectors",
+"updateFlow": "All state changes must go through the store's update method",
+"entityStore": "Use entity stores for list-based data like students, payments, and appointments"
+}
+},
+"uiComponents": {
+"structure": "Atomic Design",
+"formHandling": "Reactive Forms only",
+"readableTextLanguage":"Turkish - TR",
+"tableComponent": {
+"features": ["custom columns", "sorting", "pagination", "filtering"]
+},
+"modals": "Use a global modal service with observable control",
+"permissionDirectives": "Custom directive: *hasPermission"
+},
+"features": [
+"Student enrollment and attendance tracking",
+"Private, group, and class-based appointment scheduling",
+"Installment and payment tracking",
+"Advanced accounting system",
+"Personnel and teacher management",
+"Student and teacher dashboards",
+"Document printing (contracts, receipts, etc.)",
+"National ID verification"
+],
+"accessControl": {
+"roles": "Dynamically retrieved from backend",
+"guard": "PermissionGuard",
+"directive": "*hasPermission",
+"roleStorage": "Roles and permissions should be provided via backend (e.g., API or token claims)",
+"branchScope": true
+},
+"i18n": {
+"library": "ngx-translate",
+"modular": true,
+"languageFiles": "Feature-based JSON files",
+"dynamicLoad": true
+},
+"printing": {
+"documents": [
+"Contract",
+"Payment Receipt",
+"Payment Table",
+"Notice Document",
+"Invoice (Printed / E-Invoice)"
+],
+"printService": "All printing handled through a global PrintService and dedicated print views"
+},
+"devOps": {
+"preCommitHooks": ["lint", "build"],
+"coverageThreshold": null,
+"ciCd": false
+},
+"promptExamples": [
+"Using Angular 20 and Akita, create a Student Registration component with a reactive form. Include national ID validation, payment plan selection, and a button to print the contract.",
+"Build an Appointment Scheduling module using Akita entity store. Include weekly group and private scheduling, teacher assignment, and attendance tracking.",
+"Create a dynamic Payment Table using Angular and Akita. Filter by student, show payment status, and enable printing of receipts. Control access with *hasPermission."
+]
+}

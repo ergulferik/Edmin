@@ -2,161 +2,302 @@
 <div class="modal-content">
  <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="form-fields">
-   <div *ngFor="let field of config.fields" class="field-container">
+   <div *ngFor="let field of config.fields" class="field-container mb-3">
     <!-- Text Input -->
     @if (field.type === 'text') {
-     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ field.label }}</mat-label>
-      <input
-       matInput
-       [formControlName]="field.key"
-       type="text"
-       [placeholder]="field.placeholder || field.label"
-       [required]="field.required || false"
-      />
-      <mat-error *ngIf="isFieldInvalid(field.key)">
-       {{ getFieldError(field.key) }}
-      </mat-error>
-     </mat-form-field>
+     <div class="form-group row align-items-center">
+      <div class="col-label">
+       <label [for]="field.key" class="form-label mb-0">
+        {{ field.label }}
+        @if (field.required) {
+         <span class="text-danger">*</span>
+        }
+       </label>
+      </div>
+      <div class="col-input">
+       <input
+        type="text"
+        class="form-control"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [placeholder]="field.placeholder || field.label"
+        [required]="field.required || false"
+        [class.is-invalid]="isFieldInvalid(field.key)"
+       />
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
+     </div>
     }
 
     <!-- Number Input -->
     @if (field.type === 'number') {
-     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ field.label }}</mat-label>
-      <input
-       matInput
-       [formControlName]="field.key"
-       type="number"
-       [placeholder]="field.placeholder || field.label"
-       [required]="field.required || false"
-      />
-      <mat-error *ngIf="isFieldInvalid(field.key)">
-       {{ getFieldError(field.key) }}
-      </mat-error>
-     </mat-form-field>
+     <div class="form-group row align-items-center">
+      <div class="col-label">
+       <label [for]="field.key" class="form-label mb-0">
+        {{ field.label }}
+        @if (field.required) {
+         <span class="text-danger">*</span>
+        }
+       </label>
+      </div>
+      <div class="col-input">
+       <input
+        type="number"
+        class="form-control"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [placeholder]="field.placeholder || field.label"
+        [required]="field.required || false"
+        [class.is-invalid]="isFieldInvalid(field.key)"
+       />
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
+     </div>
     }
 
     <!-- Email Input -->
     @if (field.type === 'email') {
-     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ field.label }}</mat-label>
-      <input
-       matInput
-       [formControlName]="field.key"
-       type="email"
-       [placeholder]="field.placeholder || field.label"
-       [required]="field.required || false"
-      />
-      <mat-error *ngIf="isFieldInvalid(field.key)">
-       {{ getFieldError(field.key) }}
-      </mat-error>
-     </mat-form-field>
+     <div class="form-group row align-items-center">
+      <div class="col-label">
+       <label [for]="field.key" class="form-label mb-0">
+        {{ field.label }}
+        @if (field.required) {
+         <span class="text-danger">*</span>
+        }
+       </label>
+      </div>
+      <div class="col-input">
+       <input
+        type="email"
+        class="form-control"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [placeholder]="field.placeholder || field.label"
+        [required]="field.required || false"
+        [class.is-invalid]="isFieldInvalid(field.key)"
+       />
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
+     </div>
     }
 
     <!-- Textarea -->
     @if (field.type === 'textarea') {
-     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ field.label }}</mat-label>
-      <textarea
-       matInput
-       [formControlName]="field.key"
-       [placeholder]="field.placeholder || field.label"
-       [required]="field.required || false"
-       [rows]="field.rows || 3"
-      ></textarea>
-      <mat-error *ngIf="isFieldInvalid(field.key)">
-       {{ getFieldError(field.key) }}
-      </mat-error>
-     </mat-form-field>
+     <div class="form-group row align-items-start">
+      <div class="col-label">
+       <label [for]="field.key" class="form-label mb-0 pt-2">
+        {{ field.label }}
+        @if (field.required) {
+         <span class="text-danger">*</span>
+        }
+       </label>
+      </div>
+      <div class="col-input">
+       <textarea
+        class="form-control"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [placeholder]="field.placeholder || field.label"
+        [required]="field.required || false"
+        [rows]="field.rows || 3"
+        [class.is-invalid]="isFieldInvalid(field.key)"
+       ></textarea>
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
+     </div>
     }
 
     <!-- Select -->
     @if (field.type === 'select') {
-     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ field.label }}</mat-label>
-      <mat-select [formControlName]="field.key" [required]="field.required || false" [value]="field.value">
-       <mat-option *ngFor="let option of field.options" [value]="option.value">
-        {{ option.label }}
-       </mat-option>
-      </mat-select>
-      <mat-error *ngIf="isFieldInvalid(field.key)">
-       {{ getFieldError(field.key) }}
-      </mat-error>
-     </mat-form-field>
+     <div class="form-group row align-items-center">
+      <div class="col-label">
+       <label [for]="field.key" class="form-label mb-0">
+        {{ field.label }}
+        @if (field.required) {
+         <span class="text-danger">*</span>
+        }
+       </label>
+      </div>
+      <div class="col-input">
+       <div class="dropdown" [class.is-invalid]="isFieldInvalid(field.key)">
+        <button
+         class="btn btn-secondary dropdown-toggle w-100"
+         type="button"
+         [id]="'dropdown-' + field.key"
+         data-bs-toggle="dropdown"
+         aria-expanded="false"
+         [class.is-invalid]="isFieldInvalid(field.key)"
+        >
+         {{ getSelectedLabel(field) || field.placeholder || 'Seçiniz...' }}
+        </button>
+        <ul class="dropdown-menu w-100" [attr.aria-labelledby]="'dropdown-' + field.key">
+         @if (!field.required) {
+          <li>
+           <a
+            class="dropdown-item"
+            [class.active]="!form.get(field.key)?.value"
+            (click)="selectOption(field.key, null); $event.preventDefault()"
+            href="#"
+            >{{ field.placeholder || 'Seçiniz...' }}</a
+           >
+          </li>
+         }
+         @for (option of field.options; track option.value) {
+          <li>
+           <a
+            class="dropdown-item"
+            [class.active]="form.get(field.key)?.value === option.value"
+            (click)="selectOption(field.key, option.value); $event.preventDefault()"
+            href="#"
+            >{{ option.label }}</a
+           >
+          </li>
+         }
+        </ul>
+       </div>
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
+     </div>
     }
 
     <!-- Template -->
     @if (field.type === 'template') {
-     <edmin-button
-      class="full-width"
-      type="primary"
-      buttonType="button"
-      (click)="$event.preventDefault(); $event.stopPropagation(); openTemplateDialog(field)"
-     >
-      <mat-icon>library_books</mat-icon>
-      {{ field.template?.displayValue || field.placeholder || field.label }}
-     </edmin-button>
-     <mat-error *ngIf="isFieldInvalid(field.key)"> {{ getFieldError(field.key) }} </mat-error>
+     <div class="form-group row align-items-center">
+      <div class="col-label">
+       <label class="form-label mb-0">
+        {{ field.label }}
+        @if (field.required) {
+         <span class="text-danger">*</span>
+        }
+       </label>
+      </div>
+      <div class="col-input">
+       <edmin-button
+        class="full-width"
+        type="primary"
+        buttonType="button"
+        (click)="$event.preventDefault(); $event.stopPropagation(); openTemplateDialog(field)"
+       >
+        <mat-icon>library_books</mat-icon>
+        {{ field.template?.displayValue || field.placeholder || field.label }}
+       </edmin-button>
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
+     </div>
     }
 
     <!-- Date -->
     @if (field.type === 'date') {
-     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ field.label }}</mat-label>
-      <input
-       matInput
-       [formControlName]="field.key"
-       [matDatepicker]="picker"
-       [placeholder]="field.placeholder || field.label"
-       [required]="field.required || false"
-      />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="isFieldInvalid(field.key)">
-       {{ getFieldError(field.key) }}
-      </mat-error>
-     </mat-form-field>
+     <div class="form-group row align-items-center">
+      <div class="col-label">
+       <label [for]="field.key" class="form-label mb-0">
+        {{ field.label }}
+        @if (field.required) {
+         <span class="text-danger">*</span>
+        }
+       </label>
+      </div>
+      <div class="col-input">
+       <input
+        type="date"
+        class="form-control"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [required]="field.required || false"
+        [class.is-invalid]="isFieldInvalid(field.key)"
+       />
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
+     </div>
     }
 
     <!-- Time -->
-
     @if (field.type === 'time') {
-     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>{{ field.label }}</mat-label>
-      <input
-       matInput
-       [formControlName]="field.key"
-       [placeholder]="field.placeholder || field.label"
-       [required]="field.required || false"
-       type="time"
-       [matTimepicker]="picker"
-       [matTimepickerMin]="field.timeOptions?.min"
-       [matTimepickerMax]="field.timeOptions?.max"
-      />
-      <mat-timepicker-toggle matIconSuffix [for]="picker">
-       <mat-icon matTimepickerToggleIcon>keyboard_arrow_down</mat-icon>
-      </mat-timepicker-toggle>
-      <mat-timepicker #picker [interval]="field.timeOptions?.interval || 10" />
-      <mat-error *ngIf="isFieldInvalid(field.key)">
-       {{ getFieldError(field.key) }}
-      </mat-error>
-     </mat-form-field>
+     <div class="form-group row align-items-center">
+      <div class="col-label">
+       <label [for]="field.key" class="form-label mb-0">
+        {{ field.label }}
+        @if (field.required) {
+         <span class="text-danger">*</span>
+        }
+       </label>
+      </div>
+      <div class="col-input">
+       <input
+        type="time"
+        class="form-control"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [required]="field.required || false"
+        [min]="field.timeOptions?.min"
+        [max]="field.timeOptions?.max"
+        [step]="getTimeStep(field.timeOptions?.interval)"
+        [class.is-invalid]="isFieldInvalid(field.key)"
+       />
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
+     </div>
     }
 
     <!-- File -->
     @if (field.type === 'file') {
-     <div class="field-container">
-      <edmin-file-picker
-       [formControlName]="field.key"
-       [label]="field.placeholder || field.label"
-       [required]="field.required || false"
-       [accept]="field.accept || '*'"
-      >
-      </edmin-file-picker>
-      <mat-error *ngIf="isFieldInvalid(field.key)">
-       {{ getFieldError(field.key) }}
-      </mat-error>
+     <div class="form-group row align-items-center">
+      @if (field.label) {
+       <div class="col-label">
+        <label class="form-label mb-0">
+         {{ field.label }}
+         @if (field.required) {
+          <span class="text-danger">*</span>
+         }
+        </label>
+       </div>
+      }
+      <div class="col-input">
+       <edmin-file-picker
+        [formControlName]="field.key"
+        [label]="field.placeholder || 'Dosya seçiniz'"
+        [required]="field.required || false"
+        [accept]="field.accept || '*'"
+       >
+       </edmin-file-picker>
+       @if (isFieldInvalid(field.key)) {
+        <div class="invalid-feedback d-block">
+         {{ getFieldError(field.key) }}
+        </div>
+       }
+      </div>
      </div>
     }
    </div>

@@ -97,6 +97,10 @@ export class App {
       name: 'Roller',
       route: '/role-management',
      },
+     {
+      name: 'Kullanıcılar',
+      route: '/users',
+     },
     ],
    },
   ],

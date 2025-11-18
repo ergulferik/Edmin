@@ -1,0 +1,278 @@
+.user-type-selection {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 24px;
+ padding: 32px 24px;
+ max-width: 1200px;
+ margin: 0 auto;
+
+ @media (max-width: 1024px) {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 24px 20px;
+ }
+
+ @media (max-width: 640px) {
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 20px 16px;
+ }
+}
+
+.user-type-card {
+ position: relative;
+ overflow: visible;
+ border: 2px solid var(--border-color, #e2e8f0);
+ background: var(--background-light, #ffffff);
+ transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+ cursor: pointer;
+
+ &:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--primary-500, #5bc0be);
+  box-shadow: 0 12px 32px rgba(91, 192, 190, 0.15);
+ }
+
+ &:active {
+  transform: translateY(-4px) scale(1.01);
+ }
+
+ // Öğrenci kartı - Mavi tonları
+ &.student-card {
+  &:hover {
+   border-color: var(--secondary-500, #168aad);
+   box-shadow: 0 12px 32px rgba(22, 138, 173, 0.2);
+
+   .student-icon {
+    transform: scale(1.1) rotate(5deg);
+   }
+
+   .student-glow {
+    opacity: 0.6;
+    transform: scale(1.2);
+   }
+  }
+ }
+
+ // Öğretmen kartı - Turkuaz tonları
+ &.teacher-card {
+  &:hover {
+   border-color: var(--primary-500, #5bc0be);
+   box-shadow: 0 12px 32px rgba(91, 192, 190, 0.2);
+
+   .teacher-icon {
+    transform: scale(1.1) rotate(-5deg);
+   }
+
+   .teacher-glow {
+    opacity: 0.6;
+    transform: scale(1.2);
+   }
+  }
+ }
+
+ // Personel kartı - Gri-mavi tonları
+ &.employee-card {
+  &:hover {
+   border-color: var(--primary-600, #3a506b);
+   box-shadow: 0 12px 32px rgba(58, 80, 107, 0.2);
+
+   .employee-icon {
+    transform: scale(1.1);
+   }
+
+   .employee-glow {
+    opacity: 0.6;
+    transform: scale(1.2);
+   }
+  }
+ }
+}
+
+.card-content {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ text-align: center;
+ gap: 20px;
+ padding: 8px;
+ position: relative;
+ z-index: 1;
+
+ .icon,
+ select-hint {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+ }
+
+ &:hover {
+  .icon {
+   transform: scale(1.1);
+   filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
+  }
+
+  .select-hint {
+   opacity: 1;
+   color: var(--primary-500, #5bc0be);
+   font-weight: 600;
+  }
+ }
+}
+
+.icon-wrapper {
+ position: relative;
+ width: 120px;
+ height: 120px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+ margin-bottom: 8px;
+
+ .user-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+  position: relative;
+  z-index: 2;
+ }
+
+ .icon-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+  pointer-events: none;
+ }
+
+ // Öğrenci ikon glow - Mavi
+ .student-glow {
+  background: radial-gradient(circle, rgba(22, 138, 173, 0.3) 0%, rgba(22, 138, 173, 0.1) 50%, transparent 100%);
+ }
+
+ // Öğretmen ikon glow - Turkuaz
+ .teacher-glow {
+  background: radial-gradient(circle, rgba(91, 192, 190, 0.3) 0%, rgba(91, 192, 190, 0.1) 50%, transparent 100%);
+ }
+
+ // Personel ikon glow - Gri-mavi
+ .employee-glow {
+  background: radial-gradient(circle, rgba(58, 80, 107, 0.3) 0%, rgba(58, 80, 107, 0.1) 50%, transparent 100%);
+ }
+}
+
+.card-info {
+ flex: 1;
+ display: flex;
+ flex-direction: column;
+ gap: 8px;
+ width: 100%;
+}
+
+.card-title {
+ margin: 0;
+ font-size: 22px;
+ font-weight: 600;
+ color: var(--text-dark, #1a1a1a);
+ letter-spacing: -0.02em;
+ transition: color 0.3s ease;
+}
+
+.user-type-card:hover .card-title {
+ color: var(--primary-600, #3a506b);
+}
+
+.card-description {
+ margin: 0;
+ font-size: 14px;
+ line-height: 1.6;
+ color: var(--primary-400, #9db4c0);
+ transition: color 0.3s ease;
+}
+
+.user-type-card:hover .card-description {
+ color: var(--primary-500, #5bc0be);
+}
+
+.card-footer {
+ margin-top: auto;
+ padding-top: 16px;
+ width: 100%;
+ border-top: 1px solid var(--border-color, #e2e8f0);
+ transition: border-color 0.3s ease;
+}
+
+.user-type-card:hover .card-footer {
+ border-color: var(--primary-300, #ced4da);
+}
+
+.select-hint {
+ font-size: 12px;
+ font-weight: 500;
+ color: var(--primary-400, #9db4c0);
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ transition: color 0.3s ease;
+}
+
+.user-type-card:hover .select-hint {
+ color: var(--primary-500, #5bc0be);
+}
+
+// Animasyonlar
+@keyframes pulse {
+ 0%,
+ 100% {
+  opacity: 0.4;
+ }
+ 50% {
+  opacity: 0.8;
+ }
+}
+
+// Responsive iyileştirmeler
+@media (max-width: 768px) {
+ .icon-wrapper {
+  width: 100px;
+  height: 100px;
+
+  .icon-glow {
+   width: 120px;
+   height: 120px;
+  }
+ }
+
+ .card-title {
+  font-size: 20px;
+ }
+
+ .card-description {
+  font-size: 13px;
+ }
+}
+
+@media (max-width: 480px) {
+ .user-type-selection {
+  padding: 16px 12px;
+ }
+
+ .icon-wrapper {
+  width: 90px;
+  height: 90px;
+
+  .icon-glow {
+   width: 110px;
+   height: 110px;
+  }
+ }
+
+ .card-content {
+  gap: 16px;
+ }
+}

@@ -132,7 +132,6 @@ export class ExamPage {
    },
    {
     key: 'answerKeyFileUrl',
-    label: 'Cevap Anahtarı',
     type: 'file',
     placeholder: 'Cevap Anahtarı Seç',
    },

@@ -2,7 +2,6 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Student } from '../models/student.model';
 import { ClassItem, CourseSchedule, Field } from '../models/class.model';
 import { CLASSES_DATA, FIELDS_DATA, COURSES_DATA, CLASS_SCHEDULE_DATA } from '../data/class.data';
-import { STUDENTS_DATA } from '../data/student.data';
 import { Course } from '../models/course.model';
 import { DcToastService } from 'dc-toast-ng';
 import { HelperService } from './helper.service';
@@ -19,7 +18,7 @@ export class ClassService {
  classes = signal<ClassItem[]>([...CLASSES_DATA]);
  fields = signal<Field[]>([...FIELDS_DATA]);
  courses = signal<Course[]>([...COURSES_DATA]);
- students = signal<Student[]>([...STUDENTS_DATA]);
+ students = signal<Student[]>([]);
  selectedClass = signal<ClassItem | null>(null);
  classSchedule = signal<CourseSchedule[]>([]);
  private toast = inject(DcToastService);
@@ -380,7 +379,7 @@ export class ClassService {
  calculateClassStatistics(classId: string): Promise<any> {
   // TODO: Replace with API call: return this.http.get<any>(`/api/classes/${classId}/statistics`)
   const classStudents = this.students().filter(s => s.classId === classId);
-  const averageGrade = classStudents.reduce((sum, s) => sum + s.averageGrade, 0) / classStudents.length;
+  const averageGrade = classStudents.reduce(sum => sum + 100, 0) / classStudents.length;
   return Promise.resolve({
    studentCount: classStudents.length,
    averageGrade: Math.round(averageGrade * 100) / 100,

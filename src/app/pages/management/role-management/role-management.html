@@ -32,7 +32,7 @@
   @if (!isLoading() && filteredRoles().length > 0) {
    <div class="roles-grid">
     @for (role of filteredRoles(); track role.id) {
-     <div class="role-card" (click)="selectRole(role)">
+     <edmin-card [clickable]="true" (onClick)="selectRole(role)" class="role-card">
       <div class="role-card-header">
        <div class="role-info">
         <h3 class="role-name">{{ role.name }}</h3>
@@ -67,7 +67,7 @@
        </div>
        <span class="user-count"> {{ role.users?.length || 0 }} kullanıcı </span>
       </div>
-     </div>
+     </edmin-card>
     }
    </div>
   }

@@ -45,11 +45,13 @@
       <h4 class="student-name">{{ student.name }} {{ student.surname }}</h4>
       <p class="student-number">{{ student.studentNumber }}</p>
      </div>
+     <!--averageGrade
      <div class="student-grade">
       <span class="grade-badge" [class]="'grade-' + getGradeColor(student.averageGrade)">
        {{ student.averageGrade.toFixed(1) }}
       </span>
      </div>
+     -->
     </div>
    }
    <div *ngIf="filteredStudents.length === 0" class="no-results">

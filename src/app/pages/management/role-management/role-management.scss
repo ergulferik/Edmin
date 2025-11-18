@@ -98,20 +98,7 @@
 
 // Rol Kartı
 .role-card {
- background: var(--card-light, #ffffff);
- border: var(--border);
- border-radius: var(--rounded-lg);
- padding: 24px;
- cursor: pointer;
- transition: all 0.2s ease;
- position: relative;
- overflow: hidden;
-
- &:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary-500, #5bc0be);
- }
+ // Card component handles the base styling
 
  .role-card-header {
   display: flex;

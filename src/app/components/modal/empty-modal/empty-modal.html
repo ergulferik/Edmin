@@ -1,0 +1,5 @@
+<edmin-modal-header [title]="title" [subtitle]="subtitle" (onClose)="dialogRef.close('cancel')"></edmin-modal-header>
+<div class="modal-content">
+ <ng-container *ngComponentOutlet="content"></ng-container>
+</div>
+<edmin-modal-footer [buttons]="footer"></edmin-modal-footer>

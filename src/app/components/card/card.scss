@@ -1,0 +1,19 @@
+.edmin-card {
+ background: var(--card-light, #ffffff);
+ border: var(--border);
+ border-radius: var(--rounded-lg);
+ padding: 24px;
+ transition: all 0.2s ease;
+ position: relative;
+ overflow: hidden;
+
+ &.clickable {
+  cursor: pointer;
+
+  &:hover {
+   transform: translateY(-4px);
+   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+   border-color: var(--primary-500, #5bc0be);
+  }
+ }
+}

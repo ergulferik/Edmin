@@ -1,7 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IRole } from '../../models/user.model';
-import { environment } from '../../../environments/environment';
+import { IRole } from '../models/user.model';
+import { environment } from '../../environments/environment';
 import { DcToastService } from 'dc-toast-ng';
 import { tap, catchError, throwError, firstValueFrom } from 'rxjs';
 

@@ -47,10 +47,24 @@ export const sidebarRoutes: Routes = [
  },
  {
   path: 'role-management',
-  loadComponent: () => import('./pages/role-management/role-management').then(m => m.RoleManagementPage),
+  loadComponent: () => import('./pages/management/role-management/role-management').then(m => m.RoleManagementPage),
   canActivate: [authGuard, permissionGuard],
   canActivateChild: [authGuardChild, permissionGuardChild],
   data: { permission: 'role_view' },
+ },
+ {
+  path: 'users',
+  loadComponent: () => import('./pages/management/users/users').then(m => m.UsersPage),
+  canActivate: [authGuard, permissionGuard],
+  canActivateChild: [authGuardChild, permissionGuardChild],
+  data: { permission: 'user_view' },
+ },
+ {
+  path: 'add-student',
+  loadComponent: () => import('./pages/management/users/add/add-student/add-student').then(m => m.AddStudent),
+  canActivate: [authGuard],
+  canActivateChild: [authGuardChild],
+  data: { permission: 'student_add' },
  },
 
  {

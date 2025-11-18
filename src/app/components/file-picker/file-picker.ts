@@ -1,4 +1,4 @@
-import { Component, forwardRef, input } from '@angular/core';
+import { Component, forwardRef, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,8 +39,10 @@ export class FilePickerComponent implements ControlValueAccessor {
  /** Is the drag-over state active? */
  isDragOver = false;
 
+ onSelectFile = output<File | null>();
+
  onChange = (file: File | null) => {
-  console.log(file);
+  this.onSelectFile.emit(file);
  };
  onTouched = () => {};
 

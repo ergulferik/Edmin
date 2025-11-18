@@ -1,0 +1,59 @@
+<edmin-modal-header
+ title="Yeni Kullanıcı Ekle"
+ subtitle="Eklemek istediğiniz kullanıcı tipini seçin"
+ (onClose)="onClose()"
+></edmin-modal-header>
+
+<div class="user-type-selection">
+ <edmin-card [clickable]="true" cardClass="user-type-card student-card" (onClick)="onSelectUserType(userType.STUDENT)">
+  <div class="card-content">
+   <div class="icon-wrapper student-icon">
+    <img src="assets/images/student.png" alt="Öğrenci" class="user-icon icon" />
+    <div class="icon-glow student-glow"></div>
+   </div>
+   <div class="card-info">
+    <h3 class="card-title">Öğrenci</h3>
+    <p class="card-description">Kurumunuza yeni bir öğrenci kaydı açmak için tıklayın</p>
+   </div>
+   <div class="card-footer">
+    <span class="select-hint">Seçmek için tıklayın</span>
+   </div>
+  </div>
+ </edmin-card>
+
+ <edmin-card [clickable]="true" cardClass="user-type-card teacher-card" (onClick)="onSelectUserType(userType.TEACHER)">
+  <div class="card-content">
+   <div class="icon-wrapper teacher-icon">
+    <img src="assets/images/teacher.png" alt="Öğretmen" class="user-icon icon" />
+    <div class="icon-glow teacher-glow"></div>
+   </div>
+   <div class="card-info">
+    <h3 class="card-title">Öğretmen</h3>
+    <p class="card-description">Kurumunuza yeni bir öğretmen kaydı açmak için tıklayın</p>
+   </div>
+   <div class="card-footer">
+    <span class="select-hint">Seçmek için tıklayın</span>
+   </div>
+  </div>
+ </edmin-card>
+
+ <edmin-card
+  [clickable]="true"
+  cardClass="user-type-card employee-card"
+  (onClick)="onSelectUserType(userType.EMPLOYEE)"
+ >
+  <div class="card-content">
+   <div class="icon-wrapper employee-icon">
+    <img src="assets/images/user.png" alt="Personel" class="user-icon icon" />
+    <div class="icon-glow employee-glow"></div>
+   </div>
+   <div class="card-info">
+    <h3 class="card-title">Personel</h3>
+    <p class="card-description">Kurumunuza yeni bir personel kaydı açmak için tıklayın</p>
+   </div>
+   <div class="card-footer">
+    <span class="select-hint">Seçmek için tıklayın</span>
+   </div>
+  </div>
+ </edmin-card>
+</div>

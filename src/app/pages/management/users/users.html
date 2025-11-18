@@ -1,0 +1,183 @@
+<edmin-page-header title="Kullanıcı Yönetimi" subtitle="Kullanıcıları görüntüleyin, düzenleyin ve yönetin">
+ <div end class="view-mode-toggle">
+  <button
+   class="view-button"
+   [class.active]="viewMode() === ViewMode.CARD"
+   (click)="switchViewMode(ViewMode.CARD)"
+   title="Kart Görünümü"
+  >
+   <mat-icon>view_module</mat-icon>
+  </button>
+  <button
+   class="view-button"
+   [class.active]="viewMode() === ViewMode.GRID"
+   (click)="switchViewMode(ViewMode.GRID)"
+   title="Tablo Görünümü"
+  >
+   <mat-icon>table_chart</mat-icon>
+  </button>
+ </div>
+</edmin-page-header>
+
+<div class="users-management-container">
+ @if (viewMode() === ViewMode.CARD) {
+  <!-- Filtreleme ve Arama -->
+  <div class="filters-and-search">
+   <div class="search-container">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input
+     class="search-input"
+     type="text"
+     placeholder="Kullanıcı ara (ad, soyad, e-posta)..."
+     [value]="searchQuery()"
+     (input)="searchQuery.set($any($event.target).value)"
+    />
+   </div>
+
+   <ng-container filter *ngTemplateOutlet="filter"></ng-container>
+
+   <edmin-button type="primary" (click)="onAddClick()">
+    <ng-icon name="heroPlus"></ng-icon>
+    <span>Yeni Kullanıcı</span>
+   </edmin-button>
+  </div>
+ }
+
+ <!-- Yükleme Durumu -->
+ @if (isLoading()) {
+  <div class="loading-container">
+   <mat-spinner diameter="50"></mat-spinner>
+  </div>
+ }
+
+ <!-- Kart Görünümü -->
+ @if (viewMode() === ViewMode.CARD && !isLoading()) {
+  @if (filteredUsers().length > 0) {
+   <div class="users-grid">
+    @for (user of filteredUsers(); track user.id) {
+     <edmin-card [clickable]="true" (onClick)="selectUser(user)" class="user-card">
+      <div class="user-card-header">
+       <div class="user-avatar-container">
+        <edmin-avatar
+         [data]="{
+          image: user.image,
+          initials: getInitials(user),
+         }"
+         size="64px"
+        ></edmin-avatar>
+        @if (user.isActive !== false) {
+         <span class="status-badge active">Aktif</span>
+        } @else {
+         <span class="status-badge inactive">Pasif</span>
+        }
+       </div>
+       <div class="user-info">
+        <h3 class="user-name">{{ user.name }} {{ user.surname }}</h3>
+        <p class="user-email">{{ user.email }}</p>
+       </div>
+      </div>
+
+      <div class="user-card-body">
+       <div class="user-detail-item">
+        <span class="detail-label">Roller:</span>
+        <span class="detail-value">{{ getRolesString(user) }}</span>
+       </div>
+       @if (user.createdAt) {
+        <div class="user-detail-item">
+         <span class="detail-label">Oluşturulma:</span>
+         <span class="detail-value">{{ formatDate(user.createdAt) }}</span>
+        </div>
+       }
+      </div>
+
+      <div class="user-card-footer">
+       <button class="action-button edit" (click)="onEditUser(user); $event.stopPropagation()">
+        <mat-icon>edit</mat-icon>
+        <span>Düzenle</span>
+       </button>
+       <button class="action-button delete" (click)="onDeleteUser(user); $event.stopPropagation()">
+        <mat-icon>delete</mat-icon>
+        <span>Sil</span>
+       </button>
+      </div>
+     </edmin-card>
+    }
+   </div>
+  } @else {
+   <div class="empty-state">
+    <mat-icon class="empty-icon">person_off</mat-icon>
+    <h3>Kullanıcı bulunamadı</h3>
+    <p>
+     {{
+      searchQuery() || selectedRoleFilter() || selectedStatusFilter()
+       ? 'Filtre kriterlerinize uygun kullanıcı bulunamadı.'
+       : 'Henüz kullanıcı eklenmemiş.'
+     }}
+    </p>
+   </div>
+  }
+ }
+
+ <!-- Tablo Görünümü -->
+ @if (viewMode() === ViewMode.GRID && !isLoading()) {
+  <edmin-data-grid
+   [config]="dataGridConfig"
+   [data]="filteredUsers"
+   [actions]="dataGridActions"
+   [loading]="isLoading()"
+   (addClick)="onAddUser()"
+   (searchChange)="onSearchChange($event)"
+  >
+   <ng-container filter *ngTemplateOutlet="filter"></ng-container>
+  </edmin-data-grid>
+ }
+</div>
+
+<ng-template #filter>
+ <div class="filters-container" [ngClass]="'filters-' + viewMode()">
+  <!-- Rol Filtresi -->
+  <div class="dropdown">
+   <button
+    class="btn btn-secondary dropdown-toggle filter-dropdown"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+   >
+    {{ getSelectedRoleFilterLabel() }}
+   </button>
+   <ul class="dropdown-menu">
+    <li>
+     <a class="dropdown-item" (click)="selectedRoleFilter.set('')">Tüm Roller</a>
+    </li>
+    @for (role of roles(); track role.id) {
+     <li>
+      <a class="dropdown-item" (click)="selectedRoleFilter.set(role.id)">{{ role.name }}</a>
+     </li>
+    }
+   </ul>
+  </div>
+
+  <!-- Durum Filtresi -->
+  <div class="dropdown">
+   <button
+    class="btn btn-secondary dropdown-toggle filter-dropdown"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+   >
+    {{ getSelectedStatusFilterLabel() }}
+   </button>
+   <ul class="dropdown-menu">
+    <li>
+     <a class="dropdown-item" (click)="selectedStatusFilter.set('')">Tüm Durumlar</a>
+    </li>
+    <li>
+     <a class="dropdown-item" (click)="selectedStatusFilter.set('active')">Aktif</a>
+    </li>
+    <li>
+     <a class="dropdown-item" (click)="selectedStatusFilter.set('inactive')">Pasif</a>
+    </li>
+   </ul>
+  </div>
+ </div>
+</ng-template>

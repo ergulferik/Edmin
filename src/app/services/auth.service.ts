@@ -115,7 +115,6 @@ export class AuthService {
       this.userInfo.set(userInfo);
       this.isLoggedIn.set(true);
       await this.permissionService.loadUserPermissions(userInfo);
-      this.router.navigate(['/class-operations']);
 
       resolve();
      },

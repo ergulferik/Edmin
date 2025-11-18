@@ -1,0 +1,74 @@
+<edmin-page-header title="Öğrenci Ekle" subtitle="Yeni öğrenci bilgilerini girin" />
+
+<div class="add-student-container">
+ <main class="main-content">
+  <div class="detail-content">
+   <!-- Öğrenci Formu -->
+   <form class="student-form-card needs-validation" [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+    <div class="info-section mb-4">
+     <div class="section-header">
+      <div>
+       <h4 class="section-title">Öğrenci Bilgileri</h4>
+       <p class="section-description">Öğrenciye ait kişisel bilgilerini girin</p>
+      </div>
+      <span class="section-chip accent">Öğrenci</span>
+     </div>
+     <app-personal-info-form
+      [personalInfo]="getPersonalInfo()"
+      (onValueChange)="onPersonalInfoChange($event)"
+     ></app-personal-info-form>
+    </div>
+
+    <!-- Adres Bilgileri -->
+    <div class="info-section mb-4">
+     <div class="section-header">
+      <div>
+       <h4 class="section-title">Adres Bilgileri</h4>
+       <p class="section-description">Öğrenciye ait adres bilgilerini girin</p>
+      </div>
+     </div>
+     <app-address-form [address]="getStudentAddress()" (onValueChange)="onAddressChange($event)"></app-address-form>
+    </div>
+
+    <!-- Veli Bilgileri -->
+    <div class="info-section parent-section mb-4" formArrayName="guardians">
+     <div class="section-header">
+      <div>
+       <h4 class="section-title">Veli & Ebeveyn Bilgileri</h4>
+       <p class="section-description">Öğrenci için iletişim kurulacak kişiler</p>
+      </div>
+      <button type="button" class="chip-button" buttonType="button" (click)="addGuardian()">＋ Veli Ekle</button>
+     </div>
+     <app-guardians [guardians]="guardians" [studentAddress]="getStudentAddress()"></app-guardians>
+    </div>
+
+    <!-- Ödeme Planı -->
+    <div class="info-section payment-section mb-4" formGroupName="paymentPlan">
+     <div class="section-header">
+      <div>
+       <h4 class="section-title">Ödeme Planı</h4>
+       <p class="section-description">Öğrenci ile anlaşmaya varılan ödeme koşullarını kaydedin</p>
+      </div>
+      <span class="section-chip accent">Finans</span>
+     </div>
+     <app-payment-plan [paymentPlan]="getPaymentPlan()"></app-payment-plan>
+    </div>
+
+    <!-- Form Action Butonları -->
+    <div class="form-actions">
+     <button type="button" mat-button (click)="onCancel()" class="cancel-button" buttonType="button">İptal</button>
+     <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      buttonType="submit"
+      [disabled]="studentForm.invalid"
+      class="submit-button"
+     >
+      Kaydet
+     </button>
+    </div>
+   </form>
+  </div>
+ </main>
+</div>

@@ -1,0 +1,104 @@
+<div class="guardians-content">
+ <div class="guardian-grid">
+  @for (guardian of guardians.controls; track $index; let idx = $index) {
+   <div class="guardian-card" [formGroup]="$any(guardian)">
+    <div class="card-header">
+     <div>
+      <span class="card-label">Veli {{ idx + 1 }}</span>
+      <p class="card-caption">İlişki ve iletişim bilgileri</p>
+     </div>
+     @if (guardians.length > 1) {
+      <button type="button" class="icon-button" buttonType="button" (click)="removeGuardian(idx)" title="Veliyi kaldır">
+       <span aria-hidden="true">×</span>
+      </button>
+     }
+    </div>
+
+    <div class="row g-3">
+     <div class="col-md-4">
+      <div class="dropdown">
+       <label class="form-label">Yakınlık</label>
+       <button
+        class="btn btn-secondary dropdown-toggle w-100"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="true"
+       >
+        {{ getSelectedRelation(idx) }}
+       </button>
+       <ul class="dropdown-menu" aria-labelledby="relationDropdown">
+        @for (relation of guardianRelationOptions; track relation.value) {
+         <li>
+          <a class="dropdown-item" href="#" (click)="onSelectRelation(relation.value, idx); $event.preventDefault()">{{
+           relation.label
+          }}</a>
+         </li>
+        }
+       </ul>
+      </div>
+     </div>
+     <div class="col-md-4">
+      <label class="form-label">Ad Soyad *</label>
+      <input
+       type="text"
+       class="form-control"
+       placeholder="Ad Soyad"
+       formControlName="name"
+       [class.is-invalid]="guardians.at(idx).get('name')?.invalid && guardians.at(idx).get('name')?.touched"
+      />
+     </div>
+     <div class="col-md-4">
+      <label class="form-label">Telefon *</label>
+      <input
+       type="tel"
+       class="form-control"
+       placeholder="5XX XXX XX XX"
+       formControlName="phone"
+       [class.is-invalid]="guardians.at(idx).get('phone')?.invalid && guardians.at(idx).get('phone')?.touched"
+      />
+     </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+     <div class="col-md-6">
+      <label class="form-label">E-posta</label>
+      <input type="email" class="form-control" placeholder="ornek@eposta.com" formControlName="email" />
+     </div>
+     <div class="col-md-6">
+      <label class="form-label">Adres</label>
+      <div class="dropdown">
+       <button
+        class="btn btn-secondary dropdown-toggle w-100"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="true"
+       >
+        {{ getGuardianAddressDisplay(idx) }}
+       </button>
+       <ul class="dropdown-menu" aria-labelledby="guardianAddressDropdown">
+        <li>
+         <a
+          class="dropdown-item"
+          href="#"
+          (click)="onGuardianAddressOptionChange('same', idx); $event.preventDefault()"
+         >
+          Öğrenci ile aynı
+         </a>
+        </li>
+        <li>
+         <a
+          class="dropdown-item"
+          href="#"
+          (click)="onGuardianAddressOptionChange('custom', idx); $event.preventDefault()"
+         >
+          Adres ekle
+         </a>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+  }
+ </div>
+</div>

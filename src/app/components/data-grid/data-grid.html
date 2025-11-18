@@ -1,25 +1,40 @@
 <mat-card class="data-grid-card">
  <mat-card-content>
   <div class="data-grid-actions">
-   <mat-form-field *ngIf="config.showSearch" appearance="outline">
-    <mat-label>{{ config.searchPlaceholder || 'Ara...' }}</mat-label>
-    <input matInput [value]="searchTerm()" (input)="onSearchChange($event)" type="text" />
-    <ng-icon name="heroMagnifyingGlass" matSuffix></ng-icon>
-   </mat-form-field>
+   @if (config.showSearch) {
+    <div class="search-container">
+     <mat-icon class="search-icon">search</mat-icon>
+     <input
+      class="search-input"
+      type="text"
+      [placeholder]="config.searchPlaceholder || 'Ara...'"
+      [value]="searchTerm()"
+      (input)="onSearchChange($event)"
+     />
+    </div>
+   }
 
-   <edmin-button *ngIf="config.showAddButton" [type]="config.addButtonType || 'primary'" (click)="onAddClick()">
-    <ng-icon name="heroPlus"></ng-icon>
-    {{ config.addButtonText || 'Yeni Ekle' }}
-   </edmin-button>
+   <ng-content select="[filter]"></ng-content>
+
+   @if (config.showAddButton) {
+    <edmin-button [type]="config.addButtonType || 'primary'" (click)="onAddClick()">
+     <ng-icon name="heroPlus"></ng-icon>
+     {{ config.addButtonText || 'Yeni Ekle' }}
+    </edmin-button>
+   }
   </div>
 
   <!-- Error State -->
-  <div *ngIf="error" class="data-grid-error">{{ error }}</div>
+  @if (error) {
+   <div class="data-grid-error">{{ error }}</div>
+  }
 
   <!-- Loading State -->
-  <div *ngIf="loading" class="data-grid-loading">
-   <mat-spinner diameter="40"></mat-spinner>
-  </div>
+  @if (loading) {
+   <div class="data-grid-loading">
+    <mat-spinner diameter="40"></mat-spinner>
+   </div>
+  }
 
   <!-- Table -->
   <div class="data-grid-table" [style.maxHeight]="config.maxHeight">
@@ -28,44 +43,56 @@
     <ng-container *ngFor="let column of config.columns" [matColumnDef]="column.key">
      <th mat-header-cell *matHeaderCellDef [style.width]="getColumnWidth(column)">{{ column.label }}</th>
      <td mat-cell *matCellDef="let row" [ngClass]="{ 'image-cell': column.type === 'image' }">
-      <ng-container [ngSwitch]="column.type">
-       <!-- Tarih alanları için -->
-       <span *ngSwitchCase="'date'">{{ formatDate(row[column.key]) }}</span>
-
-       <!-- Boolean alanları için -->
-       <mat-checkbox *ngSwitchCase="'boolean'" [checked]="row[column.key]" [disabled]="true" color="primary">
-       </mat-checkbox>
-
-       <!-- Dosya alanları için -->
-       <div *ngSwitchCase="'file'" class="file-display" [matTooltip]="row[column.key]">
-        <ng-icon [name]="getFileIcon(row[column.key])" class="file-icon"></ng-icon>
-        <span class="file-name">{{ getFileDisplayName(row[column.key]) }}</span>
-       </div>
-
-       <!-- Template alanları için -->
-       <span *ngSwitchCase="'template'">{{
-        getTemplateDisplayValue(row[column.key], column.data, column.keyExpr, column.displayExpr)
-       }}</span>
-
-       <!-- Resim alanları için -->
-       <img
-        *ngSwitchCase="'image'"
-        [src]="getImageSrc(row, column)"
-        [alt]="row[column.key]"
-        class="image-display"
-        (error)="onImageError($event, row, column)"
-        [style.width]="column.imageOptions?.width"
-        [style.height]="column.imageOptions?.height"
-        [style.borderRadius]="column.imageOptions?.borderRadius"
-        [style.objectFit]="column.imageOptions?.objectFit"
-       />
-
-       <!-- Avatar alanları için -->
-       <edmin-avatar *ngSwitchCase="'avatar'" [data]="getAvatarSrc(row, column)" size="36px"></edmin-avatar>
-
-       <!-- Varsayılan metin gösterimi -->
-       <span *ngSwitchDefault>{{ row[column.key] }}</span>
-      </ng-container>
+      @switch (column.type) {
+       @case ('date') {
+        <!-- Tarih alanları için -->
+        <span>{{ formatDate(row[column.key]) }}</span>
+       }
+       @case ('boolean') {
+        <!-- Boolean alanları için -->
+        <mat-checkbox [checked]="row[column.key]" [disabled]="true" color="primary"> </mat-checkbox>
+       }
+       @case ('file') {
+        <!-- Dosya alanları için -->
+        <div class="file-display" [matTooltip]="row[column.key]">
+         <ng-icon [name]="getFileIcon(row[column.key])" class="file-icon"></ng-icon>
+         <span class="file-name">{{ getFileDisplayName(row[column.key]) }}</span>
+        </div>
+       }
+       @case ('template') {
+        <!-- Template alanları için -->
+        @if (column.alternative && typeof column.alternative === 'function') {
+         <span>{{ column.alternative(row) }}</span>
+        } @else {
+         <span>{{ getTemplateDisplayValue(row[column.key], column.data, column.keyExpr, column.displayExpr) }}</span>
+        }
+       }
+       @case ('image') {
+        <!-- Resim alanları için -->
+        <img
+         [src]="getImageSrc(row, column)"
+         [alt]="row[column.key]"
+         class="image-display"
+         (error)="onImageError($event, row, column)"
+         [style.width]="column.imageOptions?.width"
+         [style.height]="column.imageOptions?.height"
+         [style.borderRadius]="column.imageOptions?.borderRadius"
+         [style.objectFit]="column.imageOptions?.objectFit"
+        />
+       }
+       @case ('avatar') {
+        <!-- Avatar alanları için -->
+        <edmin-avatar [data]="getAvatarSrc(row, column)" size="36px"></edmin-avatar>
+       }
+       @default {
+        <!-- Varsayılan metin gösterimi -->
+        @if (column.alternative && typeof column.alternative === 'function') {
+         <span>{{ column.alternative(row) }}</span>
+        } @else {
+         <span>{{ row[column.key] }}</span>
+        }
+       }
+      }
      </td>
     </ng-container>
 

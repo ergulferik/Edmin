@@ -9,20 +9,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { PageHeaderComponent } from '../../components/page/page-header/page-header';
-import { RoleService } from '../../stores/role/role.service';
-import { IRole, UserInfo } from '../../models/user.model';
-import { IPermission, perms, findPermissionById, getParentPermission } from '../../data/perms';
-import { PermissionService } from '../../services/permission.service';
-import { HasPermissionDirective } from '../../directives/has-permission.directive';
-import { Avatar } from '../../components/avatar/avatar';
+import { IPermission, perms, findPermissionById, getParentPermission } from '../../../data/perms';
 import { DcToastService } from 'dc-toast-ng';
 import Swal from 'sweetalert2';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroPlus, heroTrash, heroArrowPath } from '@ng-icons/heroicons/outline';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { AppButtonComponent } from '../../components/button/button';
+import { Avatar } from '../../../components/avatar/avatar';
+import { AppButtonComponent } from '../../../components/button/button';
+import { PageHeaderComponent } from '../../../components/page/page-header/page-header';
+import { HasPermissionDirective } from '../../../directives/has-permission.directive';
+import { CardComponent } from '../../../components/card/card';
+import { IRole, UserInfo } from '../../../models/user.model';
+import { PermissionService } from '../../../services/permission.service';
+import { RoleService } from '../../../services/role.service';
 /**
  * View mode enum
  * @description Görünüm modları
@@ -61,6 +62,7 @@ export enum ViewMode {
   MatCheckboxModule,
   AppButtonComponent,
   PageHeaderComponent,
+  CardComponent,
  ],
  providers: [
   provideIcons({

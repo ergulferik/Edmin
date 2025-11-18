@@ -1,0 +1,119 @@
+<div class="payment-plan-content">
+ <form [formGroup]="paymentPlan">
+  <div class="row g-3">
+   <div class="col-md-2 custom-col">
+    <label class="form-label" for="totalFee">Toplam Ücret *</label>
+    <div class="input-with-prefix">
+     <span class="prefix">₺</span>
+     <input
+      type="number"
+      class="form-control"
+      id="totalFee"
+      placeholder="0"
+      formControlName="totalFee"
+      (blur)="updateRemaining()"
+      [min]="0"
+      [class.is-invalid]="isFieldInvalid('totalFee')"
+     />
+    </div>
+    @if (isFieldInvalid('totalFee')) {
+     <div class="invalid-feedback d-block">{{ getFieldError('totalFee') }}</div>
+    }
+   </div>
+   <div class="col-md-2 custom-col">
+    <label class="form-label" for="downPayment">Peşinat Tutarı</label>
+    <div class="input-with-prefix">
+     <span class="prefix">₺</span>
+     <input
+      type="number"
+      class="form-control"
+      id="downPayment"
+      placeholder="0"
+      formControlName="downPayment"
+      (blur)="updateRemaining()"
+      [min]="0"
+      [class.is-invalid]="isFieldInvalid('downPayment')"
+     />
+    </div>
+    @if (isFieldInvalid('downPayment')) {
+     <div class="invalid-feedback d-block">{{ getFieldError('downPayment') }}</div>
+    }
+   </div>
+   <div class="col-md-2 custom-col">
+    <label class="form-label">Ödeme Günleri</label>
+    <div class="input-with-prefix">
+     <span class="prefix">₺</span>
+     <input
+      type="number"
+      class="form-control"
+      placeholder="Her Ayın x. Günü"
+      [min]="1"
+      [max]="31"
+      [value]="paymentDays"
+      (blur)="onChangePaymentDays($event)"
+     />
+    </div>
+   </div>
+   <div class="col-md-2 custom-col">
+    <label class="form-label" for="numberOfInstallments">Taksit Sayısı</label>
+    <input
+     type="number"
+     class="form-control"
+     id="numberOfInstallments"
+     placeholder="0"
+     formControlName="numberOfInstallments"
+     (blur)="onChangeNumberOfInstallments($event)"
+     [min]="0"
+     [class.is-invalid]="isFieldInvalid('numberOfInstallments')"
+    />
+    @if (isFieldInvalid('numberOfInstallments')) {
+     <div class="invalid-feedback d-block">{{ getFieldError('numberOfInstallments') }}</div>
+    }
+   </div>
+   <div class="col-md-2 custom-col">
+    <label class="form-label">Kalan Tutar</label>
+    <div class="input-with-prefix disabled">
+     <span class="prefix">₺</span>
+     <input type="number" class="form-control" placeholder="0" formControlName="remaining" readonly />
+    </div>
+   </div>
+  </div>
+
+  <div class="installment-list" formArrayName="installments">
+   @if (installments.length === 0) {
+    <div class="empty-installment">Henüz taksit eklenmedi.</div>
+   } @else {
+    @for (installment of installments.controls; track $index; let i = $index) {
+     <div class="installment-item" [formGroupName]="i">
+      <div class="row g-3 align-items-end justify-content-between">
+       <div class="col-md-4">
+        <label class="form-label">Tutar</label>
+        <div class="input-with-prefix disabled">
+         <span class="prefix">₺</span>
+         <input type="number" class="form-control" placeholder="0" formControlName="amount" readonly />
+        </div>
+       </div>
+       <div class="col-md-4">
+        <label class="form-label">Son Ödeme Tarihi *</label>
+        <input type="date" class="form-control" formControlName="dueDate" />
+       </div>
+       <div class="col-md-3">
+        @if (!installment.get('isPaid')?.value) {
+         <edmin-button buttonType="button" (click)="payment(i)" type="secondary">
+          <ng-icon name="heroBanknotes" class="icon"></ng-icon>
+          <span>Ödeme Yap</span>
+         </edmin-button>
+        } @else {
+         <div class="payment-status">
+          <span class="status-badge paid">Ödendi</span>
+          <span class="paid-date">{{ installment.get('paidAt')?.value }}</span>
+         </div>
+        }
+       </div>
+      </div>
+     </div>
+    }
+   }
+  </div>
+ </form>
+</div>

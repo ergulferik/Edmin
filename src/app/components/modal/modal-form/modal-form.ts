@@ -4,21 +4,15 @@ import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } 
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { AppButtonComponent } from '../../button/button';
 import { FilePickerComponent } from '../../file-picker/file-picker';
 import { ModalHeader } from '../modal-header/modal-header';
 import { ModalFooter, ModalFooterButton } from '../modal-footer/modal-footer';
-import { MatTimepickerModule } from '@angular/material/timepicker';
 
 export interface ModalFormField {
  key: string;
- label: string;
+ label?: string;
  type: 'text' | 'number' | 'email' | 'textarea' | 'select' | 'template' | 'date' | 'file' | 'time';
  placeholder?: string;
  required?: boolean;
@@ -68,13 +62,7 @@ export interface ModalFormConfig {
   MatDialogModule,
   MatCardModule,
   MatButtonModule,
-  MatInputModule,
   MatIconModule,
-  MatFormFieldModule,
-  MatSelectModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MatTimepickerModule,
   AppButtonComponent,
   FilePickerComponent,
   ModalHeader,
@@ -172,16 +160,16 @@ export class ModalFormComponent implements OnInit {
   const control = this.form.get(fieldKey);
   if (control?.errors && control.touched) {
    if (control.errors['required']) {
-    return 'This field is required';
+    return 'Bu alan zorunludur';
    }
    if (control.errors['email']) {
-    return 'Please enter a valid email address';
+    return 'Lütfen geçerli bir email adresi giriniz';
    }
    if (control.errors['minlength']) {
-    return `Minimum length is ${control.errors['minlength'].requiredLength}`;
+    return `En az ${control.errors['minlength'].requiredLength} karakter olmalıdır`;
    }
    if (control.errors['maxlength']) {
-    return `Maximum length is ${control.errors['maxlength'].requiredLength}`;
+    return `En fazla ${control.errors['maxlength'].requiredLength} karakter olmalıdır`;
    }
   }
   return '';
@@ -233,5 +221,62 @@ export class ModalFormComponent implements OnInit {
  removeFile(fieldKey: string): void {
   this.form.get(fieldKey)?.setValue(null);
   this.form.get(fieldKey)?.markAsTouched();
+ }
+
+ /**
+  * Converts time interval string to seconds for HTML time input step attribute.
+  * @param interval - Interval in minutes as string (e.g., "10" for 10 minutes)
+  * @returns Step value in seconds (default: 600 for 10 minutes)
+  */
+ getTimeStep(interval?: string): number {
+  if (!interval) {
+   return 600; // Default: 10 minutes in seconds
+  }
+  const minutes = parseInt(interval, 10);
+  if (isNaN(minutes) || minutes <= 0) {
+   return 600; // Default: 10 minutes in seconds
+  }
+  return minutes * 60; // Convert minutes to seconds
+ }
+
+ /**
+  * Gets the label for the selected option in a select field.
+  * @param field - The form field configuration
+  * @returns The label of the selected option or null
+  */
+ getSelectedLabel(field: ModalFormField): string | null {
+  if (!field.options) {
+   return null;
+  }
+  const selectedValue = this.form.get(field.key)?.value;
+  if (selectedValue === null || selectedValue === undefined || selectedValue === '') {
+   return null;
+  }
+  const selectedOption = field.options.find(opt => opt.value === selectedValue);
+  return selectedOption ? selectedOption.label : null;
+ }
+
+ /**
+  * Handles option selection in Bootstrap dropdown.
+  * @param fieldKey - The form control key
+  * @param value - The selected option value
+  */
+ selectOption(fieldKey: string, value: any): void {
+  this.form.get(fieldKey)?.setValue(value);
+  this.form.get(fieldKey)?.markAsTouched();
+  // Close dropdown by removing show class
+  const dropdownId = `dropdown-${fieldKey}`;
+  const dropdownButton = document.getElementById(dropdownId);
+  if (dropdownButton) {
+   const dropdownElement = dropdownButton.closest('.dropdown');
+   if (dropdownElement) {
+    const dropdownMenu = dropdownElement.querySelector('.dropdown-menu');
+    if (dropdownMenu) {
+     dropdownMenu.classList.remove('show');
+    }
+    dropdownElement.classList.remove('show');
+    dropdownButton.setAttribute('aria-expanded', 'false');
+   }
+  }
  }
 }
